@@ -1,3154 +1,710 @@
-
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#10121a">
-  <meta name="description" content="AnonMessage — พื้นที่ส่งข้อความ แบ่งปันเรื่องราว และแสดงความคิดเห็นอย่างเป็นส่วนตัว">
-  <title>AnonMessage — พื้นที่ของคุณ</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnonMessage — ระบบส่งข้อความนิรนาม</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans Thai -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #10121a;
-      --surface: #181b26;
-      --surface-2: #202433;
-      --surface-3: #292e40;
-      --border: rgba(255,255,255,.085);
-      --text: #f4f5fb;
-      --muted: #9298ad;
-      --primary: #a78bfa;
-      --primary-2: #7c5ce7;
-      --cyan: #72d9ef;
-      --green: #5bd6a2;
-      --red: #ff7285;
-      --yellow: #f7c96c;
-      --radius: 20px;
-      --shadow: 0 18px 60px rgba(0,0,0,.28);
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
     body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(ellipse at 5% 0%, rgba(124,92,231,.12), transparent 38%),
-        radial-gradient(ellipse at 100% 25%, rgba(66,172,204,.07), transparent 30%),
-        var(--bg);
-      color: var(--text);
-      font-family: Inter, "Noto Sans Thai", sans-serif;
-      font-size: 14px;
-      line-height: 1.65;
+      font-family: 'Noto Sans Thai', 'Inter', sans-serif;
     }
-
-    button, input, textarea, select {
-      font: inherit;
+    .blur-image {
+      filter: blur(12px);
+      transition: filter 0.3s ease;
     }
-
-    button { cursor: pointer; }
-
-    button:focus-visible, input:focus-visible, textarea:focus-visible,
-    select:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 3px;
-    }
-
-    button:disabled { opacity: .55; cursor: not-allowed; }
-
-    a { color: var(--primary); text-decoration: none; }
-
-    .hidden { display: none !important; }
-
-    .muted { color: var(--muted); }
-
-    .small { font-size: 12px; }
-
-    .icon {
-      width: 20px;
-      height: 20px;
-      flex: 0 0 auto;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .icon-sm { width: 16px; height: 16px; }
-
-    .icon-lg { width: 25px; height: 25px; }
-
-    .app {
-      min-height: 100vh;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      min-height: 70px;
-      padding: 12px max(20px, calc((100vw - 1400px) / 2));
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      background: rgba(16,18,26,.88);
-      backdrop-filter: blur(22px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--text);
-      border: 0;
-      background: none;
-      padding: 0;
-      text-align: left;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #b49bff, #7654e8);
-      color: white;
-      box-shadow: 0 8px 25px rgba(124,92,231,.3);
-    }
-
-    .brand-name {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -.6px;
-    }
-
-    .brand-caption {
-      display: block;
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: -3px;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .icon-button {
-      width: 40px;
-      height: 40px;
-      display: inline-grid;
-      place-items: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      color: var(--text);
-      position: relative;
-    }
-
-    .icon-button:hover { background: var(--surface-3); }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #b49bff, #46c7df);
-      color: #141523;
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      overflow: hidden;
-      flex: 0 0 auto;
-    }
-
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .layout {
-      width: min(1400px, 100%);
-      margin: auto;
-      padding: 28px 22px 60px;
-      display: grid;
-      grid-template-columns: 245px minmax(0, 1fr) 280px;
-      align-items: start;
-      gap: 25px;
-    }
-
-    .sidebar, .rightbar {
-      position: sticky;
-      top: 96px;
-    }
-
-    .panel {
-      background: rgba(24,27,38,.92);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 35px rgba(0,0,0,.08);
-    }
-
-    .sidebar { padding: 17px 12px; }
-
-    .side-label {
-      padding: 12px 12px 7px;
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-    }
-
-    .nav-button {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      border: 0;
-      color: #b2b7c9;
-      background: transparent;
-      border-radius: 13px;
-      padding: 12px 13px;
-      text-align: left;
-      margin: 3px 0;
-      transition: background .2s, color .2s;
-    }
-
-    .nav-button:hover { background: var(--surface-2); color: white; }
-
-    .nav-button.active {
-      background: linear-gradient(100deg, rgba(167,139,250,.19), rgba(167,139,250,.06));
-      color: #d2c4ff;
-      box-shadow: inset 3px 0 var(--primary);
-    }
-
-    .nav-button .nav-count {
-      margin-left: auto;
-      min-width: 22px;
-      text-align: center;
-      border-radius: 8px;
-      background: var(--surface-3);
-      font-size: 11px;
-      padding: 1px 5px;
-    }
-
-    .sidebar-bottom {
-      margin-top: 20px;
-      padding: 16px 10px 4px;
-      border-top: 1px solid var(--border);
-    }
-
-    .main { min-width: 0; }
-
-    .page-heading {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 15px;
-      margin-bottom: 22px;
-    }
-
-    .page-heading h1 {
-      font-size: clamp(24px, 3vw, 32px);
-      line-height: 1.25;
-      letter-spacing: -1px;
-      margin: 0 0 7px;
-      font-weight: 800;
-    }
-
-    .page-heading p { margin: 0; color: var(--muted); }
-
-    .eyebrow {
-      color: var(--primary);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 15px;
-      font-weight: 700;
-      color: var(--text);
-      background: var(--surface-2);
-      transition: transform .15s, filter .15s, background .15s;
-      white-space: nowrap;
-    }
-
-    .btn:hover { filter: brightness(1.12); }
-    .btn:active { transform: scale(.98); }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #a78bfa, #7c5ce7);
-      color: white;
-      border-color: transparent;
-      box-shadow: 0 7px 22px rgba(124,92,231,.2);
-    }
-
-    .btn-ghost { background: transparent; }
-
-    .btn-danger {
-      background: rgba(255,114,133,.1);
-      color: var(--red);
-      border-color: rgba(255,114,133,.22);
-    }
-
-    .btn-success {
-      background: rgba(91,214,162,.1);
-      color: var(--green);
-      border-color: rgba(91,214,162,.2);
-    }
-
-    .btn-sm { padding: 7px 10px; font-size: 12px; border-radius: 10px; }
-
-    .btn-block { width: 100%; }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 28px;
-      border-radius: 24px;
-      background:
-        radial-gradient(ellipse at 100% 0%, rgba(181,159,255,.35), transparent 45%),
-        linear-gradient(120deg, #24223c, #1c2537 70%, #1d2b37);
-      border: 1px solid rgba(180,160,255,.2);
-      margin-bottom: 22px;
-    }
-
-    .hero:after {
-      content: "";
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 50%;
-      right: -60px;
-      bottom: -100px;
-      box-shadow: 0 0 0 24px rgba(255,255,255,.025), 0 0 0 48px rgba(255,255,255,.02);
-      pointer-events: none;
-    }
-
-    .hero h2 {
-      max-width: 430px;
-      font-size: clamp(23px, 3vw, 32px);
-      letter-spacing: -.8px;
-      line-height: 1.3;
-      margin: 0 0 10px;
-    }
-
-    .hero p { color: #c3c3dc; max-width: 450px; margin: 0 0 20px; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 22px;
-    }
-
-    .stat-card { padding: 17px; min-width: 0; }
-
-    .stat-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .stat-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      color: var(--primary);
-      background: rgba(167,139,250,.12);
-    }
-
-    .stat-number {
-      font-size: clamp(23px, 3vw, 30px);
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-top: 9px;
-    }
-
-    .stat-caption { color: var(--muted); font-size: 11px; }
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin: 25px 0 14px;
-    }
-
-    .section-title h2 { font-size: 17px; margin: 0; font-weight: 800; }
-
-    .section-title p { color: var(--muted); font-size: 12px; margin: 4px 0 0; }
-
-    .composer { padding: 19px; margin-bottom: 20px; }
-
-    .composer-top { display: flex; gap: 12px; align-items: flex-start; }
-
-    .field {
-      width: 100%;
-      color: var(--text);
-      background: #121520;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 13px;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    .field:focus {
-      border-color: rgba(167,139,250,.7);
-      box-shadow: 0 0 0 3px rgba(167,139,250,.09);
-    }
-
-    .field::placeholder { color: #71778c; }
-
-    textarea.field { resize: vertical; min-height: 110px; }
-
-    .field-label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 12px;
-      color: #c5c8d7;
-      font-weight: 700;
-    }
-
-    .field-group { margin-bottom: 16px; min-width: 0; }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .composer-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-
-    .composer-options { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 9px;
-      background: var(--surface-2);
-      color: #b9bdd0;
-      font-size: 11px;
-      border: 1px solid var(--border);
-    }
-
-    .feed { display: grid; gap: 14px; }
-
-    .post { padding: 19px; min-width: 0; }
-
-    .post-header { display: flex; align-items: flex-start; gap: 11px; }
-
-    .post-author { flex: 1; min-width: 0; }
-
-    .post-author strong { display: block; font-size: 13px; overflow-wrap: anywhere; }
-
-    .post-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-    .post-menu { margin-left: auto; }
-
-    .post-content {
-      margin: 15px 0;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      color: #e1e3ed;
-      line-height: 1.8;
-    }
-
-    .post-actions {
-      display: flex;
-      gap: 7px;
-      align-items: center;
-      border-top: 1px solid var(--border);
-      padding-top: 13px;
-      flex-wrap: wrap;
-    }
-
-    .action-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 9px;
-      border: 0;
-      background: transparent;
-      border-radius: 9px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .action-btn:hover { background: var(--surface-2); color: var(--text); }
-
-    .action-btn.liked { color: var(--red); }
-
-    .comments { margin-top: 15px; padding-top: 13px; border-top: 1px solid var(--border); }
-
-    .comment {
-      display: flex;
-      gap: 9px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,.035);
-    }
-
-    .comment-body { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-
-    .comment-body strong { font-size: 12px; }
-
-    .comment-body p { margin: 3px 0; white-space: pre-wrap; }
-
-    .comment-form { display: flex; gap: 8px; margin-top: 12px; }
-
-    .comment-form .field { min-width: 0; }
-
-    .right-card { padding: 18px; margin-bottom: 16px; }
-
-    .right-card h3 { margin: 0 0 13px; font-size: 14px; }
-
-    .profile-summary { display: flex; align-items: center; gap: 12px; }
-
-    .profile-summary strong { display: block; overflow-wrap: anywhere; }
-
-    .profile-summary .muted { font-size: 11px; }
-
-    .online-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      background: var(--green);
-      margin-right: 5px;
-    }
-
-    .right-link {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      color: #b9bdd0;
-      border: 0;
-      border-bottom: 1px solid var(--border);
-      background: none;
-      text-align: left;
-    }
-
-    .right-link:last-child { border-bottom: 0; }
-    .right-link:hover { color: var(--primary); }
-
-    .tag-list { display: flex; flex-wrap: wrap; gap: 7px; }
-
-    .tag {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 6px 9px;
-      color: #c5c7d6;
-      font-size: 11px;
-    }
-
-    .notice {
-      padding: 13px 14px;
-      border: 1px solid rgba(167,139,250,.2);
-      border-radius: 13px;
-      background: rgba(167,139,250,.07);
-      color: #c9c0ed;
-      font-size: 12px;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 44px 20px;
-      color: var(--muted);
-    }
-
-    .empty-state .empty-icon {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 14px;
-      display: grid;
-      place-items: center;
-      background: var(--surface-2);
-      color: var(--primary);
-      border-radius: 18px;
-    }
-
-    .empty-state h3 { color: var(--text); margin: 0 0 6px; }
-
-    .search-row { display: flex; gap: 9px; margin-bottom: 16px; }
-
-    .search-row .field { min-width: 0; }
-
-    .table-wrap { overflow-x: auto; }
-
-    table { width: 100%; border-collapse: collapse; min-width: 520px; }
-
-    th, td {
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    th {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(255,255,255,.015);
-    }
-
-    td { font-size: 12px; overflow-wrap: anywhere; }
-
-    .status {
-      display: inline-flex;
-      padding: 4px 8px;
-      border-radius: 7px;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .status-ok { background: rgba(91,214,162,.12); color: var(--green); }
-    .status-pending { background: rgba(247,201,108,.12); color: var(--yellow); }
-    .status-error { background: rgba(255,114,133,.12); color: var(--red); }
-
-    .profile-cover {
-      height: 130px;
-      background:
-        radial-gradient(circle at 75% 20%, rgba(255,255,255,.2), transparent 20%),
-        linear-gradient(120deg, #7c5ce7, #3e9ab9);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .profile-content { padding: 0 23px 23px; }
-
-    .profile-big-avatar {
-      width: 84px;
-      height: 84px;
-      margin-top: -42px;
-      position: relative;
-      border: 5px solid var(--surface);
-      border-radius: 25px;
-      font-size: 26px;
-    }
-
-    .profile-stats {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      margin-top: 15px;
-    }
-
-    .profile-stats strong { display: block; font-size: 18px; }
-    .profile-stats span { font-size: 11px; color: var(--muted); }
-
-    .settings-card { padding: 20px; margin-bottom: 16px; }
-
-    .settings-card h3 { margin: 0 0 6px; }
-
-    .settings-card > p { margin: 0 0 18px; color: var(--muted); font-size: 12px; }
-
-    .settings-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      padding: 14px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .settings-row strong { display: block; font-size: 12px; }
-
-    .settings-row span { display: block; font-size: 11px; color: var(--muted); }
-
-    .switch {
-      appearance: none;
-      width: 42px;
-      height: 24px;
-      background: #393e50;
-      border-radius: 99px;
-      position: relative;
-      flex: 0 0 auto;
-      cursor: pointer;
-    }
-
-    .switch:before {
-      content: "";
-      width: 18px;
-      height: 18px;
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      border-radius: 50%;
-      background: white;
-      transition: transform .2s;
-    }
-
-    .switch:checked { background: var(--primary-2); }
-    .switch:checked:before { transform: translateX(18px); }
-
-    .bottom-nav { display: none; }
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      background: rgba(4,5,10,.74);
-      backdrop-filter: blur(10px);
-      animation: fadeIn .16s ease-out;
-    }
-
-    .modal {
-      width: min(500px, 100%);
-      max-height: min(88vh, 850px);
-      overflow-y: auto;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 23px;
-      background: #191c28;
-      box-shadow: var(--shadow);
-      animation: riseIn .2s ease-out;
-    }
-
-    .modal-wide { width: min(700px, 100%); }
-
-    .modal-header {
-      padding: 20px 22px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .modal-header h2 { font-size: 17px; margin: 0; }
-
-    .modal-body { padding: 22px; }
-
-    .modal-footer {
-      padding: 16px 22px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 9px;
-      flex-wrap: wrap;
-    }
-
-    .auth-screen {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(350px, .95fr);
-    }
-
-    .auth-visual {
-      padding: 55px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 100vh;
-      background:
-        radial-gradient(ellipse at 20% 25%, rgba(167,139,250,.35), transparent 35%),
-        radial-gradient(ellipse at 85% 80%, rgba(77,197,220,.2), transparent 35%),
-        #171925;
-      border-right: 1px solid var(--border);
-    }
-
-    .auth-visual h1 {
-      max-width: 570px;
-      font-size: clamp(36px, 5vw, 65px);
-      letter-spacing: -2.5px;
-      line-height: 1.15;
-      margin: 22px 0;
-    }
-
-    .auth-visual p { color: #b6bbcf; max-width: 470px; font-size: 15px; }
-
-    .auth-feature-list { display: grid; gap: 15px; margin-top: 32px; }
-
-    .auth-feature { display: flex; align-items: center; gap: 12px; color: #d8d9e7; }
-
-    .auth-feature .stat-icon { background: rgba(167,139,250,.13); }
-
-    .auth-side {
-      display: grid;
-      place-items: center;
-      padding: 30px;
-    }
-
-    .auth-card { width: min(410px, 100%); }
-
-    .auth-card h2 { font-size: 27px; letter-spacing: -.8px; margin: 0 0 7px; }
-
-    .auth-card > p { color: var(--muted); margin: 0 0 25px; }
-
-    .auth-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      padding: 4px;
-      border-radius: 12px;
-      background: #11141e;
-      margin-bottom: 22px;
-    }
-
-    .auth-tab {
-      border: 0;
-      border-radius: 9px;
-      background: transparent;
-      color: var(--muted);
-      padding: 10px;
-      font-weight: 700;
-    }
-
-    .auth-tab.active { color: white; background: var(--surface-3); }
-
-    .divider-text {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 11px;
-      margin: 18px 0;
-    }
-
-    .divider-text:before, .divider-text:after {
-      content: "";
-      height: 1px;
-      background: var(--border);
-      flex: 1;
-    }
-
-    .google-button {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 11px;
-      border: 1px solid var(--border);
-      background: #222635;
-      color: white;
-      border-radius: 12px;
-      padding: 12px;
-      font-weight: 700;
-    }
-
-    .google-g {
-      width: 19px;
-      height: 19px;
-      border-radius: 50%;
-      background: white;
-      color: #4285f4;
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      font-family: Arial, sans-serif;
-    }
-
-    .toast-container {
-      position: fixed;
-      z-index: 300;
-      right: 18px;
-      top: 18px;
-      width: min(370px, calc(100vw - 36px));
-      display: grid;
-      gap: 10px;
-      pointer-events: none;
-    }
-
-    .toast {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      padding: 14px;
-      background: #222635;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 15px;
-      box-shadow: var(--shadow);
-      animation: slideIn .2s ease-out;
-      pointer-events: auto;
-    }
-
-    .toast-icon { color: var(--green); margin-top: 2px; }
-    .toast.error .toast-icon { color: var(--red); }
-    .toast.warning .toast-icon { color: var(--yellow); }
-    .toast strong { display: block; font-size: 12px; }
-    .toast p { color: var(--muted); font-size: 11px; margin: 3px 0 0; overflow-wrap: anywhere; }
-
-    .loading-screen {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 30px;
-    }
-
-    .spinner {
-      width: 30px;
-      height: 30px;
-      border: 3px solid rgba(167,139,250,.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-      margin: 0 auto 15px;
-    }
-
-    .skeleton {
-      height: 90px;
-      border-radius: 14px;
-      background: linear-gradient(90deg, #1c202d 25%, #292e40 50%, #1c202d 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-    }
-
-    .file-preview {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface-2);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .file-preview img { max-width: 100px; max-height: 90px; object-fit: cover; border-radius: 8px; }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .mobile-only { display: none; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes riseIn { from { opacity: 0; transform: translateY(10px) scale(.99); } to { opacity: 1; transform: none; } }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
-    @keyframes shimmer { to { background-position: -200% 0; } }
-
-    @media (max-width: 1150px) {
-      .layout { grid-template-columns: 220px minmax(0,1fr); }
-      .rightbar { display: none; }
-    }
-
-    @media (max-width: 760px) {
-      .topbar { min-height: 62px; padding: 10px 15px; }
-      .brand-name { font-size: 16px; }
-      .brand-mark { width: 37px; height: 37px; }
-      .layout { display: block; padding: 20px 13px 95px; }
-      .sidebar { display: none; }
-      .rightbar { display: none; }
-      .page-heading { margin-bottom: 17px; }
-      .page-heading h1 { font-size: 25px; }
-      .hero { padding: 22px; }
-      .stats-grid { gap: 8px; }
-      .stat-card { padding: 12px; }
-      .stat-top { font-size: 10px; }
-      .stat-icon { width: 30px; height: 30px; }
-      .stat-number { font-size: 23px; }
-      .composer, .post { padding: 15px; }
-      .bottom-nav {
-        display: flex;
-        position: fixed;
-        z-index: 35;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 8px 7px calc(8px + env(safe-area-inset-bottom));
-        justify-content: space-around;
-        gap: 3px;
-        background: rgba(20,22,32,.96);
-        backdrop-filter: blur(20px);
-        border-top: 1px solid var(--border);
-      }
-      .bottom-nav button {
-        display: grid;
-        justify-items: center;
-        gap: 3px;
-        padding: 6px 10px;
-        min-width: 50px;
-        border: 0;
-        background: transparent;
-        color: var(--muted);
-        font-size: 9px;
-      }
-      .bottom-nav button.active { color: var(--primary); }
-      .bottom-nav .icon { width: 21px; height: 21px; }
-      .auth-screen { grid-template-columns: 1fr; }
-      .auth-visual { display: none; }
-      .auth-side { min-height: 100vh; padding: 25px 20px; }
-      .mobile-only { display: block; }
-      .form-grid { grid-template-columns: 1fr; gap: 0; }
-      .modal-body { padding: 17px; }
-      .modal-header { padding: 16px 17px; }
-      .modal-footer { padding: 14px 17px; }
-      .overlay { padding: 10px; }
-      .modal { max-height: 92vh; }
-      .profile-stats { gap: 18px; }
-      .toast-container { top: 10px; right: 10px; width: calc(100vw - 20px); }
-    }
-
-    @media (max-width: 380px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .stat-card { display: flex; align-items: center; justify-content: space-between; }
-      .stat-number { margin: 0; }
-      .hero h2 { font-size: 23px; }
-      .brand-caption { display: none; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *:before, *:after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-      }
+    .blur-image.revealed {
+      filter: blur(0);
     }
   </style>
 </head>
+<body class="bg-slate-50 text-slate-800 h-full flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-<body>
-  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
-    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
-    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></symbol>
-    <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
-    <symbol id="i-inbox" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 13h5l2 3h4l2-3h5"/></symbol>
-    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></symbol>
-    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.6-1.4-2.4L7.3 15a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.7-1L11 7.3h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.6 1.4 2.4-1.4 1.1a8 8 0 0 1-.1 2z"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
-    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></symbol>
-    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"/></symbol>
-    <symbol id="i-comment" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H7l-4 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></symbol>
-    <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></symbol>
-    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
-    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/><path d="m9 12 2 2 4-4"/></symbol>
-    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
-    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-    <symbol id="i-close" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24"><path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0z"/><path d="M12 9v4m0 4h.01"/></symbol>
-    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 11.6-2L20 12M4 12l2.8 5a7 7 0 0 0 11.6-2"/></symbol>
-    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></symbol>
-    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
-    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></symbol>
-  </svg>
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full px-4 pointer-events-none"></div>
 
-  <div id="loadingScreen" class="loading-screen">
-    <div>
-      <div class="spinner"></div>
-      <strong>AnonMessage</strong>
-      <p class="muted">กำลังเตรียมพื้นที่ของคุณ...</p>
+  <!-- Custom Confirm Dialog Modal -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 text-center transform transition-all">
+      <div id="confirm-icon" class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h3 id="confirm-title" class="text-lg font-bold text-slate-900 mb-2">ยืนยันการทำรายการ</h3>
+      <p id="confirm-message" class="text-sm text-slate-600 mb-6">คุณต้องการดำเนินการนี้ใช่หรือไม่?</p>
+      <div class="flex gap-3 justify-center">
+        <button id="confirm-cancel-btn" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-100 transition">ยกเลิก</button>
+        <button id="confirm-ok-btn" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/20">ยืนยัน</button>
+      </div>
     </div>
   </div>
 
-  <div id="authScreen" class="auth-screen hidden">
-    <section class="auth-visual">
-      <button class="brand" onclick="App.goHome()" aria-label="AnonMessage">
-        <span class="brand-mark"><svg class="icon icon-lg"><use href="#i-message"/></svg></span>
-        <span><span class="brand-name">AnonMessage</span><span class="brand-caption">Your space. Your voice.</span></span>
-      </button>
+  <!-- Navigation Bar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-600/30">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+        </div>
+        <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">AnonMessage</span>
+      </div>
 
-      <div>
-        <div class="eyebrow">A SPACE JUST FOR YOU</div>
-        <h1>ทุกข้อความ<br>มีพื้นที่ของมัน</h1>
-        <p>แบ่งปันเรื่องราว ส่งข้อความถึงกัน และพูดในสิ่งที่คุณอยากพูด ในพื้นที่ที่ออกแบบมาเพื่อคุณ</p>
-        <div class="auth-feature-list">
-          <div class="auth-feature"><span class="stat-icon"><svg class="icon"><use href="#i-lock"/></svg></span><span>พื้นที่ส่วนตัวสำหรับข้อความของคุณ</span></div>
-          <div class="auth-feature"><span class="stat-icon"><svg class="icon"><use href="#i-users"/></svg></span><span>แบ่งปันเรื่องราวและพูดคุยกับชุมชน</span></div>
-          <div class="auth-feature"><span class="stat-icon"><svg class="icon"><use href="#i-shield"/></svg></span><span>เครื่องมือจัดการความเป็นส่วนตัว</span></div>
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-6" id="desktop-nav">
+        <!-- Dynamic rendered via JS -->
+      </nav>
+
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100" onclick="toggleMobileMenu()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white px-4 py-4 flex flex-col gap-3">
+      <!-- Dynamic rendered via JS -->
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- VIEW: HOME -->
+    <section id="view-home" class="view-section">
+      <div class="text-center max-w-3xl mx-auto py-12">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+          ส่งข้อความนิรนาม <span class="text-indigo-600">ปลอดภัย ไร้ตัวตน</span>
+        </h1>
+        <p class="text-lg text-slate-600 mb-8">
+          สร้างลิงก์รับข้อความส่วนตัวของคุณเอง แบ่งปันความรู้สึก คำติชม หรือคำถามได้อย่างมั่นใจ พร้อมระบบจัดการข้อความและสร้างสตอรี่สุดเก๋
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+          <button onclick="navigateTo('auth')" class="px-8 py-3.5 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+            เริ่มต้นใช้งานฟรี
+          </button>
+          <button onclick="navigateTo('wall')" class="px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2  0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+            ดู Public Wall
+          </button>
+        </div>
+
+        <!-- Search Username Box -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 max-w-xl mx-auto flex gap-2">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">@</span>
+            <input type="text" id="search-username-input" placeholder="ค้นหา Username เพื่อส่งข้อความ..." class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+          </div>
+          <button onclick="handleSearchUser()" class="px-6 py-3 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition">ค้นหา</button>
         </div>
       </div>
-      <div class="small muted">AnonMessage · Your space, your voice.</div>
     </section>
 
-    <section class="auth-side">
-      <div class="auth-card">
-        <div class="mobile-only" style="margin-bottom:35px">
-          <div class="brand">
-            <span class="brand-mark"><svg class="icon icon-lg"><use href="#i-message"/></svg></span>
-            <span><span class="brand-name">AnonMessage</span><span class="brand-caption">Your space. Your voice.</span></span>
+    <!-- VIEW: AUTH (Login & Register) -->
+    <section id="view-auth" class="view-section hidden">
+      <div class="max-w-md mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div class="flex border-b border-slate-200 mb-6">
+          <button onclick="switchAuthTab('login')" id="tab-login" class="flex-1 pb-3 text-center font-bold text-indigo-600 border-b-2 border-indigo-600">เข้าสู่ระบบ</button>
+          <button onclick="switchAuthTab('register')" id="tab-register" class="flex-1 pb-3 text-center font-medium text-slate-500 hover:text-slate-800">สมัครสมาชิก</button>
+        </div>
+
+        <!-- Google Sign-In Button -->
+        <div class="mb-6">
+          <div id="g_id_onload"
+               data-client_id=""
+               data-callback="handleGoogleLoginCallback"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left" style="width: 100%; display: flex; justify-content: center;"></div>
+          <div class="relative flex py-2 items-center">
+            <div class="flex-grow border-t border-slate-200"></div>
+            <span class="flex-shrink mx-4 text-slate-400 text-xs">หรือดำเนินการด้วยบัญชี</span>
+            <div class="flex-grow border-t border-slate-200"></div>
           </div>
         </div>
 
-        <div class="eyebrow">WELCOME</div>
-        <h2 id="authTitle">ยินดีต้อนรับกลับ</h2>
-        <p id="authSubtitle">เข้าสู่ระบบเพื่อไปยังพื้นที่ของคุณ</p>
-
-        <div class="auth-tabs">
-          <button class="auth-tab active" id="loginTab" onclick="App.setAuthMode('login')">เข้าสู่ระบบ</button>
-          <button class="auth-tab" id="registerTab" onclick="App.setAuthMode('register')">สมัครสมาชิก</button>
-        </div>
-
-        <form id="authForm">
-          <div id="registerFields" class="hidden">
-            <div class="field-group">
-              <label class="field-label" for="registerName">ชื่อที่ใช้แสดง</label>
-              <input class="field" id="registerName" name="displayName" maxlength="80" autocomplete="nickname" placeholder="ชื่อของคุณ">
-            </div>
+        <!-- Login Form -->
+        <form id="form-login" onsubmit="submitLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Username หรือ Email</label>
+            <input type="text" id="login-identifier" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
           </div>
-
-          <div class="field-group">
-            <label class="field-label" for="authEmail">อีเมล</label>
-            <input class="field" id="authEmail" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="you@example.com">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">รหัสผ่าน</label>
+            <input type="password" id="login-password" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
           </div>
-
-          <div class="field-group">
-            <label class="field-label" for="authPassword">รหัสผ่าน</label>
-            <input class="field" id="authPassword" name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="200" placeholder="อย่างน้อย 8 ตัวอักษร">
-          </div>
-
-          <div id="forgotPasswordRow" style="display:flex;justify-content:flex-end;margin:-5px 0 17px">
-            <button type="button" class="btn btn-ghost btn-sm" onclick="App.forgotPassword()">ลืมรหัสผ่าน?</button>
-          </div>
-
-          <div id="authError" class="notice hidden" style="margin-bottom:15px"></div>
-
-          <button type="submit" class="btn btn-primary btn-block" id="authSubmit">
-            <svg class="icon"><use href="#i-lock"/></svg>
-            เข้าสู่ระบบ
-          </button>
+          <button type="submit" class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/30">เข้าสู่ระบบ</button>
         </form>
 
-        <div class="divider-text">หรือเข้าสู่ระบบด้วย</div>
-
-        <div id="googleButtonWrap">
-          <button class="google-button" type="button" onclick="App.googleLogin()">
-            <span class="google-g">G</span> ดำเนินการต่อด้วย Google
-          </button>
-        </div>
-
-        <p class="small muted" style="text-align:center;margin-top:23px">
-          การเข้าใช้งานหมายถึงคุณยอมรับเงื่อนไขการใช้บริการและนโยบายความเป็นส่วนตัวของระบบ
-        </p>
-        <div id="googleStatus" class="small muted" style="text-align:center"></div>
+        <!-- Register Form -->
+        <form id="form-register" onsubmit="submitRegister(event)" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Username (ตัวอักษรภาษาอังกฤษ/ตัวเลข)</label>
+            <input type="text" id="reg-username" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">อีเมล</label>
+            <input type="email" id="reg-email" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อที่แสดง</label>
+            <input type="text" id="reg-displayname" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">รหัสผ่าน</label>
+            <input type="password" id="reg-password" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+          </div>
+          <button type="submit" class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/30">สมัครสมาชิก</button>
+        </form>
       </div>
     </section>
-  </div>
 
-  <div id="appScreen" class="app hidden">
-    <header class="topbar">
-      <button class="brand" onclick="App.navigate('home')">
-        <span class="brand-mark"><svg class="icon icon-lg"><use href="#i-message"/></svg></span>
-        <span><span class="brand-name">AnonMessage</span><span class="brand-caption">Your space. Your voice.</span></span>
-      </button>
-
-      <div class="topbar-right">
-        <button class="icon-button" title="ค้นหา" aria-label="ค้นหา" onclick="App.navigate('search')">
-          <svg class="icon"><use href="#i-search"/></svg>
-        </button>
-        <button class="icon-button" title="รีเฟรช" aria-label="รีเฟรช" onclick="App.refreshCurrent()">
-          <svg class="icon"><use href="#i-refresh"/></svg>
-        </button>
-        <button class="icon-button" title="การแจ้งเตือน" aria-label="การแจ้งเตือน" onclick="App.navigate('notifications')">
-          <svg class="icon"><use href="#i-bell"/></svg>
-        </button>
-        <button class="avatar" id="topAvatar" aria-label="โปรไฟล์" onclick="App.navigate('profile')">A</button>
-      </div>
-    </header>
-
-    <div class="layout">
-      <aside class="sidebar panel">
-        <div class="side-label">พื้นที่หลัก</div>
-        <button class="nav-button active" data-page="home" onclick="App.navigate('home')"><svg class="icon"><use href="#i-grid"/></svg> หน้าหลัก</button>
-        <button class="nav-button" data-page="inbox" onclick="App.navigate('inbox')"><svg class="icon"><use href="#i-inbox"/></svg> กล่องข้อความ</button>
-        <button class="nav-button" data-page="send" onclick="App.navigate('send')"><svg class="icon"><use href="#i-send"/></svg> ส่งข้อความ</button>
-        <button class="nav-button" data-page="wall" onclick="App.navigate('wall')"><svg class="icon"><use href="#i-users"/></svg> พื้นที่สาธารณะ</button>
-
-        <div class="side-label">บัญชีของฉัน</div>
-        <button class="nav-button" data-page="profile" onclick="App.navigate('profile')"><svg class="icon"><use href="#i-user"/></svg> โปรไฟล์ของฉัน</button>
-        <button class="nav-button" data-page="stories" onclick="App.navigate('stories')"><svg class="icon"><use href="#i-file"/></svg> เรื่องราวของฉัน</button>
-        <button class="nav-button" data-page="search" onclick="App.navigate('search')"><svg class="icon"><use href="#i-search"/></svg> ค้นหา</button>
-
-        <div class="side-label">การจัดการ</div>
-        <button class="nav-button" data-page="blocked" onclick="App.navigate('blocked')"><svg class="icon"><use href="#i-shield"/></svg> บัญชีที่บล็อก</button>
-        <button class="nav-button" data-page="settings" onclick="App.navigate('settings')"><svg class="icon"><use href="#i-settings"/></svg> ตั้งค่าบัญชี</button>
-
-        <div class="sidebar-bottom">
-          <button class="nav-button" onclick="App.logout()"><svg class="icon"><use href="#i-logout"/></svg> ออกจากระบบ</button>
-          <p class="small muted" style="padding:0 12px">AnonMessage · เวอร์ชัน 1.0</p>
-        </div>
-      </aside>
-
-      <main class="main" id="mainContent" aria-live="polite"></main>
-
-      <aside class="rightbar">
-        <div class="right-card panel">
-          <div class="profile-summary">
-            <div class="avatar" id="rightAvatar">A</div>
-            <div><strong id="rightName">สมาชิก</strong><span class="muted" id="rightEmail">บัญชีของคุณ</span></div>
+    <!-- VIEW: PROFILE (My Profile Dashboard) -->
+    <section id="view-profile" class="view-section hidden">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col sm:flex-row items-center gap-6">
+          <div class="w-24 h-24 rounded-full bg-indigo-100 text-indigo-600 font-bold text-3xl flex items-center justify-center overflow-hidden border-2 border-indigo-200" id="profile-avatar-box">
+            <span id="profile-initial">U</span>
           </div>
-          <div style="margin-top:16px"><span class="online-dot"></span><span class="small muted">พื้นที่ส่วนตัวของคุณ</span></div>
-          <button class="btn btn-block" style="margin-top:14px" onclick="App.navigate('profile')">ดูโปรไฟล์</button>
+          <div class="flex-1 text-center sm:text-left">
+            <h2 id="profile-display-name" class="text-2xl font-bold text-slate-900">ชื่อผู้ใช้</h2>
+            <p id="profile-username" class="text-sm text-indigo-600 font-medium mb-2">@username</p>
+            <p id="profile-bio" class="text-sm text-slate-600">ยังไม่มีคำแนะนำตัว</p>
+          </div>
+          <div>
+            <button onclick="copyMyProfileLink()" class="px-5 py-2.5 bg-indigo-50 text-indigo-600 rounded-xl font-medium hover:bg-indigo-100 transition flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012  2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+              คัดลอกลิงก์รับข้อความ
+            </button>
+          </div>
         </div>
 
-        <div class="right-card panel">
-          <h3>ทางลัด</h3>
-          <button class="right-link" onclick="App.navigate('send')"><svg class="icon"><use href="#i-send"/></svg> ส่งข้อความใหม่</button>
-          <button class="right-link" onclick="App.navigate('inbox')"><svg class="icon"><use href="#i-inbox"/></svg> ดูกล่องข้อความ</button>
-          <button class="right-link" onclick="App.navigate('wall')"><svg class="icon"><use href="#i-users"/></svg> ดูพื้นที่สาธารณะ</button>
-          <button class="right-link" onclick="App.navigate('settings')"><svg class="icon"><use href="#i-settings"/></svg> ตั้งค่าความเป็นส่วนตัว</button>
+        <!-- Profile Edit Form & Settings -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">แก้ไขข้อมูลส่วนตัว</h3>
+            <form onsubmit="submitUpdateProfile(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อที่แสดง</label>
+                <input type="text" id="edit-displayname" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">คำแนะนำตัว (Bio)</label>
+                <textarea id="edit-bio" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm"></textarea>
+              </div>
+              <div class="flex items-center gap-3">
+                <input type="checkbox" id="edit-accepting" class="w-4 h-4 text-indigo-600 rounded border-slate-300">
+                <label for="edit-accepting" class="text-sm font-medium text-slate-700">เปิดรับข้อความนิรนาม</label>
+              </div>
+              <button type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition">บันทึกการเปลี่ยนแปลง</button>
+            </form>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900 mb-4">ความปลอดภัย & บัญชี</h3>
+              <p class="text-sm text-slate-600 mb-4">เชื่อมต่อบัญชี Google หรือเปลี่ยนรหัสผ่านเพื่อความปลอดภัยสูงสุดในการใช้งาน</p>
+            </div>
+            <div class="space-y-3">
+              <button onclick="openChangePasswordModal()" class="w-full py-3 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition">เปลี่ยนรหัสผ่าน</button>
+              <button onclick="handleLogout()" class="w-full py-3 bg-rose-50 text-rose-600 rounded-xl font-medium hover:bg-rose-100 transition">ออกจากระบบ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: PUBLIC PROFILE & SEND MESSAGE -->
+    <section id="view-public-profile" class="view-section hidden">
+      <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="text-center mb-6">
+          <div class="w-20 h-20 rounded-full bg-indigo-100 text-indigo-600 font-bold text-2xl flex items-center justify-center mx-auto mb-3 border-2 border-indigo-200" id="pub-avatar">U</div>
+          <h2 id="pub-displayname" class="text-xl font-bold text-slate-900">กำลังโหลด...</h2>
+          <p id="pub-username" class="text-sm text-indigo-600 font-medium">@username</p>
+          <p id="pub-bio" class="text-sm text-slate-600 mt-2">...</p>
         </div>
 
-        <div class="right-card panel">
-          <h3>ความปลอดภัย</h3>
-          <div class="notice"><svg class="icon icon-sm" style="vertical-align:middle"><use href="#i-shield"/></svg> อย่าเปิดเผยรหัสผ่านหรือข้อมูลสำคัญผ่านข้อความสาธารณะ</div>
-          <p class="small muted" style="margin:15px 0 0">หากพบข้อความไม่เหมาะสม คุณสามารถรายงานเนื้อหาได้</p>
+        <form id="form-send-message" onsubmit="submitSendMessage(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">ข้อความนิรนามของคุณ</label>
+            <textarea id="msg-text-input" rows="4" required placeholder="พิมพ์ข้อความของคุณที่นี่..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm"></textarea>
+          </div>
+
+          <!-- Attachment section -->
+          <div class="flex items-center gap-3">
+            <label class="cursor-pointer px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-medium text-slate-700 transition flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              แนบรูปภาพ (ImgBB)
+              <input type="file" id="msg-image-file" accept="image/*" class="hidden" onchange="handleImagePreview(event)">
+            </label>
+            <span id="img-file-name" class="text-xs text-slate-500 truncate"></span>
+          </div>
+
+          <!-- Image Preview -->
+          <div id="image-preview-container" class="hidden relative rounded-xl overflow-hidden border border-slate-200 max-h-40 bg-slate-100 flex items-center justify-center">
+            <img id="image-preview" class="max-h-40 object-contain">
+            <button type="button" onclick="clearImagePreview()" class="absolute top-2 right-2 bg-slate-900/70 text-white rounded-full p-1 hover:bg-slate-900">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            ส่งข้อความนิรนาม
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW: INBOX -->
+    <section id="view-inbox" class="view-section hidden">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-slate-900">กล่องข้อความ (Inbox)</h2>
+          <button onclick="loadInboxMessages()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-medium text-slate-700 transition">รีเฟรชข้อความ</button>
         </div>
+        <div id="inbox-messages-list" class="space-y-4">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
 
-        <div class="small muted" style="padding:0 5px">© <span id="copyrightYear"></span> AnonMessage</div>
-      </aside>
-    </div>
+    <!-- VIEW: PUBLIC WALL -->
+    <section id="view-wall" class="view-section hidden">
+      <div class="max-w-3xl mx-auto space-y-6">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-slate-900 mb-2">Public Wall</h2>
+          <p class="text-slate-600 text-sm">รวมข้อความและคำตอบสาธารณะที่ถูกเผยแพร่</p>
+        </div>
+        <div id="public-wall-list" class="space-y-4">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
 
-    <nav class="bottom-nav" aria-label="เมนูโทรศัพท์">
-      <button class="active" data-page="home" onclick="App.navigate('home')"><svg class="icon"><use href="#i-grid"/></svg><span>หน้าหลัก</span></button>
-      <button data-page="inbox" onclick="App.navigate('inbox')"><svg class="icon"><use href="#i-inbox"/></svg><span>ข้อความ</span></button>
-      <button data-page="send" onclick="App.navigate('send')"><svg class="icon"><use href="#i-send"/></svg><span>ส่ง</span></button>
-      <button data-page="wall" onclick="App.navigate('wall')"><svg class="icon"><use href="#i-users"/></svg><span>ชุมชน</span></button>
-      <button data-page="profile" onclick="App.navigate('profile')"><svg class="icon"><use href="#i-user"/></svg><span>โปรไฟล์</span></button>
-    </nav>
-  </div>
+    <!-- VIEW: ANALYTICS -->
+    <section id="view-analytics" class="view-section hidden">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <h2 class="text-2xl font-bold text-slate-900">สถิติการใช้งาน (Analytics)</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="analytics-cards">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-semibold text-slate-500 mb-1">ข้อความทั้งหมด</p>
+            <h3 id="stat-total" class="text-3xl font-extrabold text-indigo-600">0</h3>
+          </div>
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-semibold text-slate-500 mb-1">ยังไม่อ่าน</p>
+            <h3 id="stat-unread" class="text-3xl font-extrabold text-amber-600">0</h3>
+          </div>
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-semibold text-slate-500 mb-1">อ่านแล้ว</p>
+            <h3 id="stat-read" class="text-3xl font-extrabold text-emerald-600">0</h3>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div id="modalRoot"></div>
-  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  </main>
 
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <p>&copy; 2026 AnonMessage. ระบบส่งข้อความนิรนามปลอดภัยแบบครบวงจร.</p>
+  </footer>
+
+  <!-- JavaScript Application Logic -->
   <script>
-    "use strict";
+    // --- CONFIGURATION ---
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQKhWAdewvjJwWE2Q8gRmwV-SFXsel0-5q2Ipuq3H8Liv6VLZofdaD4BrVJdp-hDB7/exec'; // แทนที่ด้วย Web App URL จริง
+    let currentSessionToken = localStorage.getItem('anon_sessionToken') || '';
+    let currentUser = JSON.parse(localStorage.getItem('anon_user') || 'null');
+    let targetPublicUsername = '';
+    let selectedImageBase64 = '';
 
-    /* ==========================================================
-       AnonMessage - Frontend configuration
-       ========================================================== */
-
-    const CONFIG = Object.freeze({
-      APP_NAME: "AnonMessage",
-      API_BASE_URL: "https://aged-wind-2abe.thepickffcer.workers.dev/",
-      GOOGLE_CLIENT_ID: "1022921992521-66fjmcq5qhrsrtk0hu6e6no84sn51ka6.apps.googleusercontent.com",
-      API_TIMEOUT: 25000,
-      MAX_MESSAGE_LENGTH: 10000,
-      MAX_POST_LENGTH: 5000,
-      MAX_COMMENT_LENGTH: 2000,
-      MAX_IMAGE_SIZE: 5 * 1024 * 1024,
-      SESSION_STORAGE_KEY: "anonmessage_session",
-      USER_STORAGE_KEY: "anonmessage_user",
-      LAST_USER_KEY: "anonmessage_last_user"
-    });
-
-    const ICON = (name, extraClass = "") =>
-      '<svg class="icon ' + extraClass + '" aria-hidden="true"><use href="#i-' + escapeHTML(name) + '"></use></svg>';
-
-    const Utils = {
-      escapeHTML(value) {
-        return String(value ?? "").replace(/[&<>"']/g, char => ({
-          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-        })[char]);
-      },
-
-      text(value, fallback = "") {
-        if (value === null || value === undefined) return fallback;
-        return String(value);
-      },
-
-      date(value) {
-        if (!value) return "ไม่ระบุเวลา";
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return String(value);
-        return new Intl.DateTimeFormat("th-TH", {
-          dateStyle: "medium", timeStyle: "short"
-        }).format(date);
-      },
-
-      initials(value) {
-        const name = String(value || "A").trim();
-        return Array.from(name).slice(0, 2).join("").toUpperCase() || "A";
-      },
-
-      email(value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
-      },
-
-      bytes(size) {
-        if (size < 1024) return size + " B";
-        if (size < 1024 * 1024) return (size / 1024).toFixed(1) + " KB";
-        return (size / (1024 * 1024)).toFixed(1) + " MB";
-      },
-
-      randomId() {
-        if (crypto && crypto.randomUUID) return crypto.randomUUID();
-        return Date.now().toString(36) + Math.random().toString(36).slice(2);
-      },
-
-      normalizeError(error) {
-        if (!error) return "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ";
-        return String(error.message || error || "เกิดข้อผิดพลาด");
-      },
-
-      extractList(data, keys = []) {
-        if (Array.isArray(data)) return data;
-        for (const key of keys) {
-          if (Array.isArray(data?.[key])) return data[key];
-        }
-        if (Array.isArray(data?.data)) return data.data;
-        return [];
-      },
-
-      resultData(result) {
-        if (!result || typeof result !== "object") return {};
-        return result.data && typeof result.data === "object" ? result.data : result;
+    // --- API HELPER ---
+    async function callApi(action, data = {}, sessionToken = currentSessionToken) {
+      try {
+        const payload = { action, data, sessionToken };
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        const json = await response.json();
+        return json;
+      } catch (err) {
+        console.error('API Error:', err);
+        return { success: false, error: err.message };
       }
-    };
-
-    function escapeHTML(value) {
-      return Utils.escapeHTML(value);
     }
 
-    /* ==========================================================
-       API client
-       Sends JSON POST requests to Cloudflare Worker.
-       ========================================================== */
+    // --- TOAST NOTIFICATION ---
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const bgColors = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-800';
+      toast.className = `${bgColors} text-white px-4 py-3 rounded-xl shadow-lg text-sm font-medium pointer-events-auto transform transition-all translate-y-2 opacity-0 flex items-center justify-between`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      
+      setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
 
-    const API = {
-      async request(action, data = {}, options = {}) {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), options.timeout || CONFIG.API_TIMEOUT);
-
-        const headers = { "Content-Type": "text/plain;charset=utf-8" };
-
-        const token = App.sessionToken;
-        if (token) headers["Authorization"] = "Bearer " + token;
-
-        const payload = { action, data };
-
-        if (token && !data.sessionToken) payload.data.sessionToken = token;
-
-        try {
-          const response = await fetch(CONFIG.API_BASE_URL, {
-            method: "POST",
-            headers,
-            body: JSON.stringify(payload),
-            signal: controller.signal,
-            redirect: "follow"
-          });
-
-          const raw = await response.text();
-          let result;
-
-          try {
-            result = JSON.parse(raw);
-          } catch (_) {
-            throw new Error(
-              "เซิร์ฟเวอร์ไม่ได้ส่ง JSON กลับมา กรุณาตรวจสอบ Worker และ Apps Script"
-            );
-          }
-
-          if (!response.ok) {
-            throw new Error(result.message || result.error || ("HTTP " + response.status));
-          }
-
-          if (result && (result.ok === false || result.success === false)) {
-            const errorCode = result.error || result.code || "API_ERROR";
-            const message = result.message || "ระบบไม่สามารถดำเนินการได้";
-            const error = new Error(message);
-            error.code = errorCode;
-            throw error;
-          }
-
-          return result;
-        } catch (error) {
-          if (error.name === "AbortError") {
-            throw new Error("หมดเวลารอเซิร์ฟเวอร์ กรุณาลองใหม่");
-          }
-
-          if (error instanceof TypeError) {
-            throw new Error("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสอบ Worker, CORS และอินเทอร์เน็ต");
-          }
-
-          throw error;
-        } finally {
-          clearTimeout(timeout);
-        }
-      },
-
-      health() {
-        return this.request("health", {});
-      },
-
-      login(email, password) {
-        return this.request("login", { email, password });
-      },
-
-      register(data) {
-        return this.request("register", data);
-      },
-
-      googleLogin(credential) {
-        return this.request("googleLogin", { credential });
-      },
-
-      sendMessage(data) {
-        return this.request("sendMessage", data);
-      },
-
-      getInbox() {
-        return this.request("getInbox", {});
-      },
-
-      getSentMessages() {
-        return this.request("getSentMessages", {});
-      },
-
-      replyMessage(data) {
-        return this.request("replyMessage", data);
-      },
-
-      markMessageRead(data) {
-        return this.request("markMessageRead", data);
-      },
-
-      deleteMessage(data) {
-        return this.request("deleteMessage", data);
-      },
-
-      listPublicStories() {
-        return this.request("listPublicStories", {});
-      },
-
-      createStory(data) {
-        return this.request("createStory", data);
-      },
-
-      getMyStories() {
-        return this.request("getMyStories", {});
-      },
-
-      deleteStory(data) {
-        return this.request("deleteStory", data);
-      },
-
-      reactToStory(data) {
-        return this.request("reactToStory", data);
-      },
-
-      commentOnStory(data) {
-        return this.request("commentOnStory", data);
-      },
-
-      getPublicProfile(data) {
-        return this.request("getPublicProfile", data);
-      },
-
-      updateProfile(data) {
-        return this.request("updateProfile", data);
-      },
-
-      changePassword(data) {
-        return this.request("changePassword", data);
-      },
-
-      forgotPassword(data) {
-        return this.request("forgotPassword", data);
-      },
-
-      listBlockedUsers() {
-        return this.request("listBlockedUsers", {});
-      },
-
-      blockUser(data) {
-        return this.request("blockUser", data);
-      },
-
-      unblockUser(data) {
-        return this.request("unblockUser", data);
-      },
-
-      reportContent(data) {
-        return this.request("reportContent", data);
-      },
-
-      search(data) {
-        return this.request("search", data);
-      },
-
-      getNotifications() {
-        return this.request("getNotifications", {});
-      },
-
-      markNotificationRead(data) {
-        return this.request("markNotificationRead", data);
-      },
-
-      updateSettings(data) {
-        return this.request("updateSettings", data);
-      },
-
-      getSettings() {
-        return this.request("getSettings", {});
-      },
-
-      uploadMedia(data) {
-        return this.request("uploadMedia", data);
+    // --- ROUTER & NAVIGATION ---
+    function navigateTo(viewId, param = '') {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('view-' + viewId);
+      if (target) target.classList.remove('hidden');
+      
+      renderNavbar();
+      
+      if (viewId === 'profile' && currentUser) {
+        loadProfileData();
+      } else if (viewId === 'inbox') {
+        loadInboxMessages();
+      } else if (viewId === 'wall') {
+        loadPublicWall();
+      } else if (viewId === 'analytics') {
+        loadAnalyticsData();
+      } else if (viewId === 'public-profile' && param) {
+        targetPublicUsername = param;
+        loadPublicProfileData(param);
       }
-    };
+    }
 
-    /* ==========================================================
-       Toast and custom modal system
-       No SweetAlert2 or external popup library.
-       ========================================================== */
-
-    const UI = {
-      toast(message, type = "success", title = "") {
-        const root = document.getElementById("toastContainer");
-        const toast = document.createElement("div");
-        toast.className = "toast " + (type === "success" ? "" : type);
-
-        const icon = type === "error" ? "alert" :
-                     type === "warning" ? "alert" : "check";
-
-        toast.innerHTML =
-          '<div class="toast-icon">' + ICON(icon) + '</div>' +
-          '<div style="flex:1;min-width:0"><strong>' +
-          escapeHTML(title || (type === "error" ? "เกิดข้อผิดพลาด" :
-                    type === "warning" ? "แจ้งเตือน" : "สำเร็จ")) +
-          '</strong><p>' + escapeHTML(message) + '</p></div>' +
-          '<button class="icon-button" style="width:29px;height:29px" aria-label="ปิด">' +
-          ICON("close", "icon-sm") + '</button>';
-
-        toast.querySelector("button").addEventListener("click", () => toast.remove());
-        root.appendChild(toast);
-        setTimeout(() => toast.remove(), 5000);
-      },
-
-      confirm({ title = "ยืนยันการดำเนินการ", message = "คุณต้องการดำเนินการต่อหรือไม่?", confirmText = "ยืนยัน", danger = false } = {}) {
-        return new Promise(resolve => {
-          const root = document.getElementById("modalRoot");
-          const overlay = document.createElement("div");
-          overlay.className = "overlay";
-          overlay.innerHTML = `
-            <section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}">
-              <div class="modal-header">
-                <h2>${escapeHTML(title)}</h2>
-                <button class="icon-button" data-close aria-label="ปิด">${ICON("close")}</button>
-              </div>
-              <div class="modal-body">
-                <div style="display:flex;gap:13px;align-items:flex-start">
-                  <div class="stat-icon" style="${danger ? "color:var(--red);background:rgba(255,114,133,.12)" : ""}">
-                    ${ICON(danger ? "alert" : "shield")}
-                  </div>
-                  <div>${escapeHTML(message)}</div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-cancel>ยกเลิก</button>
-                <button class="btn ${danger ? "btn-danger" : "btn-primary"}" data-confirm>${escapeHTML(confirmText)}</button>
-              </div>
-            </section>`;
-
-          let finished = false;
-          const finish = value => {
-            if (finished) return;
-            finished = true;
-            overlay.remove();
-            resolve(value);
-          };
-
-          overlay.querySelector("[data-close]").onclick = () => finish(false);
-          overlay.querySelector("[data-cancel]").onclick = () => finish(false);
-          overlay.querySelector("[data-confirm]").onclick = () => finish(true);
-          overlay.addEventListener("click", event => {
-            if (event.target === overlay) finish(false);
-          });
-          overlay.addEventListener("keydown", event => {
-            if (event.key === "Escape") finish(false);
-          });
-
-          root.appendChild(overlay);
-          overlay.querySelector("[data-confirm]").focus();
-        });
-      },
-
-      modal({ title, content, footer = "", wide = false, onOpen = null }) {
-        const root = document.getElementById("modalRoot");
-        this.closeModal();
-
-        const overlay = document.createElement("div");
-        overlay.className = "overlay";
-        overlay.id = "activeModal";
-        overlay.innerHTML = `
-          <section class="modal ${wide ? "modal-wide" : ""}" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}">
-            <div class="modal-header">
-              <h2>${escapeHTML(title)}</h2>
-              <button class="icon-button" data-close aria-label="ปิด">${ICON("close")}</button>
-            </div>
-            <div class="modal-body">${content}</div>
-            ${footer ? '<div class="modal-footer">' + footer + '</div>' : ""}
-          </section>`;
-
-        overlay.querySelector("[data-close]").onclick = () => this.closeModal();
-        overlay.addEventListener("click", event => {
-          if (event.target === overlay) this.closeModal();
-        });
-        overlay.addEventListener("keydown", event => {
-          if (event.key === "Escape") this.closeModal();
-        });
-
-        root.appendChild(overlay);
-        if (typeof onOpen === "function") onOpen(overlay);
-        return overlay;
-      },
-
-      closeModal() {
-        document.getElementById("activeModal")?.remove();
-      },
-
-      async withButton(button, action, successMessage = "") {
-        if (!button || button.disabled) return;
-        const original = button.innerHTML;
-        button.disabled = true;
-        button.innerHTML = '<span class="spinner" style="width:16px;height:16px;margin:0;border-width:2px"></span> กำลังดำเนินการ';
-
-        try {
-          const result = await action();
-          if (successMessage) this.toast(successMessage);
-          return result;
-        } catch (error) {
-          this.toast(Utils.normalizeError(error), "error");
-          throw error;
-        } finally {
-          if (button.isConnected) {
-            button.disabled = false;
-            button.innerHTML = original;
-          }
-        }
-      },
-
-      empty(icon, title, description, buttonHTML = "") {
-        return `<div class="panel empty-state">
-          <div class="empty-icon">${ICON(icon, "icon-lg")}</div>
-          <h3>${escapeHTML(title)}</h3>
-          <p>${escapeHTML(description)}</p>
-          ${buttonHTML}
-        </div>`;
+    function renderNavbar() {
+      const desktopNav = document.getElementById('desktop-nav');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      let html = '';
+      let mobileHtml = '';
+      
+      if (currentUser) {
+        html = `
+          <button onclick="navigateTo('home')" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition">หน้าแรก</button>
+          <button onclick="navigateTo('inbox')" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition">Inbox</button>
+          <button onclick="navigateTo('wall')" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition">Public Wall</button>
+          <button onclick="navigateTo('analytics')" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition">สถิติ</button>
+          <button onclick="navigateTo('profile')" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-medium hover:bg-indigo-100 transition text-sm">โปรไฟล์ของฉัน</button>
+        `;
+        mobileHtml = `
+          <button onclick="navigateTo('home'); toggleMobileMenu();" class="text-left py-2 font-medium text-slate-700">หน้าแรก</button>
+          <button onclick="navigateTo('inbox'); toggleMobileMenu();" class="text-left py-2 font-medium text-slate-700">Inbox</button>
+          <button onclick="navigateTo('wall'); toggleMobileMenu();" class="text-left py-2 font-medium text-slate-700">Public Wall</button>
+          <button onclick="navigateTo('analytics'); toggleMobileMenu();" class="text-left py-2 font-medium text-slate-700">สถิติ</button>
+          <button onclick="navigateTo('profile'); toggleMobileMenu();" class="text-left py-2 font-medium text-indigo-600">โปรไฟล์ของฉัน</button>
+          <button onclick="handleLogout(); toggleMobileMenu();" class="text-left py-2 font-medium text-rose-600">ออกจากระบบ</button>
+        `;
+      } else {
+        html = `
+          <button onclick="navigateTo('home')" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition">หน้าแรก</button>
+          <button onclick="navigateTo('wall')" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition">Public Wall</button>
+          <button onclick="navigateTo('auth')" class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition text-sm shadow-md shadow-indigo-600/20">เข้าสู่ระบบ / สมัครสมาชิก</button>
+        `;
+        mobileHtml = `
+          <button onclick="navigateTo('home'); toggleMobileMenu();" class="text-left py-2 font-medium text-slate-700">หน้าแรก</button>
+          <button onclick="navigateTo('wall'); toggleMobileMenu();" class="text-left py-2 font-medium text-slate-700">Public Wall</button>
+          <button onclick="navigateTo('auth'); toggleMobileMenu();" class="text-left py-2 font-medium text-indigo-600">เข้าสู่ระบบ / สมัครสมาชิก</button>
+        `;
       }
-    };
-
-    /* ==========================================================
-       Application state
-       ========================================================== */
-
-    const App = {
-      sessionToken: "",
-      user: null,
-      page: "home",
-      authMode: "login",
-      cache: {
-        inbox: [],
-        sent: [],
-        stories: [],
-        myStories: [],
-        blocked: [],
-        notifications: [],
-        settings: {}
-      },
-      googleInitialized: false,
-      pendingGoogleCredential: null,
-      healthStatus: null,
-      currentSearch: "",
-      currentPostFile: null,
-
-      async init() {
-        document.getElementById("copyrightYear").textContent = new Date().getFullYear();
-        document.title = CONFIG.APP_NAME + " — พื้นที่ของคุณ";
-
-        this.restoreSession();
-        this.bindEvents();
-
-        if (this.sessionToken) {
-          try {
-            await this.loadCurrentUser();
-            this.showApp();
-            this.navigate("home");
-            return;
-          } catch (error) {
-            this.clearSession(false);
-          }
-        }
-
-        this.showAuth();
-        this.initGoogleIdentity();
-        this.checkHealth();
-      },
-
-      bindEvents() {
-        document.getElementById("authForm").addEventListener("submit", event => {
-          event.preventDefault();
-          this.submitAuth();
-        });
-
-        document.addEventListener("keydown", event => {
-          if (event.key === "Escape") UI.closeModal();
-        });
-
-        window.addEventListener("online", () => {
-          UI.toast("กลับมาเชื่อมต่ออินเทอร์เน็ตแล้ว");
-        });
-
-        window.addEventListener("offline", () => {
-          UI.toast("ขณะนี้ไม่มีการเชื่อมต่ออินเทอร์เน็ต", "warning");
-        });
-      },
-
-      restoreSession() {
-        try {
-          this.sessionToken = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY) || "";
-          this.user = JSON.parse(sessionStorage.getItem(CONFIG.USER_STORAGE_KEY) || "null");
-        } catch (_) {
-          this.sessionToken = "";
-          this.user = null;
-        }
-      },
-
-      saveSession(token, user) {
-        if (!token) throw new Error("เซิร์ฟเวอร์ไม่ได้ส่ง session token กลับมา");
-
-        this.sessionToken = String(token);
-        this.user = user || {};
-
-        sessionStorage.setItem(CONFIG.SESSION_STORAGE_KEY, this.sessionToken);
-        sessionStorage.setItem(CONFIG.USER_STORAGE_KEY, JSON.stringify(this.user));
-
-        if (this.user.email) {
-          localStorage.setItem(CONFIG.LAST_USER_KEY, String(this.user.email));
-        }
-      },
-
-      clearSession(showMessage = true) {
-        this.sessionToken = "";
-        this.user = null;
-        sessionStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
-        sessionStorage.removeItem(CONFIG.USER_STORAGE_KEY);
-
-        if (showMessage) UI.toast("คุณออกจากระบบแล้ว");
-        this.showAuth();
-      },
-
-      async checkHealth() {
-        try {
-          this.healthStatus = await API.health();
-          const status = document.getElementById("googleStatus");
-          if (status) status.textContent = "เชื่อมต่อบริการแล้ว";
-        } catch (error) {
-          this.healthStatus = { ok: false, message: error.message };
-          console.warn("Health check:", error.message);
-        }
-      },
-
-      async loadCurrentUser() {
-        if (this.user && (this.user.id || this.user.userId || this.user.email)) {
-          return this.user;
-        }
-
-        const result = await API.request("getMe", {});
-        const data = Utils.resultData(result);
-        const user = data.user || data.profile || data;
-
-        if (!user || !Object.keys(user).length) {
-          throw new Error("ไม่พบข้อมูลบัญชี กรุณาเข้าสู่ระบบอีกครั้ง");
-        }
-
-        this.user = user;
-        sessionStorage.setItem(CONFIG.USER_STORAGE_KEY, JSON.stringify(user));
-        return user;
-      },
-
-      showLoading() {
-        document.getElementById("loadingScreen").classList.remove("hidden");
-        document.getElementById("authScreen").classList.add("hidden");
-        document.getElementById("appScreen").classList.add("hidden");
-      },
-
-      showAuth() {
-        document.getElementById("loadingScreen").classList.add("hidden");
-        document.getElementById("authScreen").classList.remove("hidden");
-        document.getElementById("appScreen").classList.add("hidden");
-        this.initGoogleIdentity();
-      },
-
-      showApp() {
-        document.getElementById("loadingScreen").classList.add("hidden");
-        document.getElementById("authScreen").classList.add("hidden");
-        document.getElementById("appScreen").classList.remove("hidden");
-        this.updateUserUI();
-      },
-
-      updateUserUI() {
-        const name = this.getUserName();
-        const email = this.getUserEmail();
-        const avatar = this.getUserAvatar();
-
-        ["topAvatar", "rightAvatar"].forEach(id => {
-          const element = document.getElementById(id);
-          if (!element) return;
-
-          if (avatar) {
-            element.innerHTML = '<img src="' + escapeHTML(avatar) + '" alt="">';
-          } else {
-            element.textContent = Utils.initials(name);
-          }
-        });
-
-        document.getElementById("rightName").textContent = name;
-        document.getElementById("rightEmail").textContent = email || "บัญชีของคุณ";
-      },
-
-      getUserId() {
-        return this.user?.id || this.user?.userId || this.user?.uid || "";
-      },
-
-      getUserName() {
-        return this.user?.displayName || this.user?.name || this.user?.username ||
-          this.user?.email || "สมาชิก";
-      },
-
-      getUserEmail() {
-        return this.user?.email || "";
-      },
-
-      getUserAvatar() {
-        return this.user?.avatarUrl || this.user?.photoURL ||
-          this.user?.picture || this.user?.avatar || "";
-      },
-
-      setAuthMode(mode) {
-        this.authMode = mode === "register" ? "register" : "login";
-
-        const register = this.authMode === "register";
-        document.getElementById("loginTab").classList.toggle("active", !register);
-        document.getElementById("registerTab").classList.toggle("active", register);
-        document.getElementById("registerFields").classList.toggle("hidden", !register);
-        document.getElementById("forgotPasswordRow").classList.toggle("hidden", register);
-        document.getElementById("authTitle").textContent = register ? "สร้างบัญชีใหม่" : "ยินดีต้อนรับกลับ";
-        document.getElementById("authSubtitle").textContent = register ?
-          "สมัครสมาชิกเพื่อเริ่มต้นใช้งาน" : "เข้าสู่ระบบเพื่อไปยังพื้นที่ของคุณ";
-        document.getElementById("authSubmit").innerHTML =
-          ICON(register ? "user" : "lock") + (register ? " สมัครสมาชิก" : " เข้าสู่ระบบ");
-        document.getElementById("authPassword").autocomplete = register ? "new-password" : "current-password";
-        document.getElementById("authError").classList.add("hidden");
-      },
-
-      async submitAuth() {
-        const form = document.getElementById("authForm");
-        const button = document.getElementById("authSubmit");
-        const email = document.getElementById("authEmail").value.trim().toLowerCase();
-        const password = document.getElementById("authPassword").value;
-        const displayName = document.getElementById("registerName").value.trim();
-
-        if (!Utils.email(email)) {
-          this.authError("กรุณากรอกอีเมลให้ถูกต้อง");
-          return;
-        }
-
-        if (password.length < 8) {
-          this.authError("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
-          return;
-        }
-
-        if (this.authMode === "register" && displayName.length < 2) {
-          this.authError("กรุณากรอกชื่อที่ใช้แสดงอย่างน้อย 2 ตัวอักษร");
-          return;
-        }
-
-        button.disabled = true;
-        button.textContent = this.authMode === "register" ? "กำลังสมัครสมาชิก..." : "กำลังเข้าสู่ระบบ...";
-
-        try {
-          let result;
-
-          if (this.authMode === "register") {
-            result = await API.register({ email, password, displayName });
-          } else {
-            result = await API.login(email, password);
-          }
-
-          const data = Utils.resultData(result);
-          const user = data.user || data.profile || data;
-          const token = data.sessionToken || data.token || result.sessionToken || result.token;
-
-          if (!token) {
-            throw new Error("ระบบตอบกลับแล้ว แต่ไม่พบ session token กรุณาตรวจสอบ Code.gs");
-          }
-
-          this.saveSession(token, user);
-          this.showApp();
-          UI.toast(this.authMode === "register" ? "สมัครสมาชิกสำเร็จ" : "เข้าสู่ระบบสำเร็จ");
-          this.navigate("home");
-        } catch (error) {
-          this.authError(error.message);
-        } finally {
-          button.disabled = false;
-          this.setAuthMode(this.authMode);
-        }
-      },
-
-      authError(message) {
-        const element = document.getElementById("authError");
-        element.textContent = message;
-        element.classList.remove("hidden");
-      },
-
-      initGoogleIdentity() {
-        if (this.googleInitialized) return;
-
-        const load = () => {
-          if (!window.google?.accounts?.id) return;
-
-          try {
-            window.google.accounts.id.initialize({
-              client_id: CONFIG.GOOGLE_CLIENT_ID,
-              callback: response => this.handleGoogleCredential(response),
-              auto_select: false,
-              cancel_on_tap_outside: true
-            });
-            this.googleInitialized = true;
-          } catch (error) {
-            console.warn("Google Identity initialization:", error);
-          }
-        };
-
-        if (window.google?.accounts?.id) {
-          load();
-          return;
-        }
-
-        if (document.getElementById("googleIdentityScript")) return;
-
-        const script = document.createElement("script");
-        script.id = "googleIdentityScript";
-        script.src = "https://accounts.google.com/gsi/client";
-        script.async = true;
-        script.defer = true;
-        script.onload = load;
-        script.onerror = () => {
-          const status = document.getElementById("googleStatus");
-          if (status) status.textContent = "โหลดบริการ Google ไม่สำเร็จ";
-        };
-        document.head.appendChild(script);
-      },
-
-      googleLogin() {
-        if (!window.google?.accounts?.id) {
-          UI.toast("บริการ Google ยังโหลดไม่เสร็จ กรุณารอสักครู่แล้วลองใหม่", "warning");
-          this.initGoogleIdentity();
-          return;
-        }
-
-        if (!this.googleInitialized) this.initGoogleIdentity();
-
-        try {
-          window.google.accounts.id.prompt(notification => {
-            if (notification.isNotDisplayed?.() || notification.isSkippedMoment?.()) {
-              UI.toast("Google One Tap ไม่แสดง กรุณาตรวจสอบการตั้งค่า OAuth และโดเมนเว็บไซต์", "warning");
-            }
-          });
-        } catch (error) {
-          UI.toast(error.message, "error");
-        }
-      },
-
-      async handleGoogleCredential(response) {
-        if (!response?.credential) {
-          UI.toast("ไม่พบข้อมูลรับรองจาก Google", "error");
-          return;
-        }
-
-        try {
-          const result = await API.googleLogin(response.credential);
-          const data = Utils.resultData(result);
-          const user = data.user || data.profile || data;
-          const token = data.sessionToken || data.token || result.sessionToken || result.token;
-
-          if (!token) throw new Error("Google Login สำเร็จแต่เซิร์ฟเวอร์ไม่ได้ส่ง session token");
-
-          this.saveSession(token, user);
-          this.showApp();
-          UI.toast("เข้าสู่ระบบด้วย Google สำเร็จ");
-          this.navigate("home");
-        } catch (error) {
-          UI.toast(error.message, "error");
-        }
-      },
-
-      async forgotPassword() {
-        const email = document.getElementById("authEmail").value.trim().toLowerCase();
-
-        if (!Utils.email(email)) {
-          UI.toast("กรุณากรอกอีเมลในช่องอีเมลก่อน", "warning");
-          document.getElementById("authEmail").focus();
-          return;
-        }
-
-        const overlay = UI.modal({
-          title: "รีเซ็ตรหัสผ่าน",
-          content: `
-            <div class="notice" style="margin-bottom:16px">ระบบจะส่งคำขอรีเซ็ตรหัสผ่านไปยังเซิร์ฟเวอร์ หากบริการนี้เปิดใช้งานอยู่</div>
-            <div class="field-group">
-              <label class="field-label">อีเมล</label>
-              <input class="field" id="forgotEmail" type="email" value="${escapeHTML(email)}" readonly>
-            </div>
-            <div class="small muted">การส่งอีเมลจริงต้องมีระบบรีเซ็ตรหัสผ่านฝั่งเซิร์ฟเวอร์รองรับ</div>
-          `,
-          footer: '<button class="btn" data-cancel>ยกเลิก</button><button class="btn btn-primary" id="forgotSubmit">ส่งคำขอ</button>'
-        });
-
-        overlay.querySelector("[data-cancel]").onclick = () => UI.closeModal();
-
-        overlay.querySelector("#forgotSubmit").onclick = async event => {
-          const button = event.currentTarget;
-          try {
-            await UI.withButton(button, async () => API.forgotPassword({ email }), "ส่งคำขอแล้ว");
-            UI.closeModal();
-          } catch (_) {}
-        };
-      },
-
-      async logout() {
-        const confirmed = await UI.confirm({
-          title: "ออกจากระบบ",
-          message: "คุณต้องการออกจากระบบ AnonMessage ใช่หรือไม่?",
-          confirmText: "ออกจากระบบ",
-          danger: true
-        });
-
-        if (!confirmed) return;
-
-        try {
-          await API.request("logout", {});
-        } catch (error) {
-          console.warn("Logout endpoint:", error.message);
-        }
-
-        this.clearSession(true);
-      },
-
-      async navigate(page) {
-        if (!this.sessionToken) {
-          this.showAuth();
-          return;
-        }
-
-        this.page = page;
-        document.querySelectorAll("[data-page]").forEach(button => {
-          button.classList.toggle("active", button.dataset.page === page);
-        });
-
-        const root = document.getElementById("mainContent");
-        root.innerHTML = '<div class="skeleton" style="margin-bottom:14px"></div><div class="skeleton" style="margin-bottom:14px"></div>';
-
-        try {
-          switch (page) {
-            case "home": await this.renderHome(root); break;
-            case "inbox": await this.renderInbox(root); break;
-            case "send": this.renderSend(root); break;
-            case "wall": await this.renderWall(root); break;
-            case "profile": await this.renderProfile(root); break;
-            case "stories": await this.renderMyStories(root); break;
-            case "search": this.renderSearch(root); break;
-            case "blocked": await this.renderBlocked(root); break;
-            case "settings": await this.renderSettings(root); break;
-            case "notifications": await this.renderNotifications(root); break;
-            default: await this.renderHome(root);
-          }
-        } catch (error) {
-          root.innerHTML = UI.empty("alert", "โหลดข้อมูลไม่สำเร็จ", error.message,
-            '<button class="btn btn-primary" onclick="App.refreshCurrent()">ลองอีกครั้ง</button>');
-        }
-      },
-
-      async refreshCurrent() {
-        if (this.page) await this.navigate(this.page);
-      },
-
-      /* ======================== Home ======================== */
-
-      async renderHome(root) {
-        let stories = [];
-
-        try {
-          const result = await API.listPublicStories();
-          stories = Utils.extractList(Utils.resultData(result), ["stories", "posts", "items"]);
-          this.cache.stories = stories;
-        } catch (error) {
-          console.warn("Public stories:", error.message);
-          stories = this.cache.stories;
-        }
-
-        const inboxCount = this.cache.inbox.length;
-        const myCount = this.cache.myStories.length;
-
-        root.innerHTML = `
-          <div class="page-heading">
-            <div><div class="eyebrow">YOUR DASHBOARD</div><h1>สวัสดี, ${escapeHTML(this.getUserName())}</h1><p>ยินดีต้อนรับกลับสู่พื้นที่ของคุณ</p></div>
-            <button class="btn" onclick="App.refreshCurrent()">${ICON("refresh")} รีเฟรช</button>
-          </div>
-
-          <section class="hero">
-            <div class="eyebrow">ANONMESSAGE COMMUNITY</div>
-            <h2>พื้นที่ของคุณ<br>เริ่มต้นได้ที่นี่</h2>
-            <p>ส่งข้อความ แบ่งปันเรื่องราว หรือเริ่มบทสนทนาในแบบของคุณ</p>
-            <button class="btn btn-primary" onclick="App.navigate('send')">${ICON("send")} ส่งข้อความใหม่</button>
-            <button class="btn btn-ghost" onclick="App.navigate('wall')">สำรวจชุมชน</button>
-          </section>
-
-          <div class="stats-grid">
-            <div class="panel stat-card"><div class="stat-top">ข้อความในกล่อง <span class="stat-icon">${ICON("inbox")}</span></div><div class="stat-number">${inboxCount}</div><div class="stat-caption">ข้อมูลที่โหลดไว้ในหน้านี้</div></div>
-            <div class="panel stat-card"><div class="stat-top">เรื่องราวสาธารณะ <span class="stat-icon">${ICON("users")}</span></div><div class="stat-number">${stories.length}</div><div class="stat-caption">รายการที่โหลดจากเซิร์ฟเวอร์</div></div>
-            <div class="panel stat-card"><div class="stat-top">เรื่องราวของฉัน <span class="stat-icon">${ICON("file")}</span></div><div class="stat-number">${myCount}</div><div class="stat-caption">รายการที่โหลดไว้ในหน้านี้</div></div>
-          </div>
-
-          <div class="section-title"><div><h2>แบ่งปันเรื่องราว</h2><p>เขียนสิ่งที่คุณอยากบอกให้ชุมชนได้รับรู้</p></div></div>
-          ${this.composerHTML()}
-
-          <div class="section-title"><div><h2>เรื่องราวล่าสุด</h2><p>สิ่งที่ผู้คนกำลังแบ่งปัน</p></div><button class="btn btn-sm" onclick="App.navigate('wall')">ดูทั้งหมด</button></div>
-          <div id="homeFeed" class="feed">${this.renderPostsHTML(stories.slice(0, 5))}</div>
-        `;
-
-        this.bindComposer(root.querySelector("#composerForm"));
-        this.bindPostActions(root);
-      },
-
-      composerHTML() {
-        return `
-          <form class="panel composer" id="composerForm">
-            <div class="composer-top">
-              <div class="avatar">${escapeHTML(Utils.initials(this.getUserName()))}</div>
-              <div style="flex:1;min-width:0">
-                <textarea class="field" id="composerText" maxlength="${CONFIG.MAX_POST_LENGTH}" required placeholder="วันนี้คุณอยากแบ่งปันอะไร..."></textarea>
-              </div>
-            </div>
-            <div class="composer-footer">
-              <div class="composer-options">
-                <span class="chip">${ICON("users", "icon-sm")} พื้นที่สาธารณะ</span>
-                <label class="chip" style="cursor:pointer">${ICON("image", "icon-sm")} เพิ่มรูป
-                  <input type="file" id="composerImage" accept="image/*" hidden>
-                </label>
-              </div>
-              <button class="btn btn-primary" type="submit">${ICON("send")} เผยแพร่</button>
-            </div>
-            <div id="composerFilePreview"></div>
-          </form>
-        `;
-      },
-
-      bindComposer(form) {
-        if (!form) return;
-
-        const imageInput = form.querySelector("#composerImage");
-        const preview = form.querySelector("#composerFilePreview");
-
-        imageInput?.addEventListener("change", () => {
-          const file = imageInput.files?.[0];
-          this.currentPostFile = null;
-          preview.innerHTML = "";
-
-          if (!file) return;
-
-          if (!file.type.startsWith("image/")) {
-            UI.toast("ไฟล์ที่เลือกไม่ใช่รูปภาพ", "warning");
-            imageInput.value = "";
-            return;
-          }
-
-          if (file.size > CONFIG.MAX_IMAGE_SIZE) {
-            UI.toast("รูปภาพต้องมีขนาดไม่เกิน 5 MB", "warning");
-            imageInput.value = "";
-            return;
-          }
-
-          this.currentPostFile = file;
-          preview.innerHTML = '<div class="file-preview"><span class="stat-icon">' +
-            ICON("image") + '</span><div style="flex:1;min-width:0"><strong>' +
-            escapeHTML(file.name) + '</strong><div class="small muted">' +
-            Utils.bytes(file.size) + '</div></div><button type="button" class="btn btn-sm" id="removeComposerFile">ลบ</button></div>';
-
-          preview.querySelector("#removeComposerFile").onclick = () => {
-            imageInput.value = "";
-            this.currentPostFile = null;
-            preview.innerHTML = "";
-          };
-        });
-
-        form.addEventListener("submit", async event => {
-          event.preventDefault();
-
-          const text = form.querySelector("#composerText").value.trim();
-          if (!text) {
-            UI.toast("กรุณาเขียนข้อความก่อนเผยแพร่", "warning");
-            return;
-          }
-
-          const button = form.querySelector('button[type="submit"]');
-
-          try {
-            await UI.withButton(button, async () => {
-              let imageUrl = "";
-
-              if (this.currentPostFile) {
-                imageUrl = await this.uploadImage(this.currentPostFile);
-              }
-
-              const result = await API.createStory({
-                content: text,
-                text,
-                imageUrl,
-                visibility: "public"
-              });
-
-              form.reset();
-              this.currentPostFile = null;
-              preview.innerHTML = "";
-
-              UI.toast("ส่งเรื่องราวแล้ว");
-              await this.navigate(this.page);
-              return result;
-            });
-          } catch (_) {}
-        });
-      },
-
-      async uploadImage(file) {
-        const dataUrl = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = () => reject(new Error("อ่านไฟล์รูปภาพไม่สำเร็จ"));
-          reader.readAsDataURL(file);
-        });
-
-        const result = await API.uploadMedia({
-          filename: file.name,
-          mimeType: file.type,
-          data: dataUrl
-        });
-
-        const data = Utils.resultData(result);
-        const url = data.url || data.imageUrl || data.downloadUrl;
-
-        if (!url) throw new Error("เซิร์ฟเวอร์ไม่ได้ส่ง URL รูปภาพกลับมา");
-        return url;
-      },
-
-      /* ======================== Public wall ======================== */
-
-      async renderWall(root) {
-        const result = await API.listPublicStories();
-        const stories = Utils.extractList(Utils.resultData(result), ["stories", "posts", "items"]);
-        this.cache.stories = stories;
-
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">COMMUNITY</div><h1>พื้นที่สาธารณะ</h1><p>อ่านเรื่องราวและร่วมแสดงความคิดเห็น</p></div><button class="btn" onclick="App.refreshCurrent()">${ICON("refresh")}</button></div>
-          ${this.composerHTML()}
-          <div class="section-title"><div><h2>เรื่องราวทั้งหมด</h2><p>${stories.length} รายการที่ได้รับจากเซิร์ฟเวอร์</p></div></div>
-          <div class="feed">${this.renderPostsHTML(stories)}</div>
-        `;
-
-        this.bindComposer(root.querySelector("#composerForm"));
-        this.bindPostActions(root);
-      },
-
-      renderPostsHTML(posts) {
-        if (!posts.length) {
-          return UI.empty("message", "ยังไม่มีเรื่องราว", "เริ่มแบ่งปันเรื่องราวแรกของคุณได้เลย");
-        }
-
-        return posts.map(post => {
-          const id = post.id || post.storyId || post.postId || "";
-          const author = post.displayName || post.authorName || post.username || post.author || "สมาชิก";
-          const content = post.content || post.text || post.message || "";
-          const time = post.createdAt || post.timestamp || post.date || "";
-          const avatar = post.avatarUrl || post.authorAvatar || "";
-          const image = post.imageUrl || post.image || "";
-          const likes = Number(post.likesCount ?? post.likeCount ?? post.likes ?? 0);
-          const comments = Array.isArray(post.comments) ? post.comments : [];
-          const isLiked = Boolean(post.likedByMe || post.isLiked);
-          const safeId = escapeHTML(id);
-
-          return `
-            <article class="panel post" data-story-id="${safeId}">
-              <div class="post-header">
-                <div class="avatar">${avatar ? '<img src="' + escapeHTML(avatar) + '" alt="" loading="lazy">' : escapeHTML(Utils.initials(author))}</div>
-                <div class="post-author">
-                  <strong>${escapeHTML(author)}</strong>
-                  <div class="post-meta">${escapeHTML(Utils.date(time))} · ${ICON("users", "icon-sm")} สาธารณะ</div>
-                </div>
-                <button class="icon-button post-menu" aria-label="ตัวเลือกเพิ่มเติม" data-action="post-menu" data-id="${safeId}">${ICON("more")}</button>
-              </div>
-
-              <div class="post-content">${escapeHTML(content)}</div>
-
-              ${image ? '<div style="margin-bottom:14px"><img src="' + escapeHTML(image) + '" alt="รูปภาพประกอบเรื่องราว" loading="lazy" style="width:100%;max-height:480px;object-fit:contain;border-radius:13px;background:#11141e"></div>' : ""}
-
-              <div class="post-actions">
-                <button class="action-btn ${isLiked ? "liked" : ""}" data-action="like" data-id="${safeId}">${ICON("heart")} <span>${likes}</span> ถูกใจ</button>
-                <button class="action-btn" data-action="comments" data-id="${safeId}">${ICON("comment")} ${comments.length || Number(post.commentCount || 0)} ความคิดเห็น</button>
-                <button class="action-btn" data-action="share" data-id="${safeId}">${ICON("share")} แชร์</button>
-                <button class="action-btn" data-action="report" data-id="${safeId}">${ICON("alert")} รายงาน</button>
-              </div>
-
-              <div class="comments hidden" id="comments-${safeId}">
-                <div class="comment-list">${comments.map(comment => `
-                  <div class="comment">
-                    <div class="avatar" style="width:30px;height:30px;border-radius:10px">${escapeHTML(Utils.initials(comment.displayName || comment.authorName || "M"))}</div>
-                    <div class="comment-body"><strong>${escapeHTML(comment.displayName || comment.authorName || "สมาชิก")}</strong><p>${escapeHTML(comment.content || comment.text || "")}</p><span class="small muted">${escapeHTML(Utils.date(comment.createdAt || comment.timestamp))}</span></div>
-                  </div>
-                `).join("")}</div>
-                <form class="comment-form" data-comment-form data-id="${safeId}">
-                  <input class="field" name="content" required maxlength="${CONFIG.MAX_COMMENT_LENGTH}" placeholder="เขียนความคิดเห็น...">
-                  <button class="btn btn-primary" type="submit" aria-label="ส่งความคิดเห็น">${ICON("send")}</button>
-                </form>
-              </div>
-            </article>
-          `;
-        }).join("");
-      },
-
-      bindPostActions(root) {
-        root.querySelectorAll('[data-action="like"]').forEach(button => {
-          button.addEventListener("click", async () => {
-            const id = button.dataset.id;
-            if (!id) {
-              UI.toast("ไม่พบรหัสเรื่องราว", "error");
-              return;
-            }
-
-            try {
-              const result = await API.reactToStory({ storyId: id, reaction: "like" });
-              const data = Utils.resultData(result);
-              const count = data.likesCount ?? data.likeCount;
-
-              if (count !== undefined) {
-                button.querySelector("span").textContent = String(count);
-              } else {
-                await this.refreshCurrent();
-              }
-
-              button.classList.toggle("liked");
-            } catch (error) {
-              UI.toast(error.message, "error");
-            }
-          });
-        });
-
-        root.querySelectorAll('[data-action="comments"]').forEach(button => {
-          button.addEventListener("click", () => {
-            const comments = document.getElementById("comments-" + CSS.escape(button.dataset.id));
-            if (comments) comments.classList.toggle("hidden");
-          });
-        });
-
-        root.querySelectorAll('[data-action="share"]').forEach(button => {
-          button.addEventListener("click", () => this.shareStory(button.dataset.id));
-        });
-
-        root.querySelectorAll('[data-action="report"]').forEach(button => {
-          button.addEventListener("click", () => this.reportStory(button.dataset.id));
-        });
-
-        root.querySelectorAll('[data-action="post-menu"]').forEach(button => {
-          button.addEventListener("click", () => this.showPostMenu(button.dataset.id));
-        });
-
-        root.querySelectorAll("[data-comment-form]").forEach(form => {
-          form.addEventListener("submit", async event => {
-            event.preventDefault();
-
-            const input = form.elements.content;
-            const content = input.value.trim();
-            const storyId = form.dataset.id;
-
-            if (!content) return;
-
-            const button = form.querySelector('button[type="submit"]');
-            try {
-              await UI.withButton(button, async () => {
-                await API.commentOnStory({ storyId, content, text: content });
-                input.value = "";
-                UI.toast("ส่งความคิดเห็นแล้ว");
-                await this.refreshCurrent();
-              });
-            } catch (_) {}
-          });
-        });
-      },
-
-      async shareStory(storyId) {
-        const shareUrl = new URL(location.href);
-        shareUrl.searchParams.set("story", storyId);
-
-        try {
-          if (navigator.share) {
-            await navigator.share({ title: CONFIG.APP_NAME, url: shareUrl.href });
-            return;
-          }
-        } catch (error) {
-          if (error.name === "AbortError") return;
-        }
-
-        try {
-          await navigator.clipboard.writeText(shareUrl.href);
-          UI.toast("คัดลอกลิงก์แล้ว");
-        } catch (_) {
-          UI.modal({
-            title: "แชร์เรื่องราว",
-            content: '<input class="field" readonly value="' + escapeHTML(shareUrl.href) + '">'
-          });
-        }
-      },
-
-      showPostMenu(storyId) {
-        UI.modal({
-          title: "ตัวเลือกเรื่องราว",
-          content: `
-            <div class="notice" style="margin-bottom:14px">เลือกการดำเนินการที่ต้องการ</div>
-            <button class="btn btn-block" style="margin-bottom:9px" id="postMenuShare">${ICON("share")} แชร์เรื่องราว</button>
-            <button class="btn btn-block btn-danger" id="postMenuReport">${ICON("alert")} รายงานเนื้อหา</button>
-          `
-        });
-
-        document.getElementById("postMenuShare").onclick = () => {
-          UI.closeModal();
-          this.shareStory(storyId);
-        };
-
-        document.getElementById("postMenuReport").onclick = () => {
-          UI.closeModal();
-          this.reportStory(storyId);
-        };
-      },
-
-      async reportStory(storyId) {
-        UI.modal({
-          title: "รายงานเนื้อหา",
-          content: `
-            <p class="muted">เลือกเหตุผลในการรายงาน ระบบจะส่งข้อมูลให้เซิร์ฟเวอร์ตรวจสอบ</p>
-            <div class="field-group">
-              <label class="field-label" for="reportReason">เหตุผล</label>
-              <select class="field" id="reportReason">
-                <option value="spam">สแปม</option>
-                <option value="harassment">คุกคามหรือกลั่นแกล้ง</option>
-                <option value="inappropriate">เนื้อหาไม่เหมาะสม</option>
-                <option value="privacy">ละเมิดความเป็นส่วนตัว</option>
-                <option value="other">อื่น ๆ</option>
-              </select>
-            </div>
-            <div class="field-group">
-              <label class="field-label" for="reportDetails">รายละเอียดเพิ่มเติม</label>
-              <textarea class="field" id="reportDetails" maxlength="2000" placeholder="อธิบายเพิ่มเติม (ถ้ามี)"></textarea>
-            </div>
-          `,
-          footer: '<button class="btn" data-cancel>ยกเลิก</button><button class="btn btn-danger" id="submitReport">ส่งรายงาน</button>'
-        });
-
-        document.querySelector("#activeModal [data-cancel]").onclick = () => UI.closeModal();
-
-        document.getElementById("submitReport").onclick = async event => {
-          const button = event.currentTarget;
-          try {
-            await UI.withButton(button, async () => {
-              await API.reportContent({
-                contentId: storyId,
-                storyId,
-                type: "story",
-                reason: document.getElementById("reportReason").value,
-                details: document.getElementById("reportDetails").value.trim()
-              });
-              UI.closeModal();
-            }, "ส่งรายงานแล้ว");
-          } catch (_) {}
-        };
-      },
-
-      /* ======================== Send messages ======================== */
-
-      renderSend(root) {
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">NEW MESSAGE</div><h1>ส่งข้อความ</h1><p>เขียนข้อความถึงผู้รับที่คุณต้องการ</p></div></div>
-          <section class="panel" style="padding:22px">
-            <div class="notice" style="margin-bottom:20px">${ICON("lock", "icon-sm")} ข้อมูลผู้รับและรูปแบบการส่งข้อความขึ้นอยู่กับการตั้งค่าฝั่งเซิร์ฟเวอร์</div>
-            <form id="sendMessageForm">
-              <div class="field-group">
-                <label class="field-label" for="messageRecipient">ผู้รับ</label>
-                <input class="field" id="messageRecipient" name="recipient" required maxlength="200" placeholder="อีเมล ชื่อผู้ใช้ หรือรหัสผู้รับ">
-                <p class="small muted">กรอกข้อมูลผู้รับตามรูปแบบที่ระบบหลังบ้านรองรับ</p>
-              </div>
-              <div class="field-group">
-                <label class="field-label" for="messageSubject">หัวข้อ (ไม่บังคับ)</label>
-                <input class="field" id="messageSubject" name="subject" maxlength="200" placeholder="หัวข้อข้อความ">
-              </div>
-              <div class="field-group">
-                <label class="field-label" for="messageContent">ข้อความ</label>
-                <textarea class="field" id="messageContent" name="content" required maxlength="${CONFIG.MAX_MESSAGE_LENGTH}" style="min-height:200px" placeholder="เขียนข้อความของคุณที่นี่..."></textarea>
-                <div class="small muted" style="text-align:right"><span id="messageLength">0</span> / ${CONFIG.MAX_MESSAGE_LENGTH}</div>
-              </div>
-              <div class="field-group">
-                <label class="field-label" for="messageMode">รูปแบบผู้ส่ง</label>
-                <select class="field" id="messageMode" name="senderMode">
-                  <option value="anonymous">ไม่แสดงชื่อผู้ส่ง (หากระบบรองรับ)</option>
-                  <option value="identified">แสดงชื่อผู้ส่ง</option>
-                </select>
-              </div>
-              <div class="field-group">
-                <label style="display:flex;align-items:flex-start;gap:9px;color:var(--muted);font-size:12px">
-                  <input type="checkbox" id="messageConfirm" required style="margin-top:4px">
-                  ฉันตรวจสอบเนื้อหาและผู้รับแล้ว และยืนยันว่าจะไม่ส่งข้อความเพื่อคุกคามหรือหลอกลวง
-                </label>
-              </div>
-              <button class="btn btn-primary" type="submit">${ICON("send")} ส่งข้อความ</button>
-            </form>
-          </section>
-        `;
-
-        const content = root.querySelector("#messageContent");
-        content.addEventListener("input", () => {
-          root.querySelector("#messageLength").textContent = String(content.value.length);
-        });
-
-        root.querySelector("#sendMessageForm").addEventListener("submit", async event => {
-          event.preventDefault();
-
-          const recipient = root.querySelector("#messageRecipient").value.trim();
-          const subject = root.querySelector("#messageSubject").value.trim();
-          const message = content.value.trim();
-          const senderMode = root.querySelector("#messageMode").value;
-
-          if (!recipient || !message) {
-            UI.toast("กรุณากรอกผู้รับและข้อความ", "warning");
-            return;
-          }
-
-          const button = event.currentTarget.querySelector('button[type="submit"]');
-
-          try {
-            await UI.withButton(button, async () => {
-              const result = await API.sendMessage({
-                recipient,
-                to: recipient,
-                subject,
-                content: message,
-                message,
-                senderMode,
-                anonymous: senderMode === "anonymous"
-              });
-
-              const data = Utils.resultData(result);
-              if (data.messageId || data.id) {
-                UI.toast("ส่งข้อความเรียบร้อยแล้ว");
-              } else {
-                UI.toast("เซิร์ฟเวอร์รับคำขอแล้ว");
-              }
-
-              event.currentTarget.reset();
-              root.querySelector("#messageLength").textContent = "0";
-            });
-          } catch (_) {}
-        });
-      },
-
-      /* ======================== Inbox ======================== */
-
-      async renderInbox(root) {
-        const result = await API.getInbox();
-        const messages = Utils.extractList(Utils.resultData(result), ["messages", "inbox", "items"]);
-        this.cache.inbox = messages;
-
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">YOUR MESSAGES</div><h1>กล่องข้อความ</h1><p>จัดการข้อความที่ได้รับ</p></div><button class="btn" onclick="App.refreshCurrent()">${ICON("refresh")}</button></div>
-          <div class="search-row">
-            <input class="field" id="inboxSearch" placeholder="ค้นหาข้อความในกล่อง..." aria-label="ค้นหาข้อความ">
-            <button class="btn" id="inboxSearchButton">${ICON("search")} ค้นหา</button>
-          </div>
-          <div class="panel table-wrap">
-            <table><thead><tr><th>ผู้ส่ง</th><th>ข้อความ</th><th>วันที่</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody id="inboxRows">${this.renderInboxRows(messages)}</tbody></table>
-          </div>
-          ${messages.length ? "" : UI.empty("inbox", "ยังไม่มีข้อความ", "เมื่อมีข้อความเข้ามา ข้อความจะแสดงในหน้านี้")}
-        `;
-
-        const search = () => {
-          const query = root.querySelector("#inboxSearch").value.trim().toLowerCase();
-          const filtered = messages.filter(message => {
-            const content = [
-              message.content, message.message, message.subject, message.senderName,
-              message.sender, message.from, message.createdAt
-            ].join(" ").toLowerCase();
-            return content.includes(query);
-          });
-          root.querySelector("#inboxRows").innerHTML = this.renderInboxRows(filtered);
-          this.bindInboxRows(root, filtered);
-        };
-
-        root.querySelector("#inboxSearchButton").onclick = search;
-        root.querySelector("#inboxSearch").addEventListener("keydown", event => {
-          if (event.key === "Enter") search();
-        });
-
-        this.bindInboxRows(root, messages);
-      },
-
-      renderInboxRows(messages) {
-        if (!messages.length) {
-          return '<tr><td colspan="5" class="muted" style="text-align:center;padding:35px">ไม่มีรายการข้อความ</td></tr>';
-        }
-
-        return messages.map(message => {
-          const id = message.id || message.messageId || "";
-          const sender = message.senderName || message.sender || message.from || "ไม่ระบุผู้ส่ง";
-          const content = message.content || message.message || message.subject || "";
-          const time = message.createdAt || message.timestamp || message.date;
-          const read = Boolean(message.read || message.isRead || message.status === "read");
-
-          return `<tr>
-            <td>${escapeHTML(sender)}</td>
-            <td>${escapeHTML(String(content).slice(0, 110))}${String(content).length > 110 ? "…" : ""}</td>
-            <td>${escapeHTML(Utils.date(time))}</td>
-            <td><span class="status ${read ? "status-ok" : "status-pending"}">${read ? "อ่านแล้ว" : "ยังไม่อ่าน"}</span></td>
-            <td><button class="btn btn-sm" data-message-view="${escapeHTML(id)}">เปิด</button></td>
-          </tr>`;
-        }).join("");
-      },
-
-      bindInboxRows(root, messages) {
-        root.querySelectorAll("[data-message-view]").forEach(button => {
-          button.onclick = () => {
-            const message = messages.find(item =>
-              String(item.id || item.messageId || "") === button.dataset.messageView
-            );
-            if (message) this.openMessage(message);
-          };
-        });
-      },
-
-      openMessage(message) {
-        const id = message.id || message.messageId || "";
-        const content = message.content || message.message || "";
-        const sender = message.senderName || message.sender || message.from || "ไม่ระบุผู้ส่ง";
-        const subject = message.subject || "ไม่มีหัวข้อ";
-
-        UI.modal({
-          title: "รายละเอียดข้อความ",
-          content: `
-            <div class="field-group"><label class="field-label">ผู้ส่ง</label><div>${escapeHTML(sender)}</div></div>
-            <div class="field-group"><label class="field-label">หัวข้อ</label><div>${escapeHTML(subject)}</div></div>
-            <div class="field-group"><label class="field-label">วันที่</label><div>${escapeHTML(Utils.date(message.createdAt || message.timestamp))}</div></div>
-            <div class="field-group"><label class="field-label">เนื้อหา</label><div class="panel" style="padding:14px;white-space:pre-wrap;overflow-wrap:anywhere">${escapeHTML(content)}</div></div>
-            <div class="field-group"><label class="field-label" for="replyContent">ตอบกลับ</label><textarea id="replyContent" class="field" maxlength="${CONFIG.MAX_MESSAGE_LENGTH}" placeholder="เขียนข้อความตอบกลับ..."></textarea></div>
-          `,
-          footer: '<button class="btn btn-danger" id="deleteMessageButton">ลบข้อความ</button><button class="btn" id="markReadButton">ทำเครื่องหมายว่าอ่านแล้ว</button><button class="btn btn-primary" id="replyMessageButton">' + ICON("send") + ' ตอบกลับ</button>',
-          wide: true
-        });
-
-        document.getElementById("markReadButton").onclick = async event => {
-          try {
-            await UI.withButton(event.currentTarget, () => API.markMessageRead({ messageId: id, id }));
-            UI.closeModal();
-            await this.refreshCurrent();
-          } catch (_) {}
-        };
-
-        document.getElementById("deleteMessageButton").onclick = async event => {
-          const yes = await UI.confirm({
-            title: "ลบข้อความ",
-            message: "คุณแน่ใจหรือไม่ว่าต้องการลบข้อความนี้?",
-            danger: true,
-            confirmText: "ลบข้อความ"
-          });
-          if (!yes) return;
-
-          try {
-            await UI.withButton(event.currentTarget, () => API.deleteMessage({ messageId: id, id }));
-            UI.closeModal();
-            await this.refreshCurrent();
-          } catch (_) {}
-        };
-
-        document.getElementById("replyMessageButton").onclick = async event => {
-          const reply = document.getElementById("replyContent").value.trim();
-          if (!reply) {
-            UI.toast("กรุณากรอกข้อความตอบกลับ", "warning");
-            return;
-          }
-
-          try {
-            await UI.withButton(event.currentTarget, () =>
-              API.replyMessage({ messageId: id, id, content: reply, message: reply })
-            );
-            UI.closeModal();
-            UI.toast("ส่งข้อความตอบกลับแล้ว");
-            await this.refreshCurrent();
-          } catch (_) {}
-        };
-
-        API.markMessageRead({ messageId: id, id }).catch(error => {
-          console.warn("Mark read:", error.message);
-        });
-      },
-
-      /* ======================== Profile ======================== */
-
-      async renderProfile(root) {
-        let profile = this.user || {};
-
-        const userId = this.getUserId();
-        if (userId) {
-          try {
-            const result = await API.getPublicProfile({ userId, id: userId });
-            const data = Utils.resultData(result);
-            profile = data.profile || data.user || data;
-            this.user = { ...this.user, ...profile };
-            sessionStorage.setItem(CONFIG.USER_STORAGE_KEY, JSON.stringify(this.user));
-          } catch (error) {
-            console.warn("Profile:", error.message);
-          }
-        }
-
-        const name = profile.displayName || profile.name || profile.username || this.getUserName();
-        const email = profile.email || this.getUserEmail();
-        const bio = profile.bio || profile.about || "";
-        const avatar = profile.avatarUrl || profile.photoURL || profile.avatar || this.getUserAvatar();
-
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">YOUR PROFILE</div><h1>โปรไฟล์ของฉัน</h1><p>จัดการข้อมูลที่ใช้แสดงในระบบ</p></div><button class="btn" id="editProfileButton">${ICON("settings")} แก้ไขโปรไฟล์</button></div>
-          <section class="panel" style="overflow:hidden">
-            <div class="profile-cover"></div>
-            <div class="profile-content">
-              <div class="avatar profile-big-avatar">${avatar ? '<img src="' + escapeHTML(avatar) + '" alt="">' : escapeHTML(Utils.initials(name))}</div>
-              <h2 style="margin:13px 0 2px">${escapeHTML(name)}</h2>
-              <div class="muted">${escapeHTML(email)}</div>
-              <p style="white-space:pre-wrap;overflow-wrap:anywhere">${escapeHTML(bio || "ยังไม่ได้เพิ่มคำแนะนำตัว")}</p>
-              <div class="profile-stats">
-                <div><strong>${this.cache.myStories.length}</strong><span>เรื่องราวที่โหลดไว้</span></div>
-                <div><strong>${this.cache.inbox.length}</strong><span>ข้อความที่โหลดไว้</span></div>
-              </div>
-              <div style="margin-top:22px;display:flex;gap:9px;flex-wrap:wrap">
-                <button class="btn btn-primary" onclick="App.navigate('stories')">${ICON("file")} เรื่องราวของฉัน</button>
-                <button class="btn" onclick="App.navigate('settings')">${ICON("settings")} ตั้งค่าบัญชี</button>
-              </div>
-            </div>
-          </section>
-        `;
-
-        root.querySelector("#editProfileButton").onclick = () => this.editProfile(profile);
-      },
-
-      editProfile(profile = {}) {
-        UI.modal({
-          title: "แก้ไขโปรไฟล์",
-          content: `
-            <form id="editProfileForm">
-              <div class="field-group"><label class="field-label" for="editDisplayName">ชื่อที่ใช้แสดง</label><input class="field" id="editDisplayName" maxlength="80" required value="${escapeHTML(profile.displayName || profile.name || profile.username || "")}"></div>
-              <div class="field-group"><label class="field-label" for="editBio">แนะนำตัว</label><textarea class="field" id="editBio" maxlength="1000" placeholder="เขียนเกี่ยวกับตัวคุณ...">${escapeHTML(profile.bio || profile.about || "")}</textarea></div>
-              <div class="field-group"><label class="field-label" for="editAvatarUrl">URL รูปโปรไฟล์</label><input class="field" id="editAvatarUrl" type="url" maxlength="1000" value="${escapeHTML(profile.avatarUrl || profile.avatar || "")}" placeholder="https://..."><p class="small muted">ใช้ URL รูปภาพที่เข้าถึงได้จากอินเทอร์เน็ต</p></div>
-            </form>
-          `,
-          footer: '<button class="btn" data-cancel>ยกเลิก</button><button class="btn btn-primary" id="saveProfileButton">บันทึก</button>'
-        });
-
-        document.querySelector("#activeModal [data-cancel]").onclick = () => UI.closeModal();
-
-        document.getElementById("saveProfileButton").onclick = async event => {
-          const button = event.currentTarget;
-          const displayName = document.getElementById("editDisplayName").value.trim();
-          const bio = document.getElementById("editBio").value.trim();
-          const avatarUrl = document.getElementById("editAvatarUrl").value.trim();
-
-          if (displayName.length < 2) {
-            UI.toast("ชื่อที่ใช้แสดงต้องมีอย่างน้อย 2 ตัวอักษร", "warning");
-            return;
-          }
-
-          try {
-            await UI.withButton(button, async () => {
-              const result = await API.updateProfile({ displayName, bio, avatarUrl });
-              const data = Utils.resultData(result);
-              this.user = { ...this.user, ...(data.user || data.profile || data), displayName, bio, avatarUrl };
-              sessionStorage.setItem(CONFIG.USER_STORAGE_KEY, JSON.stringify(this.user));
-              this.updateUserUI();
-              UI.closeModal();
-              await this.navigate("profile");
-            }, "บันทึกโปรไฟล์แล้ว");
-          } catch (_) {}
-        };
-      },
-
-      /* ======================== My stories ======================== */
-
-      async renderMyStories(root) {
-        const result = await API.getMyStories();
-        const stories = Utils.extractList(Utils.resultData(result), ["stories", "posts", "items"]);
-        this.cache.myStories = stories;
-
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">YOUR POSTS</div><h1>เรื่องราวของฉัน</h1><p>จัดการรายการเรื่องราวที่คุณสร้าง</p></div><button class="btn" onclick="App.refreshCurrent()">${ICON("refresh")}</button></div>
-          <div class="feed">${stories.length ? stories.map(story => {
-            const id = story.id || story.storyId || story.postId || "";
-            return `<article class="panel post">
-              <div class="post-meta">${escapeHTML(Utils.date(story.createdAt || story.timestamp))}</div>
-              <div class="post-content">${escapeHTML(story.content || story.text || "")}</div>
-              <div class="post-actions">
-                <button class="action-btn" data-action="share" data-id="${escapeHTML(id)}">${ICON("share")} แชร์</button>
-                <button class="btn btn-danger btn-sm" data-delete-story="${escapeHTML(id)}">${ICON("alert")} ลบเรื่องราว</button>
-              </div>
-            </article>`;
-          }).join("") : UI.empty("file", "ยังไม่มีเรื่องราว", "เรื่องราวที่คุณเผยแพร่จะแสดงที่นี่")}
-          </div>
-        `;
-
-        this.bindPostActions(root);
-
-        root.querySelectorAll("[data-delete-story]").forEach(button => {
-          button.onclick = async () => {
-            const yes = await UI.confirm({
-              title: "ลบเรื่องราว",
-              message: "การลบอาจไม่สามารถย้อนกลับได้ คุณต้องการดำเนินการต่อหรือไม่?",
-              danger: true,
-              confirmText: "ลบ"
-            });
-
-            if (!yes) return;
-
-            try {
-              await API.deleteStory({ storyId: button.dataset.deleteStory, id: button.dataset.deleteStory });
-              UI.toast("ลบเรื่องราวแล้ว");
-              await this.refreshCurrent();
-            } catch (error) {
-              UI.toast(error.message, "error");
-            }
-          };
-        });
-      },
-
-      /* ======================== Search ======================== */
-
-      renderSearch(root) {
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">DISCOVER</div><h1>ค้นหา</h1><p>ค้นหาเรื่องราวหรือสมาชิกตามที่ระบบรองรับ</p></div></div>
-          <section class="panel" style="padding:20px">
-            <form class="search-row" id="globalSearchForm">
-              <input class="field" id="globalSearchInput" required maxlength="200" placeholder="พิมพ์คำค้นหา...">
-              <button class="btn btn-primary" type="submit">${ICON("search")} ค้นหา</button>
-            </form>
-            <div class="small muted">ผลลัพธ์ขึ้นอยู่กับบริการค้นหาที่ตั้งค่าไว้ใน Worker และ Code.gs</div>
-          </section>
-          <div class="section-title"><h2>ผลการค้นหา</h2></div>
-          <div id="searchResults"></div>
-        `;
-
-        root.querySelector("#globalSearchForm").onsubmit = async event => {
-          event.preventDefault();
-          const query = root.querySelector("#globalSearchInput").value.trim();
-          const results = root.querySelector("#searchResults");
-          results.innerHTML = '<div class="skeleton"></div>';
-
-          try {
-            const result = await API.search({ query, q: query });
-            const data = Utils.resultData(result);
-            const items = Utils.extractList(data, ["results", "stories", "users", "items"]);
-
-            if (!items.length) {
-              results.innerHTML = UI.empty("search", "ไม่พบผลลัพธ์", "ลองใช้คำค้นหาอื่น");
-              return;
-            }
-
-            results.innerHTML = `<div class="feed">${items.map(item => {
-              const isUser = Boolean(item.email || item.userId);
-              const name = item.displayName || item.name || item.username || "สมาชิก";
-              const content = item.content || item.text || item.bio || "";
-              const id = item.id || item.userId || item.storyId || "";
-
-              return `<article class="panel post">
-                <div class="post-header"><div class="avatar">${escapeHTML(Utils.initials(name))}</div><div class="post-author"><strong>${escapeHTML(name)}</strong><div class="post-meta">${isUser ? "สมาชิก" : escapeHTML(Utils.date(item.createdAt || item.timestamp))}</div></div></div>
-                <div class="post-content">${escapeHTML(content)}</div>
-                <div class="post-actions">${isUser ? '<button class="btn btn-sm" data-view-user="' + escapeHTML(id) + '">ดูสมาชิก</button>' : '<button class="action-btn" data-action="share" data-id="' + escapeHTML(id) + '">' + ICON("share") + ' แชร์</button>'}</div>
-              </article>`;
-            }).join("")}</div>`;
-
-            results.querySelectorAll("[data-view-user]").forEach(button => {
-              button.onclick = () => this.viewUser(button.dataset.viewUser);
-            });
-            this.bindPostActions(results);
-          } catch (error) {
-            results.innerHTML = UI.empty("alert", "ค้นหาไม่สำเร็จ", error.message);
-          }
-        };
-      },
-
-      async viewUser(userId) {
-        try {
-          const result = await API.getPublicProfile({ userId, id: userId });
-          const data = Utils.resultData(result);
-          const user = data.profile || data.user || data;
-          UI.modal({
-            title: "โปรไฟล์สมาชิก",
-            content: `
-              <div class="profile-summary">
-                <div class="avatar">${escapeHTML(Utils.initials(user.displayName || user.name || user.username))}</div>
-                <div><strong>${escapeHTML(user.displayName || user.name || user.username || "สมาชิก")}</strong><div class="muted small">${escapeHTML(user.bio || user.about || "ไม่มีคำแนะนำตัว")}</div></div>
-              </div>
-              <div class="notice" style="margin-top:18px">ข้อมูลที่แสดงขึ้นอยู่กับการตั้งค่าความเป็นส่วนตัวของสมาชิก</div>
-            `,
-            footer: '<button class="btn" data-close>ปิด</button><button class="btn btn-danger" id="blockViewedUser">บล็อกสมาชิก</button>'
-          });
-
-          document.querySelector("#activeModal [data-close]").onclick = () => UI.closeModal();
-          document.getElementById("blockViewedUser").onclick = async () => {
-            const yes = await UI.confirm({ title: "บล็อกสมาชิก", message: "คุณต้องการบล็อกสมาชิกนี้ใช่หรือไม่?", danger: true });
-            if (!yes) return;
-
-            try {
-              await API.blockUser({ userId, id: userId });
-              UI.closeModal();
-              UI.toast("บล็อกสมาชิกแล้ว");
-            } catch (error) {
-              UI.toast(error.message, "error");
-            }
-          };
-        } catch (error) {
-          UI.toast(error.message, "error");
-        }
-      },
-
-      /* ======================== Blocked users ======================== */
-
-      async renderBlocked(root) {
-        const result = await API.listBlockedUsers();
-        const users = Utils.extractList(Utils.resultData(result), ["blockedUsers", "users", "items"]);
-        this.cache.blocked = users;
-
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">PRIVACY</div><h1>บัญชีที่บล็อก</h1><p>จัดการบัญชีที่คุณไม่ต้องการติดต่อด้วย</p></div><button class="btn" onclick="App.refreshCurrent()">${ICON("refresh")}</button></div>
-          <div class="panel" style="padding:20px">
-            ${users.length ? users.map(user => {
-              const id = user.userId || user.id || "";
-              const name = user.displayName || user.name || user.username || user.email || "สมาชิก";
-              return `<div class="settings-row">
-                <div class="profile-summary"><div class="avatar">${escapeHTML(Utils.initials(name))}</div><div><strong>${escapeHTML(name)}</strong><span>${escapeHTML(user.email || "สมาชิกที่ถูกบล็อก")}</span></div></div>
-                <button class="btn btn-sm" data-unblock="${escapeHTML(id)}">เลิกบล็อก</button>
-              </div>`;
-            }).join("") : UI.empty("shield", "ไม่มีบัญชีที่บล็อก", "บัญชีที่คุณบล็อกจะแสดงในหน้านี้")}
-          </div>
-        `;
-
-        root.querySelectorAll("[data-unblock]").forEach(button => {
-          button.onclick = async () => {
-            try {
-              await API.unblockUser({ userId: button.dataset.unblock, id: button.dataset.unblock });
-              UI.toast("เลิกบล็อกสมาชิกแล้ว");
-              await this.refreshCurrent();
-            } catch (error) {
-              UI.toast(error.message, "error");
-            }
-          };
-        });
-      },
-
-      /* ======================== Notifications ======================== */
-
-      async renderNotifications(root) {
-        const result = await API.getNotifications();
-        const notifications = Utils.extractList(Utils.resultData(result), ["notifications", "items"]);
-        this.cache.notifications = notifications;
-
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">ACTIVITY</div><h1>การแจ้งเตือน</h1><p>รายการกิจกรรมที่ระบบส่งให้คุณ</p></div><button class="btn" onclick="App.refreshCurrent()">${ICON("refresh")}</button></div>
-          <div class="panel" style="padding:10px 18px">
-            ${notifications.length ? notifications.map(item => {
-              const id = item.id || item.notificationId || "";
-              return `<div class="settings-row">
-                <div style="display:flex;gap:12px;align-items:flex-start">
-                  <div class="stat-icon">${ICON("bell")}</div>
-                  <div><strong>${escapeHTML(item.title || item.type || "การแจ้งเตือน")}</strong><span>${escapeHTML(item.message || item.content || "")}</span><span>${escapeHTML(Utils.date(item.createdAt || item.timestamp))}</span></div>
-                </div>
-                <button class="btn btn-sm" data-notification-read="${escapeHTML(id)}">อ่านแล้ว</button>
-              </div>`;
-            }).join("") : UI.empty("bell", "ยังไม่มีการแจ้งเตือน", "เมื่อมีรายการใหม่ ระบบจะแสดงที่นี่")}
-          </div>
-        `;
-
-        root.querySelectorAll("[data-notification-read]").forEach(button => {
-          button.onclick = async () => {
-            try {
-              await API.markNotificationRead({ id: button.dataset.notificationRead, notificationId: button.dataset.notificationRead });
-              button.disabled = true;
-              button.textContent = "อ่านแล้ว";
-            } catch (error) {
-              UI.toast(error.message, "error");
-            }
-          };
-        });
-      },
-
-      /* ======================== Settings ======================== */
-
-      async renderSettings(root) {
-        let settings = this.cache.settings;
-
-        try {
-          const result = await API.getSettings();
-          const data = Utils.resultData(result);
-          settings = data.settings || data;
-          this.cache.settings = settings;
-        } catch (error) {
-          console.warn("Settings:", error.message);
-        }
-
-        root.innerHTML = `
-          <div class="page-heading"><div><div class="eyebrow">PREFERENCES</div><h1>ตั้งค่าบัญชี</h1><p>จัดการข้อมูลและความเป็นส่วนตัวของคุณ</p></div></div>
-
-          <section class="panel settings-card">
-            <h3>ข้อมูลบัญชี</h3><p>ข้อมูลพื้นฐานสำหรับบัญชีของคุณ</p>
-            <div class="settings-row"><div><strong>อีเมล</strong><span>${escapeHTML(this.getUserEmail() || "ไม่ระบุ")}</span></div><span class="status status-ok">บัญชี</span></div>
-            <div class="settings-row"><div><strong>ชื่อที่ใช้แสดง</strong><span>${escapeHTML(this.getUserName())}</span></div><button class="btn btn-sm" id="settingsEditProfile">แก้ไข</button></div>
-          </section>
-
-          <section class="panel settings-card">
-            <h3>ความเป็นส่วนตัว</h3><p>ตัวเลือกต่อไปนี้จะบันทึกได้เมื่อระบบหลังบ้านรองรับ</p>
-            <div class="settings-row"><div><strong>รับการแจ้งเตือน</strong><span>รับข้อมูลกิจกรรมจากระบบ</span></div><input type="checkbox" class="switch" id="settingNotifications" ${settings.notificationsEnabled !== false ? "checked" : ""}></div>
-            <div class="settings-row"><div><strong>อนุญาตให้ค้นพบโปรไฟล์</strong><span>ให้ผู้อื่นค้นหาโปรไฟล์ของคุณได้</span></div><input type="checkbox" class="switch" id="settingDiscoverable" ${settings.discoverable !== false ? "checked" : ""}></div>
-            <div class="settings-row"><div><strong>อนุญาตให้แสดงสถานะออนไลน์</strong><span>การแสดงสถานะขึ้นอยู่กับระบบ</span></div><input type="checkbox" class="switch" id="settingOnline" ${settings.showOnline !== false ? "checked" : ""}></div>
-            <button class="btn btn-primary" style="margin-top:15px" id="saveSettingsButton">บันทึกการตั้งค่า</button>
-          </section>
-
-          <section class="panel settings-card">
-            <h3>เปลี่ยนรหัสผ่าน</h3><p>ใช้รหัสผ่านที่คาดเดายากและไม่ใช้ซ้ำกับเว็บไซต์อื่น</p>
-            <form id="changePasswordForm">
-              <div class="field-group"><label class="field-label" for="currentPassword">รหัสผ่านปัจจุบัน</label><input class="field" id="currentPassword" type="password" autocomplete="current-password" required minlength="8" maxlength="200"></div>
-              <div class="field-group"><label class="field-label" for="newPassword">รหัสผ่านใหม่</label><input class="field" id="newPassword" type="password" autocomplete="new-password" required minlength="8" maxlength="200"></div>
-              <div class="field-group"><label class="field-label" for="confirmNewPassword">ยืนยันรหัสผ่านใหม่</label><input class="field" id="confirmNewPassword" type="password" autocomplete="new-password" required minlength="8" maxlength="200"></div>
-              <button class="btn btn-primary" type="submit">เปลี่ยนรหัสผ่าน</button>
-            </form>
-          </section>
-
-          <section class="panel settings-card">
-            <h3>การจัดการเซสชัน</h3><p>ออกจากระบบบนอุปกรณ์นี้</p>
-            <button class="btn btn-danger" id="settingsLogout">${ICON("logout")} ออกจากระบบ</button>
-          </section>
-
-          <section class="panel settings-card">
-            <h3>ข้อมูลระบบ</h3>
-            <div class="settings-row"><div><strong>ชื่อระบบ</strong><span>${escapeHTML(CONFIG.APP_NAME)}</span></div></div>
-            <div class="settings-row"><div><strong>การเชื่อมต่อ API</strong><span style="overflow-wrap:anywhere">${escapeHTML(CONFIG.API_BASE_URL)}</span></div></div>
-            <button class="btn" id="checkApiButton">${ICON("refresh")} ตรวจสอบการเชื่อมต่อ</button>
-          </section>
-        `;
-
-        root.querySelector("#settingsEditProfile").onclick = () => this.editProfile(this.user || {});
-        root.querySelector("#settingsLogout").onclick = () => this.logout();
-
-        root.querySelector("#saveSettingsButton").onclick = async event => {
-          const button = event.currentTarget;
-          const preferences = {
-            notificationsEnabled: root.querySelector("#settingNotifications").checked,
-            discoverable: root.querySelector("#settingDiscoverable").checked,
-            showOnline: root.querySelector("#settingOnline").checked
-          };
-
-          try {
-            await UI.withButton(button, async () => {
-              await API.updateSettings(preferences);
-              this.cache.settings = { ...this.cache.settings, ...preferences };
-            }, "บันทึกการตั้งค่าแล้ว");
-          } catch (_) {}
-        };
-
-        root.querySelector("#changePasswordForm").onsubmit = async event => {
-          event.preventDefault();
-
-          const currentPassword = root.querySelector("#currentPassword").value;
-          const newPassword = root.querySelector("#newPassword").value;
-          const confirmPassword = root.querySelector("#confirmNewPassword").value;
-
-          if (newPassword !== confirmPassword) {
-            UI.toast("รหัสผ่านใหม่ไม่ตรงกัน", "warning");
-            return;
-          }
-
-          if (currentPassword === newPassword) {
-            UI.toast("รหัสผ่านใหม่ต้องแตกต่างจากรหัสผ่านเดิม", "warning");
-            return;
-          }
-
-          const button = event.currentTarget.querySelector('button[type="submit"]');
-          try {
-            await UI.withButton(button, async () => {
-              await API.changePassword({ currentPassword, newPassword });
-              event.currentTarget.reset();
-            }, "เปลี่ยนรหัสผ่านแล้ว");
-          } catch (_) {}
-        };
-
-        root.querySelector("#checkApiButton").onclick = async event => {
-          try {
-            const result = await UI.withButton(event.currentTarget, () => API.health());
-            UI.modal({
-              title: "ผลการตรวจสอบ",
-              content: '<div class="notice">เซิร์ฟเวอร์ตอบกลับแล้ว</div><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;color:#c4c8d8">' +
-                escapeHTML(JSON.stringify(result, null, 2)) + '</pre>'
-            });
-          } catch (error) {
-            UI.toast(error.message, "error");
-          }
-        };
+      
+      desktopNav.innerHTML = html;
+      mobileMenu.innerHTML = mobileHtml;
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // --- AUTHENTICATION ---
+    function switchAuthTab(tab) {
+      const loginTab = document.getElementById('tab-login');
+      const regTab = document.getElementById('tab-register');
+      const loginForm = document.getElementById('form-login');
+      const regForm = document.getElementById('form-register');
+      
+      if (tab === 'login') {
+        loginTab.className = "flex-1 pb-3 text-center font-bold text-indigo-600 border-b-2 border-indigo-600";
+        regTab.className = "flex-1 pb-3 text-center font-medium text-slate-500 hover:text-slate-800";
+        loginForm.classList.remove('hidden');
+        regForm.classList.add('hidden');
+      } else {
+        regTab.className = "flex-1 pb-3 text-center font-bold text-indigo-600 border-b-2 border-indigo-600";
+        loginTab.className = "flex-1 pb-3 text-center font-medium text-slate-500 hover:text-slate-800";
+        regForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
       }
-    };
+    }
 
-    /* ==========================================================
-       Start application
-       ========================================================== */
+    async function submitLogin(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('login-identifier').value;
+      const password = document.getElementById('login-password').value;
+      
+      const res = await callApi('login', { identifier, password });
+      if (res.success) {
+        currentSessionToken = res.data.sessionToken;
+        currentUser = res.data.user;
+        localStorage.setItem('anon_sessionToken', currentSessionToken);
+        localStorage.setItem('anon_user', JSON.stringify(currentUser));
+        showToast('เข้าสู่ระบบสำเร็จ');
+        navigateTo('profile');
+      } else {
+        showToast(res.error || 'เข้าสู่ระบบไม่สำเร็จ', 'error');
+      }
+    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      App.init().catch(error => {
-        console.error("Application initialization:", error);
-        document.getElementById("loadingScreen").classList.add("hidden");
-        document.getElementById("authScreen").classList.remove("hidden");
-        UI.toast(error.message || "เริ่มต้นระบบไม่สำเร็จ", "error");
+    async function submitRegister(e) {
+      e.preventDefault();
+      const username = document.getElementById('reg-username').value;
+      const email = document.getElementById('reg-email').value;
+      const displayName = document.getElementById('reg-displayname').value;
+      const password = document.getElementById('reg-password').value;
+      
+      const res = await callApi('register', { username, email, displayName, password });
+      if (res.success) {
+        showToast('สมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ');
+        switchAuthTab('login');
+      } else {
+        showToast(res.error || 'สมัครสมาชิกไม่สำเร็จ', 'error');
+      }
+    }
+
+    async function handleGoogleLoginCallback(response) {
+      const idToken = response.credential;
+      const res = await callApi('googleLogin', { idToken });
+      if (res.success) {
+        currentSessionToken = res.data.sessionToken;
+        currentUser = res.data.user;
+        localStorage.setItem('anon_sessionToken', currentSessionToken);
+        localStorage.setItem('anon_user', JSON.stringify(currentUser));
+        showToast('เข้าสู่ระบบด้วย Google สำเร็จ');
+        navigateTo('profile');
+      } else {
+        showToast(res.error || 'Google Login ไม่สำเร็จ', 'error');
+      }
+    }
+
+    async function handleLogout() {
+      await callApi('logout', {}, currentSessionToken);
+      currentSessionToken = '';
+      currentUser = null;
+      localStorage.removeItem('anon_sessionToken');
+      localStorage.removeItem('anon_user');
+      showToast('ออกจากระบบเรียบร้อย');
+      navigateTo('home');
+    }
+
+    // --- PROFILE & SETTINGS ---
+    async function loadProfileData() {
+      const res = await callApi('getMyProfile', {}, currentSessionToken);
+      if (res.success) {
+        const u = res.data;
+        document.getElementById('profile-display-name').textContent = u.displayName;
+        document.getElementById('profile-username').textContent = '@' + u.username;
+        document.getElementById('profile-bio').textContent = u.bio || 'ยังไม่มีคำแนะนำตัว';
+        document.getElementById('edit-displayname').value = u.displayName;
+        document.getElementById('edit-bio').value = u.bio || '';
+        document.getElementById('edit-accepting').checked = u.isAcceptingMessages;
+        document.getElementById('profile-initial').textContent = u.displayName.charAt(0).toUpperCase();
+      }
+    }
+
+    async function submitUpdateProfile(e) {
+      e.preventDefault();
+      const displayName = document.getElementById('edit-displayname').value;
+      const bio = document.getElementById('edit-bio').value;
+      const isAcceptingMessages = document.getElementById('edit-accepting').checked;
+      
+      const res = await callApi('updateProfile', { displayName, bio, isAcceptingMessages }, currentSessionToken);
+      if (res.success) {
+        showToast('บันทึกโปรไฟล์สำเร็จ');
+        loadProfileData();
+      } else {
+        showToast(res.error || 'บันทึกไม่สำเร็จ', 'error');
+      }
+    }
+
+    function copyMyProfileLink() {
+      if (!currentUser) return;
+      const link = window.location.origin + window.location.pathname + '?u=' + currentUser.username;
+      navigator.clipboard.writeText(link);
+      showToast('คัดลอกลิงก์โปรไฟล์แล้ว');
+    }
+
+    // --- SEARCH USER & PUBLIC PROFILE ---
+    function handleSearchUser() {
+      const username = document.getElementById('search-username-input').value.trim().replace(/^@/, '');
+      if (!username) return;
+      window.history.pushState({}, '', '?u=' + username);
+      navigateTo('public-profile', username);
+    }
+
+    async function loadPublicProfileData(username) {
+      const res = await callApi('getPublicProfile', { username });
+      if (res.success) {
+        const u = res.data;
+        document.getElementById('pub-displayname').textContent = u.displayName;
+        document.getElementById('pub-username').textContent = '@' + u.username;
+        document.getElementById('pub-bio').textContent = u.bio || 'ส่งข้อความนิรนามถึงฉันได้ที่นี่';
+        document.getElementById('pub-avatar').textContent = u.displayName.charAt(0).toUpperCase();
+        
+        if (!u.isAcceptingMessages) {
+          document.getElementById('form-send-message').innerHTML = '<div class="p-4 bg-amber-50 text-amber-700 rounded-xl text-center text-sm font-medium">ผู้ใช้นี้ปิดรับข้อความชั่วคราว</div>';
+        }
+      } else {
+        showToast('ไม่พบผู้ใช้งานนี้', 'error');
+        navigateTo('home');
+      }
+    }
+
+    function handleImagePreview(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('img-file-name').textContent = file.name;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        selectedImageBase64 = event.target.result;
+        document.getElementById('image-preview').src = selectedImageBase64;
+        document.getElementById('image-preview-container').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearImagePreview() {
+      selectedImageBase64 = '';
+      document.getElementById('msg-image-file').value = '';
+      document.getElementById('img-file-name').textContent = '';
+      document.getElementById('image-preview-container').classList.add('hidden');
+    }
+
+    async function submitSendMessage(e) {
+      e.preventDefault();
+      const messageText = document.getElementById('msg-text-input').value;
+      let attachmentUrl = '';
+      let attachmentType = 'none';
+      
+      if (selectedImageBase64) {
+        showToast('กำลังอัปโหลดรูปภาพ...', 'info');
+        const imgRes = await callApi('uploadImageToImgBB', { base64Image: selectedImageBase64 });
+        if (imgRes.success) {
+          attachmentUrl = imgRes.data.url;
+          attachmentType = 'image';
+        } else {
+          showToast(imgRes.error || 'อัปโหลดรูปไม่สำเร็จ', 'error');
+          return;
+        }
+      }
+      
+      const res = await callApi('sendMessage', {
+        recipientUsername: targetPublicUsername,
+        messageText,
+        attachmentType,
+        attachmentUrl,
+        senderDeviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+        senderBrowser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Other'
       });
+      
+      if (res.success) {
+        showToast('ส่งข้อความนิรนามสำเร็จ!');
+        document.getElementById('msg-text-input').value = '';
+        clearImagePreview();
+      } else {
+        showToast(res.error || 'ส่งข้อความไม่สำเร็จ', 'error');
+      }
+    }
+
+    // --- INBOX ---
+    async function loadInboxMessages() {
+      const res = await callApi('getInbox', {}, currentSessionToken);
+      const container = document.getElementById('inbox-messages-list');
+      
+      if (res.success && res.data.messages.length > 0) {
+        container.innerHTML = res.data.messages.map(msg => `
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>อุปกรณ์: ${msg.senderDeviceType || 'Unknown'} (${msg.senderBrowser || 'Unknown'})</span>
+              <span>${new Date(msg.createdAt).toLocaleString('th-TH')}</span>
+            </div>
+            <p class="text-slate-800 text-base whitespace-pre-wrap">${msg.messageText}</p>
+            ${msg.attachmentUrl ? `<div class="mt-2"><img src="${msg.attachmentUrl}" class="max-h-48 rounded-xl blur-image cursor-pointer" onclick="this.classList.toggle('revealed')" title="คลิกเพื่อเปิด/ปิดเบลอ"></div>` : ''}
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button onclick="deleteMessage('${msg.messageId}')" class="px-3 py-1.5 bg-rose-50 text-rose-600 rounded-xl text-xs font-medium hover:bg-rose-100 transition">ลบ</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = '<div class="text-center py-12 text-slate-400">ยังไม่มีข้อความในกล่องข้อความของคุณ</div>';
+      }
+    }
+
+    async function deleteMessage(messageId) {
+      const res = await callApi('deleteMessage', { messageId }, currentSessionToken);
+      if (res.success) {
+        showToast('ลบข้อความสำเร็จ');
+        loadInboxMessages();
+      } else {
+        showToast(res.error || 'ลบไม่สำเร็จ', 'error');
+      }
+    }
+
+    // --- PUBLIC WALL ---
+    async function loadPublicWall() {
+      const res = await callApi('getPublicWall');
+      const container = document.getElementById('public-wall-list');
+      
+      if (res.success && res.data.posts.length > 0) {
+        container.innerHTML = res.data.posts.map(post => `
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3">
+            <p class="text-slate-800 text-lg font-medium">${post.displayText}</p>
+            <div class="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-100">
+              <span>เผยแพร่เมื่อ: ${new Date(post.publishedAt).toLocaleString('th-TH')}</span>
+              <button onclick="addReaction('${post.wallId}')" class="flex items-center gap-1 text-rose-500 font-medium hover:underline">❤️ ถูกใจ</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = '<div class="text-center py-12 text-slate-400">ยังไม่มีโพสต์บน Public Wall</div>';
+      }
+    }
+
+    async function addReaction(wallId) {
+      await callApi('addReaction', { wallId, reactionType: 'heart' });
+      showToast('ถูกใจโพสต์แล้ว');
+    }
+
+    // --- ANALYTICS ---
+    async function loadAnalyticsData() {
+      const res = await callApi('getAnalytics', {}, currentSessionToken);
+      if (res.success) {
+        document.getElementById('stat-total').textContent = res.data.totalMessages;
+        document.getElementById('stat-unread').textContent = res.data.unreadMessages;
+        document.getElementById('stat-read').textContent = res.data.readMessages;
+      }
+    }
+
+    // --- INITIAL ROUTING CHECK ---
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const usernameParam = urlParams.get('u');
+      
+      if (usernameParam) {
+        navigateTo('public-profile', usernameParam);
+      } else if (currentUser) {
+        navigateTo('home');
+      } else {
+        navigateTo('home');
+      }
     });
   </script>
 </body>
