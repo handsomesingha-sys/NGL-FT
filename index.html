@@ -1,45 +1,39 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#312e81">
-  <meta name="description" content="AnonMessage - ส่งข้อความนิรนาม สร้างโปรไฟล์ และแบ่งปันเรื่องราว">
-  <title>AnonMessage — ส่งข้อความนิรนาม</title>
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="description" content="AnonMessage - พื้นที่ส่งข้อความนิรนามและแบ่งปันความรู้สึก">
+  <title>AnonMessage | ส่งข้อความนิรนาม</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.css">
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.all.min.js"></script>
 
   <style>
     :root {
       --primary: #4f46e5;
       --primary-dark: #3730a3;
       --primary-light: #eef2ff;
-      --accent: #ec4899;
-      --success: #059669;
-      --danger: #dc2626;
-      --warning: #d97706;
-      --background: #f5f6fb;
+      --background: #f5f7fb;
       --surface: #ffffff;
-      --surface-muted: #f8fafc;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --text: #172033;
+      --muted: #748094;
+      --border: #e5e9f2;
+      --success: #15803d;
+      --danger: #dc2626;
       --radius: 18px;
-      --shadow: 0 8px 30px rgba(15, 23, 42, .06);
-      --sidebar-width: 260px;
+      --shadow: 0 8px 30px rgba(31, 41, 55, .06);
     }
 
     * {
       box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
     }
 
     body {
@@ -51,10 +45,7 @@
       font-size: 16px;
     }
 
-    button,
-    input,
-    textarea,
-    select {
+    button, input, textarea, select {
       font: inherit;
     }
 
@@ -63,12 +54,13 @@
     }
 
     button:disabled {
-      opacity: .55;
       cursor: not-allowed;
+      opacity: .55;
     }
 
-    img {
-      max-width: 100%;
+    a {
+      color: var(--primary);
+      text-decoration: none;
     }
 
     .hidden {
@@ -76,134 +68,205 @@
     }
 
     .muted {
-      color: var(--text-muted);
+      color: var(--muted);
     }
 
     .small {
       font-size: 13px;
     }
 
-    .page-shell {
-      min-height: 100vh;
+    .container {
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
     }
 
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 20;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner {
+      min-height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 12px 22px;
-      background: rgba(255,255,255,.94);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 11px;
-      min-width: 0;
       color: var(--text);
-      text-decoration: none;
-    }
-
-    .brand-logo {
-      display: grid;
-      place-items: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 15px;
-      color: white;
-      background: linear-gradient(135deg, #6366f1, #9333ea);
-      box-shadow: 0 5px 15px rgba(99,102,241,.24);
-      font-size: 20px;
-    }
-
-    .brand-name {
-      font-family: "Prompt", sans-serif;
-      font-size: 20px;
       font-weight: 700;
-      line-height: 1.2;
+      font-size: 21px;
     }
 
-    .brand-caption {
-      color: var(--text-muted);
-      font-size: 12px;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .icon-button {
-      position: relative;
+    .brand-icon {
       width: 42px;
       height: 42px;
-      display: inline-grid;
+      display: grid;
       place-items: center;
-      background: white;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 13px;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
     }
 
-    .icon-button:hover {
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 10px 15px;
+      min-height: 42px;
+      font-weight: 600;
+      transition: .18s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-outline {
+      border-color: var(--border);
+      background: white;
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: #f8fafc;
+    }
+
+    .btn-danger {
+      color: white;
+      background: var(--danger);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      color: var(--text);
+    }
+
+    .login-screen {
+      min-height: calc(100vh - 70px);
+      display: grid;
+      place-items: center;
+      padding: 28px 16px;
+    }
+
+    .login-card {
+      width: min(440px, 100%);
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: white;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .login-logo {
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
       background: var(--primary-light);
       color: var(--primary);
+      font-size: 32px;
     }
 
-    .notification-dot {
-      position: absolute;
-      top: 7px;
-      right: 7px;
-      width: 8px;
-      height: 8px;
-      background: var(--danger);
-      border-radius: 50%;
-      border: 2px solid white;
+    .login-card h1 {
+      margin: 0 0 8px;
+      font-size: 29px;
+    }
+
+    .login-card p {
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .google-button-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 22px 0;
+      min-height: 44px;
+    }
+
+    .login-note {
+      padding: 13px;
+      border-radius: 12px;
+      background: #f8fafc;
+      color: var(--muted);
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.7;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-      max-width: 1500px;
-      margin: 0 auto;
-      min-height: calc(100vh - 69px);
+      grid-template-columns: 245px minmax(0, 1fr);
+      gap: 24px;
+      padding-top: 26px;
+      padding-bottom: 50px;
     }
 
     .sidebar {
-      padding: 22px 14px;
-      border-right: 1px solid var(--border);
-      background: rgba(255,255,255,.72);
+      align-self: start;
+      position: sticky;
+      top: 94px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      box-shadow: var(--shadow);
     }
 
     .sidebar-user {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      margin-bottom: 24px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: white;
+      padding: 5px 2px 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 15px;
+      min-width: 0;
     }
 
     .avatar {
+      flex-shrink: 0;
       width: 44px;
       height: 44px;
-      display: inline-grid;
-      place-items: center;
-      flex-shrink: 0;
-      overflow: hidden;
       border-radius: 50%;
-      background: #e0e7ff;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: var(--primary-light);
       color: var(--primary);
-      font-size: 17px;
       font-weight: 700;
     }
 
@@ -219,11 +282,10 @@
     }
 
     .nav-label {
-      margin: 15px 12px 8px;
-      color: #94a3b8;
+      margin: 13px 0 8px;
+      color: var(--muted);
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: .04em;
     }
 
     .nav-menu {
@@ -235,214 +297,132 @@
       width: 100%;
       display: flex;
       align-items: center;
-      gap: 13px;
-      padding: 12px 14px;
-      border: 0;
-      border-radius: 13px;
-      background: transparent;
-      color: #475569;
+      gap: 12px;
       text-align: left;
-      transition: .18s ease;
+      padding: 11px 12px;
+      border: 0;
+      border-radius: 11px;
+      color: #566176;
+      background: transparent;
     }
 
     .nav-item i {
       width: 20px;
       text-align: center;
-      font-size: 16px;
     }
 
-    .nav-item:hover {
-      background: #eef2ff;
-      color: var(--primary);
-    }
-
+    .nav-item:hover,
     .nav-item.active {
       background: var(--primary-light);
       color: var(--primary);
-      font-weight: 700;
     }
 
     .main-content {
-      width: 100%;
-      max-width: 1100px;
       min-width: 0;
-      margin: 0 auto;
-      padding: 26px;
     }
 
-    .page-header {
+    .page-heading {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 18px;
-      margin-bottom: 23px;
-    }
-
-    .page-title {
-      margin: 0 0 5px;
-      font-family: "Prompt", sans-serif;
-      font-size: 27px;
-      line-height: 1.35;
-      font-weight: 600;
-    }
-
-    .page-description {
-      margin: 0;
-      color: var(--text-muted);
-    }
-
-    .button {
-      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 9px;
-      min-height: 42px;
-      padding: 10px 16px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: .18s ease;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 20px;
     }
 
-    .button-primary {
-      background: var(--primary);
-      color: white;
+    .page-heading h1 {
+      margin: 0 0 4px;
+      font-size: 27px;
     }
 
-    .button-primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .button-secondary {
-      background: white;
-      border-color: var(--border);
-      color: var(--text);
-    }
-
-    .button-secondary:hover {
-      background: var(--surface-muted);
-    }
-
-    .button-danger {
-      background: #fef2f2;
-      border-color: #fecaca;
-      color: var(--danger);
-    }
-
-    .button-danger:hover {
-      background: #fee2e2;
-    }
-
-    .button-compact {
-      min-height: 35px;
-      padding: 7px 11px;
-      font-size: 14px;
+    .page-heading p {
+      margin: 0;
+      color: var(--muted);
     }
 
     .card {
-      min-width: 0;
-      padding: 22px;
+      background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      background: var(--surface);
+      padding: 22px;
       box-shadow: var(--shadow);
-    }
-
-    .card + .card {
-      margin-top: 18px;
+      margin-bottom: 20px;
+      min-width: 0;
     }
 
     .card-title {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin: 0 0 17px;
-      font-family: "Prompt", sans-serif;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 16px;
       font-size: 18px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    .card-title i {
-      color: var(--primary);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .grid-3 {
+    .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+      gap: 15px;
+      margin-bottom: 20px;
     }
 
     .stat-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 17px;
       background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
       box-shadow: var(--shadow);
     }
 
     .stat-icon {
+      width: 42px;
+      height: 42px;
       display: grid;
       place-items: center;
-      width: 49px;
-      height: 49px;
-      flex-shrink: 0;
-      border-radius: 15px;
-      background: #eef2ff;
+      border-radius: 13px;
+      background: var(--primary-light);
       color: var(--primary);
-      font-size: 19px;
+      margin-bottom: 13px;
     }
 
-    .stat-number {
-      font-family: "Prompt", sans-serif;
+    .stat-value {
       font-size: 27px;
       font-weight: 700;
-      line-height: 1.2;
     }
 
     .stat-label {
-      color: var(--text-muted);
-      font-size: 13px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
 
     .field {
-      display: grid;
-      gap: 7px;
+      min-width: 0;
       margin-bottom: 16px;
     }
 
     .field label {
+      display: block;
+      margin-bottom: 7px;
       font-weight: 600;
-      font-size: 14px;
     }
 
     .input,
     .textarea,
     .select {
+      display: block;
       width: 100%;
-      min-height: 44px;
-      padding: 11px 13px;
-      border: 1px solid #cbd5e1;
-      border-radius: 12px;
+      padding: 12px 13px;
+      border: 1px solid #dbe1ec;
+      border-radius: 11px;
+      outline: none;
       background: white;
       color: var(--text);
-      outline: none;
-      transition: .18s ease;
-    }
-
-    .textarea {
-      min-height: 120px;
-      resize: vertical;
-      line-height: 1.65;
     }
 
     .input:focus,
@@ -452,1188 +432,695 @@
       box-shadow: 0 0 0 3px rgba(79,70,229,.1);
     }
 
-    .form-actions {
+    .textarea {
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.7;
+    }
+
+    .field-help {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .profile-cover {
+      width: 100%;
+      height: 150px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6366f1, #a5b4fc);
+      object-fit: cover;
+    }
+
+    .profile-head {
       display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
       align-items: center;
+      gap: 15px;
+      margin-top: -25px;
+      padding: 0 15px;
     }
 
-    .help-text {
-      margin-top: -5px;
-      color: var(--text-muted);
-      font-size: 13px;
+    .profile-head .avatar {
+      width: 84px;
+      height: 84px;
+      border: 4px solid white;
+      font-size: 24px;
     }
 
-    .banner {
-      position: relative;
-      overflow: hidden;
-      padding: 28px;
-      margin-bottom: 20px;
-      border-radius: 22px;
-      background: linear-gradient(120deg, #4338ca, #7c3aed 65%, #c026d3);
-      color: white;
+    .profile-head h2 {
+      margin: 22px 0 2px;
+      overflow-wrap: anywhere;
     }
 
-    .banner::after {
-      content: "";
-      position: absolute;
-      width: 210px;
-      height: 210px;
-      right: -50px;
-      top: -80px;
-      border: 35px solid rgba(255,255,255,.09);
-      border-radius: 50%;
-    }
-
-    .banner h2 {
-      position: relative;
-      z-index: 1;
-      margin: 0 0 8px;
-      font-family: "Prompt", sans-serif;
-      font-size: 25px;
-    }
-
-    .banner p {
-      position: relative;
-      z-index: 1;
-      max-width: 600px;
-      margin: 0 0 18px;
-      color: rgba(255,255,255,.87);
-    }
-
-    .banner .button {
-      position: relative;
-      z-index: 1;
-      background: white;
-      color: var(--primary-dark);
-    }
-
-    .list {
-      display: grid;
-      gap: 13px;
-    }
-
-    .list-item {
-      padding: 16px;
+    .message-card {
+      padding: 17px;
       border: 1px solid var(--border);
-      border-radius: 15px;
+      border-radius: 14px;
+      margin-bottom: 12px;
       background: white;
     }
 
-    .list-item-top {
+    .message-header {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
-    .message-content {
-      margin: 8px 0 12px;
+    .message-body {
       line-height: 1.8;
       overflow-wrap: anywhere;
       white-space: pre-wrap;
     }
 
-    .message-media {
+    .message-image {
       display: block;
       max-width: 100%;
       max-height: 360px;
-      margin: 12px 0;
-      border-radius: 13px;
+      margin-top: 12px;
+      border-radius: 12px;
       object-fit: contain;
-      background: #f1f5f9;
     }
 
-    .meta {
+    .message-actions {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-muted);
-      font-size: 13px;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 13px;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      color: #475569;
-      font-size: 12px;
-      font-weight: 600;
+    .story-row {
+      display: flex;
+      gap: 13px;
+      overflow-x: auto;
+      padding: 3px 0 12px;
     }
 
-    .pill-success {
-      background: #d1fae5;
-      color: #065f46;
+    .story-item {
+      flex: 0 0 110px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 8px;
+      text-align: center;
+      background: white;
     }
 
-    .pill-warning {
-      background: #fef3c7;
-      color: #92400e;
+    .story-item .avatar {
+      margin: 0 auto 8px;
+      width: 54px;
+      height: 54px;
     }
 
-    .pill-danger {
-      background: #fee2e2;
-      color: #991b1b;
+    .notification-item {
+      display: flex;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .notification-item:last-child {
+      border-bottom: 0;
+    }
+
+    .notification-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
     .empty-state {
-      padding: 35px 15px;
+      padding: 38px 16px;
       text-align: center;
-      color: var(--text-muted);
+      color: var(--muted);
     }
 
     .empty-state i {
       display: block;
-      margin-bottom: 13px;
-      font-size: 37px;
-      color: #cbd5e1;
+      margin-bottom: 12px;
+      font-size: 35px;
+      color: #c3cada;
     }
 
     .empty-state strong {
       display: block;
-      margin-bottom: 6px;
       color: var(--text);
-      font-size: 17px;
-    }
-
-    .profile-cover {
-      height: 175px;
-      margin: -22px -22px 0;
-      border-radius: var(--radius) var(--radius) 0 0;
-      background: linear-gradient(130deg, #6366f1, #c084fc);
-      background-position: center;
-      background-size: cover;
-    }
-
-    .profile-head {
-      display: flex;
-      align-items: flex-end;
-      gap: 18px;
-      margin-top: -42px;
-      padding: 0 4px 18px;
-    }
-
-    .profile-head .avatar {
-      width: 100px;
-      height: 100px;
-      border: 5px solid white;
-      box-shadow: var(--shadow);
-      font-size: 30px;
-    }
-
-    .profile-head-text {
-      min-width: 0;
-      padding-bottom: 6px;
-    }
-
-    .profile-head-text h2 {
-      margin: 0 0 3px;
-      font-family: "Prompt", sans-serif;
-      font-size: 22px;
-      overflow-wrap: anywhere;
-    }
-
-    .story-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .story-card {
-      position: relative;
-      min-height: 190px;
-      overflow: hidden;
-      border-radius: 16px;
-      background: linear-gradient(145deg, #4338ca, #c026d3);
-      color: white;
-    }
-
-    .story-card img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .story-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(transparent 25%, rgba(15,23,42,.75));
-    }
-
-    .story-text {
-      position: absolute;
-      z-index: 1;
-      left: 13px;
-      right: 13px;
-      bottom: 13px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-    }
-
-    .story-user {
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .upload-preview {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px dashed #cbd5e1;
-      border-radius: 12px;
-    }
-
-    .upload-preview img {
-      width: 75px;
-      height: 75px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    .upload-preview audio {
-      width: 100%;
-    }
-
-    .pagination {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .login-screen {
-      min-height: calc(100vh - 69px);
-      display: grid;
-      place-items: center;
-      padding: 25px;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(129,140,248,.17), transparent 30%),
-        radial-gradient(circle at 80% 80%, rgba(192,132,252,.16), transparent 30%),
-        var(--background);
-    }
-
-    .login-card {
-      width: 100%;
-      max-width: 460px;
-      padding: 35px;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      background: white;
-      box-shadow: 0 25px 80px rgba(15,23,42,.09);
-      text-align: center;
-    }
-
-    .login-logo {
-      width: 76px;
-      height: 76px;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 17px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, #6366f1, #9333ea);
-      color: white;
-      font-size: 31px;
-    }
-
-    .login-card h1 {
-      margin: 0 0 7px;
-      font-family: "Prompt", sans-serif;
-      font-size: 27px;
-    }
-
-    .login-card p {
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    .login-note {
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 12px;
-      background: #f8fafc;
-      color: var(--text-muted);
-      font-size: 13px;
-      text-align: left;
-    }
-
-    .google-button-wrap {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0;
-      min-height: 45px;
-    }
-
-    .footer {
-      padding: 22px;
-      color: #94a3b8;
-      text-align: center;
-      font-size: 13px;
-    }
-
-    .mobile-nav-toggle {
-      display: none;
+      margin-bottom: 5px;
     }
 
     .loading-overlay {
       position: fixed;
-      z-index: 9998;
       inset: 0;
+      z-index: 1000;
       display: grid;
       place-items: center;
-      background: rgba(248,250,252,.78);
-      backdrop-filter: blur(4px);
+      background: rgba(248,250,252,.8);
+      backdrop-filter: blur(3px);
     }
 
     .loading-box {
-      display: grid;
-      justify-items: center;
-      gap: 12px;
-      padding: 25px 35px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
+      padding: 22px 30px;
+      border-radius: 16px;
       background: white;
       box-shadow: var(--shadow);
+      text-align: center;
     }
 
-    .spinner {
-      width: 35px;
-      height: 35px;
-      border: 4px solid #e0e7ff;
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+    .loading-box i {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-size: 28px;
     }
 
     .toast-container {
       position: fixed;
-      z-index: 10000;
       right: 18px;
       bottom: 18px;
+      z-index: 1100;
       display: grid;
       gap: 8px;
+      width: min(340px, calc(100% - 36px));
     }
 
     .toast {
-      max-width: 350px;
-      padding: 13px 17px;
-      border-radius: 13px;
-      background: #0f172a;
+      padding: 13px 16px;
+      background: #172033;
       color: white;
+      border-radius: 12px;
       box-shadow: var(--shadow);
-      animation: toast-in .2s ease-out;
+      animation: toast-in .2s ease;
+    }
+
+    .toast.success {
+      background: #166534;
     }
 
     .toast.error {
       background: #991b1b;
     }
 
-    .toast.success {
-      background: #065f46;
-    }
-
     @keyframes toast-in {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 1000px) {
-      .layout {
-        grid-template-columns: 220px minmax(0, 1fr);
-      }
-
-      .main-content {
-        padding: 20px;
-      }
-
-      .grid-3 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    .footer {
+      padding: 25px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
     }
 
-    @media (max-width: 760px) {
-      .topbar {
-        padding: 10px 14px;
-      }
+    .file-preview {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
 
-      .brand-name {
-        font-size: 18px;
-      }
+    .inline-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
 
-      .brand-caption {
-        display: none;
-      }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
 
-      .mobile-nav-toggle {
-        display: inline-grid;
-      }
-
+    @media (max-width: 900px) {
       .layout {
-        display: block;
+        grid-template-columns: 1fr;
+        gap: 16px;
       }
 
       .sidebar {
-        position: fixed;
-        z-index: 500;
-        top: 66px;
-        bottom: 0;
-        left: 0;
-        width: min(290px, 85vw);
-        overflow-y: auto;
-        transform: translateX(-105%);
-        transition: transform .22s ease;
-        background: white;
-        box-shadow: 15px 0 35px rgba(15,23,42,.09);
+        position: static;
       }
 
-      .sidebar.open {
-        transform: translateX(0);
+      .nav-menu {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      .main-content {
-        padding: 18px 13px;
-      }
-
-      .page-header {
+      .nav-item {
+        justify-content: center;
         flex-direction: column;
-        align-items: stretch;
+        text-align: center;
+        gap: 5px;
+        padding: 10px 5px;
+        font-size: 12px;
       }
 
-      .page-title {
-        font-size: 23px;
-      }
-
-      .grid-2,
-      .grid-3 {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .story-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .stat-card {
-        padding: 16px;
-      }
-
-      .banner {
-        padding: 22px;
-      }
-
-      .card {
-        padding: 17px;
-      }
-
-      .profile-cover {
-        margin: -17px -17px 0;
-      }
-
-      .login-card {
-        padding: 25px 20px;
+      .nav-item i {
+        font-size: 18px;
       }
     }
 
-    @media (max-width: 390px) {
-      .story-grid {
-        grid-template-columns: minmax(0, 1fr);
+    @media (max-width: 600px) {
+      .container {
+        width: calc(100% - 22px);
       }
 
-      .topbar-actions .button {
-        padding: 8px 10px;
+      .topbar-inner {
+        min-height: 62px;
       }
 
-      .brand-logo {
-        width: 39px;
-        height: 39px;
+      .brand {
+        font-size: 18px;
+      }
+
+      .brand-icon {
+        width: 37px;
+        height: 37px;
+      }
+
+      .login-card {
+        padding: 24px 18px;
+      }
+
+      .layout {
+        padding-top: 14px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        align-items: center;
+        column-gap: 12px;
+        padding: 14px;
+      }
+
+      .stat-icon {
+        grid-row: span 2;
+        margin: 0;
+      }
+
+      .stat-value {
+        font-size: 22px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .page-heading h1 {
+        font-size: 23px;
+      }
+
+      .page-heading {
+        align-items: flex-start;
+      }
+
+      .profile-cover {
+        height: 115px;
+      }
+
+      .profile-head {
+        padding: 0 5px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="page-shell">
-    <header class="topbar">
-      <button class="icon-button mobile-nav-toggle" id="mobileNavToggle" aria-label="เปิดเมนู">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-
-      <a href="#" class="brand" id="brandHome">
-        <span class="brand-logo"><i class="fa-solid fa-comment-dots"></i></span>
-        <span>
-          <span class="brand-name">AnonMessage</span>
-          <span class="brand-caption">Share your thoughts anonymously</span>
-        </span>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#" id="brandHome">
+        <span class="brand-icon"><i class="fa-solid fa-comment-dots"></i></span>
+        <span>AnonMessage</span>
       </a>
 
-      <div class="topbar-actions">
-        <button class="icon-button hidden" id="headerNotificationButton" aria-label="การแจ้งเตือน">
+      <div class="top-actions">
+        <button class="icon-btn hidden" id="headerNotificationButton" type="button" title="การแจ้งเตือน" aria-label="การแจ้งเตือน">
           <i class="fa-regular fa-bell"></i>
-          <span class="notification-dot hidden" id="notificationDot"></span>
         </button>
-        <button class="button button-primary hidden" id="headerLoginButton">
-          <i class="fa-brands fa-google"></i>
-          เข้าสู่ระบบ
+        <button class="btn btn-outline" id="headerLoginButton" type="button">
+          <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
         </button>
-        <button class="icon-button hidden" id="headerProfileButton" aria-label="โปรไฟล์">
-          <i class="fa-regular fa-user"></i>
+        <button class="btn btn-outline hidden" id="headerProfileButton" type="button">
+          <i class="fa-regular fa-user"></i> โปรไฟล์
         </button>
       </div>
-    </header>
-
-    <section class="login-screen hidden" id="loginScreen">
-      <div class="login-card">
-        <div class="login-logo"><i class="fa-solid fa-comment-dots"></i></div>
-        <h1>AnonMessage</h1>
-        <p>พื้นที่แบ่งปันความรู้สึก รับฟังความคิดเห็น และส่งข้อความโดยไม่ต้องเปิดเผยตัวตนต่อเจ้าของโปรไฟล์</p>
-        <div class="google-button-wrap">
-          <div id="googleSignInButton"></div>
-        </div>
-        <div class="login-note">
-          <i class="fa-solid fa-shield-halved"></i>
-          การเข้าสู่ระบบใช้สำหรับจัดการโปรไฟล์และอ่านข้อความของคุณ ผู้ส่งข้อความนิรนามอาจยังมีข้อมูลทางเทคนิคที่ระบบจำเป็นต้องประมวลผล
-        </div>
-        <p class="small">การใช้งานต้องไม่ละเมิดสิทธิผู้อื่นหรือส่งเนื้อหาคุกคาม</p>
-      </div>
-    </section>
-
-    <div class="layout hidden" id="appLayout">
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-user">
-          <div class="avatar" id="sidebarAvatar">A</div>
-          <div style="min-width:0">
-            <div class="sidebar-user-name" id="sidebarUserName">ผู้ใช้งาน</div>
-            <div class="muted small" id="sidebarUsername">@username</div>
-          </div>
-        </div>
-
-        <div class="nav-label">เมนูหลัก</div>
-        <nav class="nav-menu" aria-label="เมนูหลัก">
-          <button class="nav-item active" data-page="dashboard">
-            <i class="fa-solid fa-house"></i> ภาพรวม
-          </button>
-          <button class="nav-item" data-page="profile">
-            <i class="fa-regular fa-id-card"></i> โปรไฟล์ของฉัน
-          </button>
-          <button class="nav-item" data-page="inbox">
-            <i class="fa-regular fa-envelope"></i> กล่องข้อความ
-          </button>
-          <button class="nav-item" data-page="send">
-            <i class="fa-regular fa-paper-plane"></i> ทดลองส่งข้อความ
-          </button>
-          <button class="nav-item" data-page="stories">
-            <i class="fa-regular fa-circle-play"></i> สตอรี่
-          </button>
-          <button class="nav-item" data-page="notifications">
-            <i class="fa-regular fa-bell"></i> การแจ้งเตือน
-          </button>
-          <button class="nav-item" data-page="stats">
-            <i class="fa-solid fa-chart-simple"></i> สถิติของฉัน
-          </button>
-        </nav>
-
-        <div class="nav-label">บัญชี</div>
-        <nav class="nav-menu">
-          <button class="nav-item" data-page="settings">
-            <i class="fa-solid fa-gear"></i> ตั้งค่า
-          </button>
-          <button class="nav-item" id="sidebarLogoutButton">
-            <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
-          </button>
-        </nav>
-
-        <div class="card" style="margin-top:24px;padding:14px;box-shadow:none">
-          <div style="font-weight:700;margin-bottom:6px">
-            <i class="fa-solid fa-link" style="color:var(--primary)"></i>
-            ลิงก์โปรไฟล์
-          </div>
-          <p class="small muted" style="margin:0 0 10px">แชร์โปรไฟล์ของคุณเพื่อให้คนอื่นส่งข้อความมาได้</p>
-          <button class="button button-secondary button-compact" style="width:100%" id="copyProfileLinkButton">
-            <i class="fa-regular fa-copy"></i> คัดลอกลิงก์
-          </button>
-        </div>
-      </aside>
-
-      <main class="main-content">
-        <section class="page-section" id="page-dashboard">
-          <div class="banner">
-            <h2 id="welcomeTitle">ยินดีต้อนรับสู่ AnonMessage</h2>
-            <p>แบ่งปันความรู้สึก รับข้อความ และสร้างพื้นที่ของตัวเองได้ในที่เดียว</p>
-            <button class="button" id="bannerProfileButton">
-              <i class="fa-regular fa-id-card"></i> ตั้งค่าโปรไฟล์
-            </button>
-          </div>
-
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">ภาพรวมของฉัน</h1>
-              <p class="page-description">สรุปกิจกรรมและข้อความที่ได้รับ</p>
-            </div>
-            <button class="button button-secondary" id="refreshDashboardButton">
-              <i class="fa-solid fa-rotate"></i> รีเฟรช
-            </button>
-          </div>
-
-          <div class="grid-3">
-            <div class="stat-card">
-              <div class="stat-icon"><i class="fa-regular fa-envelope"></i></div>
-              <div>
-                <div class="stat-number" id="dashboardReceived">—</div>
-                <div class="stat-label">ข้อความทั้งหมด</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background:#d1fae5;color:#047857"><i class="fa-regular fa-envelope-open"></i></div>
-              <div>
-                <div class="stat-number" id="dashboardRead">—</div>
-                <div class="stat-label">อ่านข้อความแล้ว</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background:#fce7f3;color:#be185d"><i class="fa-regular fa-circle-play"></i></div>
-              <div>
-                <div class="stat-number" id="dashboardStories">—</div>
-                <div class="stat-label">สตอรี่ที่ยังแสดง</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-top:20px">
-            <div class="card">
-              <h2 class="card-title"><i class="fa-solid fa-paper-plane"></i> ลิงก์ส่งข้อความ</h2>
-              <p class="muted">ส่งลิงก์นี้ให้เพื่อนเพื่อรับข้อความนิรนาม</p>
-              <div class="field">
-                <label for="dashboardProfileLink">ลิงก์โปรไฟล์ของคุณ</label>
-                <input class="input" id="dashboardProfileLink" readonly>
-              </div>
-              <button class="button button-primary" id="dashboardCopyLinkButton">
-                <i class="fa-regular fa-copy"></i> คัดลอกลิงก์
-              </button>
-            </div>
-            <div class="card">
-              <h2 class="card-title"><i class="fa-solid fa-bolt"></i> ทางลัด</h2>
-              <div class="list">
-                <button class="button button-secondary" data-goto="inbox">
-                  <i class="fa-regular fa-envelope"></i> เปิดกล่องข้อความ
-                </button>
-                <button class="button button-secondary" data-goto="stories">
-                  <i class="fa-regular fa-circle-play"></i> สร้างสตอรี่
-                </button>
-                <button class="button button-secondary" data-goto="stats">
-                  <i class="fa-solid fa-chart-simple"></i> ดูสถิติ
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="list-item-top">
-              <h2 class="card-title" style="margin:0"><i class="fa-regular fa-envelope"></i> ข้อความล่าสุด</h2>
-              <button class="button button-secondary button-compact" data-goto="inbox">ดูทั้งหมด</button>
-            </div>
-            <div class="list" id="dashboardRecentMessages"></div>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-profile">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">โปรไฟล์ของฉัน</h1>
-              <p class="page-description">จัดการชื่อ รูปภาพ และข้อมูลที่แสดงต่อสาธารณะ</p>
-            </div>
-            <button class="button button-secondary" id="profileRefreshButton">
-              <i class="fa-solid fa-rotate"></i> โหลดข้อมูลใหม่
-            </button>
-          </div>
-
-          <div class="card">
-            <div class="profile-cover" id="profileCoverPreview"></div>
-            <div class="profile-head">
-              <div class="avatar" id="profileAvatarPreview">A</div>
-              <div class="profile-head-text">
-                <h2 id="profileDisplayNamePreview">ชื่อของฉัน</h2>
-                <div class="muted" id="profileUsernamePreview">@username</div>
-              </div>
-            </div>
-            <div class="meta">
-              <span><i class="fa-solid fa-link"></i> ลิงก์โปรไฟล์</span>
-              <span id="profileLinkText"></span>
-            </div>
-          </div>
-
-          <div class="card">
-            <h2 class="card-title"><i class="fa-solid fa-pen-to-square"></i> แก้ไขข้อมูลโปรไฟล์</h2>
-            <form id="profileForm">
-              <div class="grid-2">
-                <div class="field">
-                  <label for="profileDisplayName">ชื่อที่แสดง *</label>
-                  <input class="input" id="profileDisplayName" maxlength="80" required>
-                </div>
-                <div class="field">
-                  <label for="profileUsername">Username *</label>
-                  <input class="input" id="profileUsername" maxlength="30" pattern="[a-zA-Z0-9_.]{3,30}" required>
-                  <div class="help-text">3–30 ตัวอักษร ใช้ a-z, 0-9, _ และ .</div>
-                </div>
-              </div>
-              <div class="field">
-                <label for="profileBio">คำแนะนำตัว</label>
-                <textarea class="textarea" id="profileBio" maxlength="500" placeholder="เขียนแนะนำตัวสั้น ๆ"></textarea>
-              </div>
-
-              <div class="grid-2">
-                <div>
-                  <div class="field">
-                    <label for="profileAvatarFile">รูปโปรไฟล์</label>
-                    <input class="input" type="file" id="profileAvatarFile" accept="image/jpeg,image/png,image/webp,image/gif">
-                  </div>
-                  <div class="upload-preview hidden" id="avatarUploadPreview">
-                    <img id="avatarUploadImage" alt="ตัวอย่างรูปโปรไฟล์">
-                    <div>
-                      <div id="avatarUploadStatus">ยังไม่ได้อัปโหลด</div>
-                      <button class="button button-secondary button-compact" type="button" id="removeAvatarSelectionButton">ยกเลิกภาพที่เลือก</button>
-                    </div>
-                  </div>
-                  <button class="button button-secondary" type="button" id="uploadAvatarButton">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดรูปโปรไฟล์
-                  </button>
-                </div>
-                <div>
-                  <div class="field">
-                    <label for="profileCoverFile">รูปปกโปรไฟล์</label>
-                    <input class="input" type="file" id="profileCoverFile" accept="image/jpeg,image/png,image/webp,image/gif">
-                  </div>
-                  <div class="upload-preview hidden" id="coverUploadPreview">
-                    <img id="coverUploadImage" alt="ตัวอย่างรูปปก">
-                    <div>
-                      <div id="coverUploadStatus">ยังไม่ได้อัปโหลด</div>
-                      <button class="button button-secondary button-compact" type="button" id="removeCoverSelectionButton">ยกเลิกภาพที่เลือก</button>
-                    </div>
-                  </div>
-                  <button class="button button-secondary" type="button" id="uploadCoverButton">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดรูปปก
-                  </button>
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <button class="button button-primary" type="submit">
-                  <i class="fa-solid fa-floppy-disk"></i> บันทึกโปรไฟล์
-                </button>
-                <button class="button button-secondary" type="button" id="profileCancelButton">ยกเลิกการแก้ไข</button>
-              </div>
-            </form>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-inbox">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">กล่องข้อความ</h1>
-              <p class="page-description">ข้อความที่ส่งถึงคุณโดยไม่เปิดเผยตัวตนในหน้าจอนี้</p>
-            </div>
-            <button class="button button-secondary" id="refreshInboxButton">
-              <i class="fa-solid fa-rotate"></i> รีเฟรช
-            </button>
-          </div>
-
-          <div class="card">
-            <div class="grid-2">
-              <div class="field">
-                <label for="inboxStatusFilter">สถานะข้อความ</label>
-                <select class="select" id="inboxStatusFilter">
-                  <option value="active">ข้อความที่ใช้งาน</option>
-                  <option value="deleted">ข้อความที่ลบแล้ว</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="inboxPageSize">จำนวนต่อหน้า</label>
-                <select class="select" id="inboxPageSize">
-                  <option value="10">10 รายการ</option>
-                  <option value="20" selected>20 รายการ</option>
-                  <option value="50">50 รายการ</option>
-                </select>
-              </div>
-            </div>
-            <div class="list" id="inboxList"></div>
-            <div class="pagination" id="inboxPagination"></div>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-send">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">ทดลองส่งข้อความ</h1>
-              <p class="page-description">ส่งข้อความไปยังโปรไฟล์ที่ต้องการ</p>
-            </div>
-          </div>
-
-          <div class="card">
-            <h2 class="card-title"><i class="fa-regular fa-paper-plane"></i> ส่งข้อความนิรนาม</h2>
-            <p class="muted">คุณสามารถส่งข้อความถึงโปรไฟล์ของคุณเองเพื่อทดสอบ หรือส่งถึงผู้ใช้อื่นได้</p>
-
-            <form id="sendMessageForm">
-              <div class="field">
-                <label for="sendRecipientUsername">Username ผู้รับ *</label>
-                <input class="input" id="sendRecipientUsername" maxlength="100" placeholder="เช่น somchai" required>
-              </div>
-              <div class="field">
-                <label for="sendMessageText">ข้อความ</label>
-                <textarea class="textarea" id="sendMessageText" maxlength="5000" placeholder="พิมพ์ข้อความที่ต้องการส่ง"></textarea>
-                <div class="help-text">ไม่เกิน 5,000 ตัวอักษร</div>
-              </div>
-              <div class="field">
-                <label for="sendMessageImage">แนบรูปภาพ (ไม่บังคับ)</label>
-                <input class="input" type="file" id="sendMessageImage" accept="image/jpeg,image/png,image/webp,image/gif">
-              </div>
-              <div class="upload-preview hidden" id="messageImagePreview">
-                <img id="messageImagePreviewImage" alt="ภาพแนบข้อความ">
-                <div>
-                  <div id="messageImageStatus">ยังไม่ได้อัปโหลด</div>
-                  <button class="button button-secondary button-compact" type="button" id="removeMessageImageButton">ลบรูปที่เลือก</button>
-                </div>
-              </div>
-              <div class="form-actions" style="margin-bottom:17px">
-                <button class="button button-secondary" type="button" id="uploadMessageImageButton">
-                  <i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดรูปภาพ
-                </button>
-              </div>
-              <div class="field">
-                <label for="sendMessageImageUrl">URL รูปภาพที่อัปโหลด</label>
-                <input class="input" id="sendMessageImageUrl" readonly placeholder="URL จะปรากฏหลังอัปโหลด">
-              </div>
-              <button class="button button-primary" type="submit">
-                <i class="fa-regular fa-paper-plane"></i> ส่งข้อความ
-              </button>
-            </form>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-stories">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">สตอรี่</h1>
-              <p class="page-description">โพสต์ข้อความหรือรูปภาพที่แสดงเป็นเวลา 24 ชั่วโมง</p>
-            </div>
-            <button class="button button-secondary" id="refreshStoriesButton">
-              <i class="fa-solid fa-rotate"></i> รีเฟรช
-            </button>
-          </div>
-
-          <div class="card">
-            <h2 class="card-title"><i class="fa-solid fa-circle-plus"></i> สร้างสตอรี่</h2>
-            <form id="storyForm">
-              <div class="field">
-                <label for="storyText">ข้อความสตอรี่</label>
-                <textarea class="textarea" id="storyText" maxlength="1000" placeholder="วันนี้มีอะไรอยากแบ่งปันไหม?"></textarea>
-              </div>
-              <div class="field">
-                <label for="storyImageFile">รูปภาพ (ไม่บังคับ)</label>
-                <input class="input" type="file" id="storyImageFile" accept="image/jpeg,image/png,image/webp,image/gif">
-              </div>
-              <div class="upload-preview hidden" id="storyImagePreview">
-                <img id="storyImagePreviewImage" alt="ภาพสตอรี่">
-                <div>
-                  <div id="storyImageStatus">ยังไม่ได้อัปโหลด</div>
-                  <button class="button button-secondary button-compact" type="button" id="removeStoryImageButton">ลบรูปที่เลือก</button>
-                </div>
-              </div>
-              <div class="form-actions" style="margin-bottom:17px">
-                <button class="button button-secondary" type="button" id="uploadStoryImageButton">
-                  <i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดรูปภาพ
-                </button>
-              </div>
-              <div class="field">
-                <label for="storyImageUrl">URL รูปภาพ</label>
-                <input class="input" id="storyImageUrl" readonly placeholder="URL จะปรากฏหลังอัปโหลด">
-              </div>
-              <button class="button button-primary" type="submit">
-                <i class="fa-solid fa-plus"></i> เผยแพร่สตอรี่
-              </button>
-            </form>
-          </div>
-
-          <div class="card">
-            <div class="list-item-top">
-              <h2 class="card-title" style="margin:0"><i class="fa-solid fa-earth-asia"></i> สตอรี่สาธารณะ</h2>
-              <button class="button button-secondary button-compact" id="loadPublicStoriesButton">โหลดใหม่</button>
-            </div>
-            <div class="story-grid" id="publicStoriesList"></div>
-            <div class="pagination" id="storiesPagination"></div>
-          </div>
-
-          <div class="card">
-            <h2 class="card-title"><i class="fa-regular fa-user"></i> สตอรี่ของฉัน</h2>
-            <div class="story-grid" id="myStoriesList"></div>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-notifications">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">การแจ้งเตือน</h1>
-              <p class="page-description">ติดตามกิจกรรมที่เกี่ยวข้องกับบัญชีของคุณ</p>
-            </div>
-            <button class="button button-secondary" id="refreshNotificationsButton">
-              <i class="fa-solid fa-rotate"></i> รีเฟรช
-            </button>
-          </div>
-          <div class="card">
-            <div class="list" id="notificationsList"></div>
-            <div class="pagination" id="notificationsPagination"></div>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-stats">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">สถิติของฉัน</h1>
-              <p class="page-description">สรุปข้อความที่ได้รับและสถานะการอ่าน</p>
-            </div>
-            <button class="button button-secondary" id="refreshStatsButton">
-              <i class="fa-solid fa-rotate"></i> คำนวณใหม่
-            </button>
-          </div>
-          <div class="grid-3">
-            <div class="stat-card">
-              <div class="stat-icon"><i class="fa-regular fa-envelope"></i></div>
-              <div><div class="stat-number" id="statsReceived">—</div><div class="stat-label">ข้อความทั้งหมด</div></div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background:#d1fae5;color:#047857"><i class="fa-regular fa-envelope-open"></i></div>
-              <div><div class="stat-number" id="statsRead">—</div><div class="stat-label">อ่านข้อความแล้ว</div></div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background:#fef3c7;color:#92400e"><i class="fa-regular fa-envelope"></i></div>
-              <div><div class="stat-number" id="statsUnread">—</div><div class="stat-label">ยังไม่ได้อ่าน</div></div>
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title"><i class="fa-solid fa-chart-pie"></i> อัตราการอ่าน</h2>
-            <div style="height:16px;overflow:hidden;border-radius:999px;background:#e2e8f0">
-              <div id="readRateBar" style="height:100%;width:0;background:linear-gradient(90deg,#4f46e5,#a855f7);transition:width .3s"></div>
-            </div>
-            <div class="meta" style="justify-content:space-between;margin-top:9px">
-              <span>อัตราการอ่านข้อความ</span>
-              <strong id="readRateText">0%</strong>
-            </div>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-settings">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">ตั้งค่าบัญชี</h1>
-              <p class="page-description">จัดการการเข้าสู่ระบบและข้อมูลส่วนตัว</p>
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title"><i class="fa-solid fa-user-shield"></i> บัญชีที่เข้าสู่ระบบ</h2>
-            <div class="field">
-              <label>อีเมล</label>
-              <input class="input" id="settingsEmail" readonly>
-            </div>
-            <div class="field">
-              <label>บทบาท</label>
-              <input class="input" id="settingsRole" readonly>
-            </div>
-            <div class="field">
-              <label>วันที่สมัคร</label>
-              <input class="input" id="settingsCreatedAt" readonly>
-            </div>
-            <button class="button button-danger" id="settingsLogoutButton">
-              <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
-            </button>
-          </div>
-          <div class="card">
-            <h2 class="card-title"><i class="fa-solid fa-circle-info"></i> เกี่ยวกับความเป็นส่วนตัว</h2>
-            <p class="muted">โปรไฟล์ของคุณจะแสดงข้อมูลที่ตั้งใจเผยแพร่ เช่น ชื่อที่แสดง Username รูปโปรไฟล์ และคำแนะนำตัว อย่าใส่ข้อมูลส่วนตัวที่ไม่ต้องการให้ผู้อื่นเห็น</p>
-            <p class="muted">การส่งข้อความนิรนามไม่ได้รับประกันว่าผู้ส่งจะไม่สามารถระบุตัวได้ในทุกสถานการณ์ และระบบอาจจำเป็นต้องจัดเก็บข้อมูลสำหรับป้องกันสแปมและตรวจสอบรายงาน</p>
-          </div>
-        </section>
-
-        <section class="page-section hidden" id="page-public-profile">
-          <div class="page-header">
-            <div>
-              <h1 class="page-title">โปรไฟล์ผู้ใช้</h1>
-              <p class="page-description">ส่งข้อความถึงเจ้าของโปรไฟล์นี้</p>
-            </div>
-            <button class="button button-secondary" data-goto="dashboard">
-              <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
-            </button>
-          </div>
-          <div class="card">
-            <div class="profile-cover" id="publicProfileCover"></div>
-            <div class="profile-head">
-              <div class="avatar" id="publicProfileAvatar">A</div>
-              <div class="profile-head-text">
-                <h2 id="publicProfileName">กำลังโหลดโปรไฟล์...</h2>
-                <div class="muted" id="publicProfileUsername"></div>
-              </div>
-            </div>
-            <p id="publicProfileBio" class="muted"></p>
-            <button class="button button-primary" id="publicProfileSendButton">
-              <i class="fa-regular fa-paper-plane"></i> ส่งข้อความ
-            </button>
-          </div>
-          <div class="card">
-            <h2 class="card-title"><i class="fa-regular fa-paper-plane"></i> ส่งข้อความนิรนาม</h2>
-            <form id="publicSendMessageForm">
-              <div class="field">
-                <label for="publicSendMessageText">ข้อความ</label>
-                <textarea class="textarea" id="publicSendMessageText" maxlength="5000" placeholder="เขียนข้อความที่ต้องการส่ง"></textarea>
-              </div>
-              <div class="field">
-                <label for="publicSendImageFile">แนบรูปภาพ (ไม่บังคับ)</label>
-                <input class="input" id="publicSendImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
-              </div>
-              <div class="upload-preview hidden" id="publicSendImagePreview">
-                <img id="publicSendImagePreviewImage" alt="ภาพแนบ">
-                <div>
-                  <div id="publicSendImageStatus">ยังไม่ได้อัปโหลด</div>
-                  <button class="button button-secondary button-compact" type="button" id="removePublicSendImageButton">ลบรูปที่เลือก</button>
-                </div>
-              </div>
-              <button class="button button-secondary" type="button" id="uploadPublicSendImageButton">
-                <i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดรูปภาพ
-              </button>
-              <div class="field" style="margin-top:15px">
-                <label for="publicSendImageUrl">URL รูปภาพ</label>
-                <input class="input" id="publicSendImageUrl" readonly>
-              </div>
-              <button class="button button-primary" type="submit">
-                <i class="fa-regular fa-paper-plane"></i> ส่งข้อความ
-              </button>
-            </form>
-          </div>
-        </section>
-
-        <div class="footer">
-          <div><strong>AnonMessage</strong> — Share your thoughts anonymously</div>
-          <div>โปรดใช้บริการอย่างสุภาพและเคารพสิทธิของผู้อื่น</div>
-        </div>
-      </main>
     </div>
+  </header>
+
+  <section class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo"><i class="fa-solid fa-comment-dots"></i></div>
+      <h1>AnonMessage</h1>
+      <p>พื้นที่แบ่งปันความรู้สึก รับฟังความคิดเห็น และส่งข้อความโดยไม่ต้องเปิดเผยตัวตนต่อเจ้าของโปรไฟล์</p>
+
+      <div class="google-button-wrap">
+        <div id="googleSignInButton"></div>
+      </div>
+
+      <div class="login-note">
+        <i class="fa-solid fa-shield-halved"></i>
+        การเข้าสู่ระบบใช้สำหรับจัดการโปรไฟล์และอ่านข้อความของคุณ โปรดใช้งานอย่างสุภาพและเคารพสิทธิของผู้อื่น
+      </div>
+      <p class="small">การส่งข้อความคุกคามหรือเนื้อหาที่ละเมิดสิทธิผู้อื่นไม่เหมาะสมกับการใช้งานระบบ</p>
+    </div>
+  </section>
+
+  <div class="container layout hidden" id="appLayout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebarAvatar">A</div>
+        <div style="min-width:0">
+          <div class="sidebar-user-name" id="sidebarUserName">ผู้ใช้งาน</div>
+          <div class="muted small" id="sidebarUsername">@username</div>
+        </div>
+      </div>
+
+      <div class="nav-label">เมนูหลัก</div>
+      <nav class="nav-menu" aria-label="เมนูหลัก">
+        <button class="nav-item active" data-page="dashboard" type="button"><i class="fa-solid fa-house"></i> ภาพรวม</button>
+        <button class="nav-item" data-page="profile" type="button"><i class="fa-regular fa-id-card"></i> โปรไฟล์ของฉัน</button>
+        <button class="nav-item" data-page="inbox" type="button"><i class="fa-regular fa-envelope"></i> กล่องข้อความ</button>
+        <button class="nav-item" data-page="send" type="button"><i class="fa-regular fa-paper-plane"></i> ส่งข้อความ</button>
+        <button class="nav-item" data-page="stories" type="button"><i class="fa-regular fa-circle-play"></i> สตอรี่</button>
+        <button class="nav-item" data-page="notifications" type="button"><i class="fa-regular fa-bell"></i> การแจ้งเตือน</button>
+        <button class="nav-item" data-page="stats" type="button"><i class="fa-solid fa-chart-simple"></i> สถิติของฉัน</button>
+        <button class="nav-item" data-page="settings" type="button"><i class="fa-solid fa-gear"></i> ตั้งค่า</button>
+      </nav>
+
+      <div class="divider"></div>
+      <button class="btn btn-outline btn-block" id="logoutButton" type="button">
+        <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+      </button>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <section class="page" id="page-dashboard">
+        <div class="page-heading">
+          <div>
+            <h1 id="welcomeTitle">ภาพรวม</h1>
+            <p>จัดการโปรไฟล์และข้อความของคุณได้ในที่เดียว</p>
+          </div>
+          <button class="btn btn-primary" type="button" data-go="send">
+            <i class="fa-regular fa-paper-plane"></i> ส่งข้อความ
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-regular fa-envelope"></i></div>
+            <div class="stat-value" id="dashboardInboxCount">0</div>
+            <div class="stat-label">ข้อความทั้งหมด</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-regular fa-bell"></i></div>
+            <div class="stat-value" id="dashboardUnreadCount">0</div>
+            <div class="stat-label">ข้อความที่ยังไม่อ่าน</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="stat-value" id="dashboardProfileViews">0</div>
+            <div class="stat-label">ยอดเข้าชมโปรไฟล์</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title"><span><i class="fa-solid fa-link"></i> ลิงก์โปรไฟล์ของฉัน</span></h2>
+          <p class="muted">แชร์ลิงก์นี้ให้ผู้อื่นเพื่อรับข้อความนิรนาม</p>
+          <div class="field">
+            <input class="input" id="dashboardProfileLink" readonly>
+          </div>
+          <div class="inline-actions">
+            <button class="btn btn-primary" id="copyProfileLinkButton" type="button"><i class="fa-regular fa-copy"></i> คัดลอกลิงก์</button>
+            <button class="btn btn-outline" id="openProfileLinkButton" type="button"><i class="fa-solid fa-arrow-up-right-from-square"></i> เปิดโปรไฟล์</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title"><span><i class="fa-regular fa-envelope"></i> ข้อความล่าสุด</span>
+            <button class="btn btn-outline" type="button" data-go="inbox">ดูทั้งหมด</button>
+          </h2>
+          <div id="dashboardRecentMessages">
+            <div class="empty-state"><i class="fa-regular fa-envelope"></i><strong>ยังไม่มีข้อความ</strong><span>ข้อความใหม่จะแสดงที่นี่</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page-profile">
+        <div class="page-heading">
+          <div><h1>โปรไฟล์ของฉัน</h1><p>แก้ไขข้อมูลและแชร์โปรไฟล์ของคุณ</p></div>
+        </div>
+
+        <div class="card">
+          <img class="profile-cover" id="profileCoverPreview" alt="ภาพหน้าปก">
+          <div class="profile-head">
+            <div class="avatar" id="profileAvatarPreview">A</div>
+            <div>
+              <h2 id="profileDisplayNamePreview">ชื่อของฉัน</h2>
+              <div class="muted" id="profileUsernamePreview">@username</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+
+          <form id="profileForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="profileDisplayName">ชื่อที่แสดง</label>
+                <input class="input" id="profileDisplayName" maxlength="80" required>
+              </div>
+              <div class="field">
+                <label for="profileUsername">ชื่อผู้ใช้</label>
+                <input class="input" id="profileUsername" maxlength="30" required pattern="[A-Za-z0-9_.-]+">
+                <div class="field-help">ใช้ตัวอักษรภาษาอังกฤษ ตัวเลข จุด ขีดกลาง หรือขีดล่าง</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="profileBio">แนะนำตัว</label>
+              <textarea class="textarea" id="profileBio" maxlength="500" placeholder="เขียนแนะนำตัวสั้น ๆ"></textarea>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="profileAvatarUrl">URL รูปโปรไฟล์</label>
+                <input class="input" id="profileAvatarUrl" type="url" placeholder="https://...">
+              </div>
+              <div class="field">
+                <label for="profileCoverUrl">URL ภาพหน้าปก</label>
+                <input class="input" id="profileCoverUrl" type="url" placeholder="https://...">
+              </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> บันทึกโปรไฟล์</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">ลิงก์สำหรับรับข้อความ</h2>
+          <div class="field"><input class="input" id="profileLinkText" readonly></div>
+          <button class="btn btn-outline" type="button" id="copyProfilePageLinkButton"><i class="fa-regular fa-copy"></i> คัดลอกลิงก์</button>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page-inbox">
+        <div class="page-heading">
+          <div><h1>กล่องข้อความ</h1><p>อ่านข้อความที่ส่งถึงคุณ</p></div>
+          <button class="btn btn-outline" id="refreshInboxButton" type="button"><i class="fa-solid fa-rotate"></i> โหลดใหม่</button>
+        </div>
+        <div class="card">
+          <div class="form-grid">
+            <div class="field">
+              <label for="inboxFilter">ตัวกรอง</label>
+              <select class="select" id="inboxFilter">
+                <option value="all">ข้อความทั้งหมด</option>
+                <option value="unread">ยังไม่อ่าน</option>
+                <option value="read">อ่านแล้ว</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="inboxSearch">ค้นหาข้อความ</label>
+              <input class="input" id="inboxSearch" placeholder="พิมพ์คำค้นหา">
+            </div>
+          </div>
+          <div id="inboxMessages">
+            <div class="empty-state"><i class="fa-regular fa-envelope-open"></i><strong>ยังไม่มีข้อความ</strong><span>ข้อความที่ได้รับจะแสดงที่นี่</span></div>
+          </div>
+          <div class="inline-actions">
+            <button class="btn btn-outline" id="inboxPrevButton" type="button">ก่อนหน้า</button>
+            <span class="muted small" id="inboxPagination">หน้า 1</span>
+            <button class="btn btn-outline" id="inboxNextButton" type="button">ถัดไป</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page-send">
+        <div class="page-heading">
+          <div><h1>ส่งข้อความนิรนาม</h1><p>ส่งข้อความถึงผู้ใช้โดยไม่แสดงชื่อของคุณต่อผู้รับ</p></div>
+        </div>
+
+        <div class="card">
+          <form id="sendMessageForm">
+            <div class="field">
+              <label for="recipientUsername">ชื่อผู้ใช้ผู้รับ</label>
+              <input class="input" id="recipientUsername" maxlength="30" placeholder="เช่น username" required>
+            </div>
+            <div class="field">
+              <label for="anonymousMessageText">ข้อความ</label>
+              <textarea class="textarea" id="anonymousMessageText" maxlength="5000" placeholder="เขียนข้อความของคุณที่นี่..." required></textarea>
+              <div class="field-help"><span id="messageCharacterCount">0</span>/5000 ตัวอักษร</div>
+            </div>
+            <div class="field">
+              <label for="messageImageFile">แนบรูปภาพ (ถ้ามี)</label>
+              <input class="input" id="messageImageFile" type="file" accept="image/*">
+              <div class="field-help">รองรับรูปภาพเท่านั้น ขนาดไฟล์สูงสุดกำหนดโดยระบบที่ให้บริการอัปโหลด</div>
+              <img class="file-preview hidden" id="messageImagePreview" alt="ตัวอย่างรูปภาพ">
+              <button class="btn btn-outline hidden" id="removeMessageImageButton" type="button">นำรูปออก</button>
+            </div>
+            <button class="btn btn-primary" id="sendMessageButton" type="submit"><i class="fa-regular fa-paper-plane"></i> ส่งข้อความ</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title"><i class="fa-solid fa-shield-halved"></i> ข้อควรรู้</h2>
+          <p class="muted">กรุณาส่งข้อความด้วยความสุภาพ ห้ามใช้ระบบเพื่อคุกคาม ข่มขู่ เปิดเผยข้อมูลส่วนตัว หรือส่งเนื้อหาที่ละเมิดสิทธิของผู้อื่น</p>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page-stories">
+        <div class="page-heading">
+          <div><h1>สตอรี่</h1><p>แบ่งปันข้อความสั้น ๆ ให้ผู้อื่นรับชม</p></div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">สร้างสตอรี่</h2>
+          <form id="storyForm">
+            <div class="field">
+              <label for="storyText">ข้อความสตอรี่</label>
+              <textarea class="textarea" id="storyText" maxlength="1000" placeholder="วันนี้คุณอยากแบ่งปันอะไร..." required></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-plus"></i> เผยแพร่สตอรี่</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">สตอรี่ล่าสุด</h2>
+          <div class="story-row" id="storiesList">
+            <div class="empty-state"><i class="fa-regular fa-circle-play"></i><strong>ยังไม่มีสตอรี่</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page-notifications">
+        <div class="page-heading">
+          <div><h1>การแจ้งเตือน</h1><p>ติดตามกิจกรรมที่เกี่ยวข้องกับบัญชีของคุณ</p></div>
+          <button class="btn btn-outline" id="refreshNotificationsButton" type="button"><i class="fa-solid fa-rotate"></i> โหลดใหม่</button>
+        </div>
+        <div class="card">
+          <div id="notificationsList">
+            <div class="empty-state"><i class="fa-regular fa-bell"></i><strong>ไม่มีการแจ้งเตือน</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page-stats">
+        <div class="page-heading">
+          <div><h1>สถิติของฉัน</h1><p>สรุปกิจกรรมในโปรไฟล์ของคุณ</p></div>
+          <button class="btn btn-outline" id="refreshStatsButton" type="button"><i class="fa-solid fa-rotate"></i> โหลดใหม่</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon"><i class="fa-regular fa-envelope"></i></div><div class="stat-value" id="statsMessageCount">0</div><div class="stat-label">ข้อความที่ได้รับ</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-eye"></i></div><div class="stat-value" id="statsProfileViews">0</div><div class="stat-label">เข้าชมโปรไฟล์</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fa-regular fa-circle-play"></i></div><div class="stat-value" id="statsStoryCount">0</div><div class="stat-label">สตอรี่</div></div>
+        </div>
+        <div class="card">
+          <h2 class="card-title">สรุปกิจกรรม</h2>
+          <div id="statsDetails" class="muted">โหลดสถิติเพื่อดูข้อมูลล่าสุด</div>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page-settings">
+        <div class="page-heading">
+          <div><h1>ตั้งค่าบัญชี</h1><p>ตรวจสอบข้อมูลบัญชีและจัดการเซสชัน</p></div>
+        </div>
+        <div class="card">
+          <h2 class="card-title">ข้อมูลบัญชี</h2>
+          <div class="field"><label for="settingsEmail">อีเมล</label><input class="input" id="settingsEmail" readonly></div>
+          <div class="field"><label for="settingsRole">สิทธิ์บัญชี</label><input class="input" id="settingsRole" readonly></div>
+          <div class="field"><label for="settingsCreatedAt">วันที่สมัคร</label><input class="input" id="settingsCreatedAt" readonly></div>
+        </div>
+        <div class="card">
+          <h2 class="card-title">เซสชัน</h2>
+          <p class="muted">หากต้องการหยุดใช้งานบัญชีบนอุปกรณ์นี้ ให้กดออกจากระบบ</p>
+          <button class="btn btn-danger" id="settingsLogoutButton" type="button"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
+        </div>
+      </section>
+    </main>
   </div>
+
+  <footer class="footer">AnonMessage · พื้นที่แบ่งปันความรู้สึกอย่างเคารพซึ่งกันและกัน</footer>
 
   <div class="loading-overlay hidden" id="loadingOverlay">
     <div class="loading-box">
-      <div class="spinner"></div>
+      <i class="fa-solid fa-spinner fa-spin"></i>
       <div id="loadingMessage">กำลังดำเนินการ...</div>
     </div>
   </div>
 
-  <div class="toast-container" id="toastContainer"></div>
-
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <script>
-    'use strict';
+    "use strict";
 
-    /* ============================================================
-       CONFIGURATION
-       ============================================================ */
-
+    /*
+     * CONFIGURATION
+     *
+     * ตั้งค่า API_BASE_URL เป็น URL ของ Cloudflare Worker จริง
+     * ตั้งค่า GOOGLE_CLIENT_ID เป็น OAuth Client ID ของ Google
+     *
+     * ห้ามใส่ PASSWORD_PEPPER, OTP_SECRET หรือความลับฝั่งเซิร์ฟเวอร์
+     * ไว้ในไฟล์หน้าเว็บนี้
+     */
     const CONFIG = Object.freeze({
-      APP_NAME: 'AnonMessage',
+      APP_NAME: "AnonMessage",
+      API_BASE_URL: "https://YOUR-CLOUDFLARE-WORKER-URL",
+      GOOGLE_CLIENT_ID: "YOUR_GOOGLE_OAUTH_CLIENT_ID",
 
-      /*
-       * ใส่ URL ของ Cloudflare Worker ที่คุณ Deploy แล้ว
-       * ตัวอย่างรูปแบบ:
-       * https://anonmessage-api.example.workers.dev
-       *
-       * ห้ามใส่ URL สมมติแล้วคาดหวังว่าจะใช้งานได้
-       */
-      API_BASE_URL: 'https://aged-wind-2abe.thepickffcer.workers.dev/',
+      SESSION_STORAGE_KEY: "anonmessage_session_token",
+      SENDER_STORAGE_KEY: "anonmessage_sender_token",
+      LAST_USER_KEY: "anonmessage_last_user",
 
-      /*
-       * ใช้ Google OAuth Web Client ID เดียวกับที่กำหนด
-       * ใน Script Properties ของ Code.gs
-       */
-      GOOGLE_CLIENT_ID: '1022921992521-66fjmcq5qhrsrtk0hu6e6no84sn51ka6.apps.googleusercontent.com',
-
-      /*
-       * คำเตือน: API Key ที่อยู่ใน HTML เปิดเผยต่อสาธารณะ
-       * สำหรับระบบ Production ควรย้ายการอัปโหลดไป Worker
-       * แล้วเก็บคีย์ใน Worker Secrets
-       */
-      IMGBB_API_KEY: '2ee007fe6916aba0796a39684e15efe7',
-
-      SESSION_STORAGE_KEY: 'anonmessage_session_token',
-      SENDER_STORAGE_KEY: 'anonmessage_sender_token',
-      LAST_USER_KEY: 'anonmessage_last_user',
-
-      IMGBB_UPLOAD_URL: 'https://api.imgbb.com/1/upload',
-
-      MAX_IMAGE_SIZE_MB: 10,
       MAX_MESSAGE_LENGTH: 5000,
       MAX_STORY_LENGTH: 1000,
-      DEFAULT_PAGE_SIZE: 20
+      MAX_IMAGE_BYTES: 10 * 1024 * 1024,
+      PAGE_SIZE: 20
     });
 
-
-    /* ============================================================
-       APPLICATION STATE
-       ============================================================ */
-
     const state = {
-      sessionToken: '',
+      sessionToken: "",
       user: null,
-      currentPage: 'dashboard',
-      publicUsername: '',
-      publicRecipientUserId: '',
-      publicProfile: null,
+      currentPage: "dashboard",
+      inboxItems: [],
       inboxPage: 1,
       inboxTotalPages: 1,
-      storiesPage: 1,
-      storiesTotalPages: 1,
-      notificationsPage: 1,
-      notificationsTotalPages: 1,
-      uploadedAvatarUrl: '',
-      uploadedCoverUrl: '',
-      uploadedMessageImageUrl: '',
-      uploadedStoryImageUrl: '',
-      uploadedPublicImageUrl: '',
+      stories: [],
+      notifications: [],
+      stats: {},
+      selectedMessageImage: null,
       loadingCount: 0,
       googleInitialized: false
-    };
-
-
-    /* ============================================================
-       DOM HELPERS
-       ============================================================ */
-
-    const $ = function (selector, root) {
-      return (root || document).querySelector(selector);
-    };
-
-    const $$ = function (selector, root) {
-      return Array.from(
-        (root || document).querySelectorAll(selector)
-      );
     };
 
     function byId(id) {
@@ -1641,86 +1128,72 @@
     }
 
     function escapeHtml(value) {
-      return String(value == null ? '' : value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
     function safeUrl(value) {
-      const text = String(value || '').trim();
-
-      if (!text) return '';
+      const text = String(value || "").trim();
+      if (!text) return "";
 
       try {
         const url = new URL(text);
-
-        if (url.protocol !== 'https:' && url.protocol !== 'http:') {
-          return '';
+        if (url.protocol !== "https:" && url.protocol !== "http:") {
+          return "";
         }
-
         return url.href;
       } catch (error) {
-        return '';
+        return "";
       }
     }
 
     function formatDate(value) {
-      if (!value) return '-';
+      if (!value) return "-";
 
       const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "-";
 
-      if (Number.isNaN(date.getTime())) {
-        return '-';
-      }
-
-      return date.toLocaleString('th-TH', {
-        dateStyle: 'medium',
-        timeStyle: 'short'
+      return date.toLocaleString("th-TH", {
+        dateStyle: "medium",
+        timeStyle: "short"
       });
     }
 
     function showToast(message, type) {
-      const container = byId('toastContainer');
-      const toast = document.createElement('div');
+      const container = byId("toastContainer");
+      const toast = document.createElement("div");
 
-      toast.className = 'toast' +
-        (type === 'error' ? ' error' : '') +
-        (type === 'success' ? ' success' : '');
+      toast.className = "toast" +
+        (type === "error" ? " error" : "") +
+        (type === "success" ? " success" : "");
 
-      toast.textContent = String(message || '');
+      toast.textContent = String(message || "ไม่สำเร็จ");
       container.appendChild(toast);
 
       window.setTimeout(function () {
         toast.remove();
-      }, 4000);
+      }, 3500);
     }
 
     function showLoading(message) {
       state.loadingCount++;
-
-      byId('loadingMessage').textContent =
-        message || 'กำลังดำเนินการ...';
-
-      byId('loadingOverlay').classList.remove('hidden');
+      byId("loadingMessage").textContent = message || "กำลังดำเนินการ...";
+      byId("loadingOverlay").classList.remove("hidden");
     }
 
     function hideLoading() {
-      state.loadingCount = Math.max(
-        0,
-        state.loadingCount - 1
-      );
-
+      state.loadingCount = Math.max(0, state.loadingCount - 1);
       if (state.loadingCount === 0) {
-        byId('loadingOverlay').classList.add('hidden');
+        byId("loadingOverlay").classList.add("hidden");
       }
     }
 
     async function withLoading(message, callback) {
       showLoading(message);
-
       try {
         return await callback();
       } finally {
@@ -1728,150 +1201,109 @@
       }
     }
 
-    async function confirmDialog(
-      title,
-      text,
-      confirmText
-    ) {
+    async function confirmDialog(title, message, confirmText) {
       const result = await Swal.fire({
-        icon: 'warning',
-        title: title,
-        text: text,
+        icon: "warning",
+        title: title || "ยืนยัน",
+        text: message || "",
         showCancelButton: true,
-        confirmButtonText: confirmText || 'ยืนยัน',
-        cancelButtonText: 'ยกเลิก',
-        confirmButtonColor: '#4f46e5',
-        cancelButtonColor: '#64748b',
+        confirmButtonText: confirmText || "ยืนยัน",
+        cancelButtonText: "ยกเลิก",
+        confirmButtonColor: "#4f46e5",
+        cancelButtonColor: "#64748b",
         reverseButtons: true
       });
-
       return result.isConfirmed;
     }
 
     function showErrorDialog(title, message) {
+      /*
+       * ข้อความแจ้งผู้ใช้ต้องเป็นข้อความสั้น
+       * ไม่แสดงรายละเอียดจาก API หรือข้อผิดพลาดภายใน
+       */
       return Swal.fire({
-        icon: 'error',
-        title: title || 'เกิดข้อผิดพลาด',
-        text: message || 'ไม่สามารถดำเนินการได้',
-        confirmButtonText: 'ตกลง',
-        confirmButtonColor: '#4f46e5'
+        icon: "error",
+        title: title || "ไม่สำเร็จ",
+        text: message || "ไม่สำเร็จ",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#4f46e5"
       });
     }
 
     function showSuccessDialog(title, message) {
       return Swal.fire({
-        icon: 'success',
-        title: title || 'สำเร็จ',
-        text: message || '',
-        confirmButtonText: 'ตกลง',
-        confirmButtonColor: '#4f46e5'
+        icon: "success",
+        title: title || "สำเร็จ",
+        text: message || "",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#4f46e5"
       });
     }
-
-    function setButtonLoading(button, loading, text) {
-      if (!button) return;
-
-      if (loading) {
-        button.dataset.originalHtml = button.innerHTML;
-        button.disabled = true;
-        button.innerHTML =
-          '<i class="fa-solid fa-spinner fa-spin"></i> ' +
-          escapeHtml(text || 'กำลังดำเนินการ...');
-      } else {
-        button.disabled = false;
-
-        if (button.dataset.originalHtml) {
-          button.innerHTML = button.dataset.originalHtml;
-          delete button.dataset.originalHtml;
-        }
-      }
-    }
-
-
-    /* ============================================================
-       STORAGE AND SESSION
-       ============================================================ */
 
     function getSessionToken() {
       return state.sessionToken ||
         localStorage.getItem(CONFIG.SESSION_STORAGE_KEY) ||
-        '';
+        "";
     }
 
     function saveSessionToken(token) {
-      state.sessionToken = String(token || '');
+      state.sessionToken = String(token || "");
 
       if (state.sessionToken) {
-        localStorage.setItem(
-          CONFIG.SESSION_STORAGE_KEY,
-          state.sessionToken
-        );
+        localStorage.setItem(CONFIG.SESSION_STORAGE_KEY, state.sessionToken);
       } else {
-        localStorage.removeItem(
-          CONFIG.SESSION_STORAGE_KEY
-        );
+        localStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
       }
     }
 
     function clearSession() {
-      state.sessionToken = '';
+      state.sessionToken = "";
       state.user = null;
-
-      localStorage.removeItem(
-        CONFIG.SESSION_STORAGE_KEY
-      );
-
-      localStorage.removeItem(
-        CONFIG.LAST_USER_KEY
-      );
+      localStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
+      localStorage.removeItem(CONFIG.LAST_USER_KEY);
     }
 
     function getSenderToken() {
-      let token = localStorage.getItem(
-        CONFIG.SENDER_STORAGE_KEY
-      );
+      let token = localStorage.getItem(CONFIG.SENDER_STORAGE_KEY);
 
       if (!token) {
         if (window.crypto && window.crypto.randomUUID) {
-          token = window.crypto.randomUUID() +
-            window.crypto.randomUUID();
+          token = window.crypto.randomUUID() + window.crypto.randomUUID();
         } else {
-          token = 'sender-' +
-            Date.now().toString(36) + '-' +
-            Math.random().toString(36).slice(2) +
-            Math.random().toString(36).slice(2);
+          const bytes = new Uint8Array(32);
+          if (window.crypto && window.crypto.getRandomValues) {
+            window.crypto.getRandomValues(bytes);
+            token = Array.from(bytes, function (byte) {
+              return byte.toString(16).padStart(2, "0");
+            }).join("");
+          } else {
+            token = "sender-" + Date.now().toString(36) +
+              "-" + Math.random().toString(36).slice(2);
+          }
         }
 
-        localStorage.setItem(
-          CONFIG.SENDER_STORAGE_KEY,
-          token
-        );
+        localStorage.setItem(CONFIG.SENDER_STORAGE_KEY, token);
       }
 
       return token;
     }
 
     function getApiUrl() {
-      const base = String(
-        CONFIG.API_BASE_URL || ''
-      ).trim();
+      const base = String(CONFIG.API_BASE_URL || "").trim();
 
-      if (
-        !base ||
-        base.indexOf('YOUR-CLOUDFLARE-WORKER-URL') !== -1
-      ) {
-        throw new Error(
-          'กรุณากำหนด CONFIG.API_BASE_URL เป็น URL Cloudflare Worker จริง'
-        );
+      if (!base || base.indexOf("YOUR-CLOUDFLARE-WORKER-URL") !== -1) {
+        throw new Error("CONFIGURATION_MISSING");
       }
 
-      return base.replace(/\/+$/, '');
+      const normalized = base.replace(/\/+$/, "");
+      const parsed = new URL(normalized);
+
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+        throw new Error("INVALID_CONFIGURATION");
+      }
+
+      return normalized;
     }
-
-
-    /* ============================================================
-       API CLIENT
-       ============================================================ */
 
     async function apiRequest(action, data, options) {
       const opts = options || {};
@@ -1880,41 +1312,34 @@
       if (
         opts.auth !== false &&
         getSessionToken() &&
-        !Object.prototype.hasOwnProperty.call(
-          payload,
-          'sessionToken'
-        )
+        !Object.prototype.hasOwnProperty.call(payload, "sessionToken")
       ) {
         payload.sessionToken = getSessionToken();
       }
 
-      const url = getApiUrl();
-
       let response;
 
       try {
-        response = await fetch(url, {
-          method: 'POST',
+        response = await fetch(getApiUrl(), {
+          method: "POST",
           headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
+            "Content-Type": "text/plain;charset=utf-8"
           },
           body: JSON.stringify({
             action: action,
             data: payload
           }),
-          redirect: 'follow',
-          cache: 'no-store'
+          redirect: "follow",
+          cache: "no-store"
         });
       } catch (error) {
-        throw new Error(
-          'เชื่อมต่อ API ไม่สำเร็จ กรุณาตรวจสอบ URL ของ Worker, CORS และการ Deploy'
-        );
+        console.error("Request failed:", action, error);
+        throw new Error("REQUEST_FAILED");
       }
 
       if (!response.ok) {
-        throw new Error(
-          'API ตอบกลับด้วย HTTP ' + response.status
-        );
+        console.error("Request returned non-success status:", action, response.status);
+        throw new Error("REQUEST_FAILED");
       }
 
       let result;
@@ -1922,31 +1347,28 @@
       try {
         result = await response.json();
       } catch (error) {
-        throw new Error(
-          'API ส่งข้อมูลกลับมาไม่ใช่ JSON กรุณาตรวจสอบ Worker'
-        );
+        console.error("Invalid response:", action, error);
+        throw new Error("INVALID_RESPONSE");
       }
 
-      if (!result || typeof result !== 'object') {
-        throw new Error('รูปแบบข้อมูล API ไม่ถูกต้อง');
+      if (!result || typeof result !== "object") {
+        throw new Error("INVALID_RESPONSE");
       }
 
-      if (!result.ok) {
-        const errorCode = String(
-          result.error || 'API_ERROR'
-        );
-
-        const message = String(
-          result.message || 'คำขอไม่สำเร็จ'
-        );
+      /*
+       * Backend ของโปรเจกต์นี้ตอบกลับด้วย { ok: true/false, ... }
+       * ข้อความผิดพลาดภายในจะไม่ถูกนำไปแสดงต่อผู้ใช้
+       */
+      if (result.ok !== true) {
+        const errorCode = String(result.error || "REQUEST_FAILED");
 
         if (
           [
-            'AUTH_REQUIRED',
-            'INVALID_SESSION',
-            'SESSION_REVOKED',
-            'SESSION_EXPIRED',
-            'ACCOUNT_DISABLED'
+            "AUTH_REQUIRED",
+            "INVALID_SESSION",
+            "SESSION_REVOKED",
+            "SESSION_EXPIRED",
+            "ACCOUNT_DISABLED"
           ].indexOf(errorCode) !== -1 &&
           opts.auth !== false
         ) {
@@ -1954,35 +1376,123 @@
           showLoginScreen();
         }
 
-        const error = new Error(message);
-        error.code = errorCode;
-        error.response = result;
-
-        throw error;
+        const internalError = new Error(errorCode);
+        internalError.code = errorCode;
+        console.warn("Operation was not successful:", action, errorCode);
+        throw internalError;
       }
 
       return result;
     }
 
+    function renderAvatar(element, avatarUrl, displayName) {
+      if (!element) return;
 
-    /* ============================================================
-       GOOGLE SIGN-IN
-       ============================================================ */
+      const url = safeUrl(avatarUrl);
+      element.replaceChildren();
 
-    function initializeGoogleSignIn() {
-      if (
-        !CONFIG.GOOGLE_CLIENT_ID ||
-        CONFIG.GOOGLE_CLIENT_ID.indexOf(
-          'YOUR_GOOGLE_OAUTH_CLIENT_ID'
-        ) !== -1
-      ) {
-        console.warn(
-          'กรุณาตั้งค่า GOOGLE_CLIENT_ID'
+      if (url) {
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = "รูปโปรไฟล์";
+        image.referrerPolicy = "no-referrer";
+        image.onerror = function () {
+          element.textContent = getInitial(displayName);
+        };
+        element.appendChild(image);
+      } else {
+        element.textContent = getInitial(displayName);
+      }
+    }
+
+    function getInitial(name) {
+      const text = String(name || "A").trim();
+      return text ? Array.from(text)[0].toUpperCase() : "A";
+    }
+
+    function buildProfileUrl(username) {
+      const clean = String(username || "").replace(/^@/, "").trim();
+      const url = new URL(window.location.href);
+      url.search = "";
+      url.hash = "";
+      url.searchParams.set("user", clean);
+      return url.href;
+    }
+
+    function showLoginScreen() {
+      byId("loginScreen").classList.remove("hidden");
+      byId("appLayout").classList.add("hidden");
+
+      byId("headerLoginButton").classList.remove("hidden");
+      byId("headerProfileButton").classList.add("hidden");
+      byId("headerNotificationButton").classList.add("hidden");
+    }
+
+    function showAppScreen() {
+      byId("loginScreen").classList.add("hidden");
+      byId("appLayout").classList.remove("hidden");
+
+      byId("headerLoginButton").classList.add("hidden");
+      byId("headerProfileButton").classList.remove("hidden");
+      byId("headerNotificationButton").classList.remove("hidden");
+    }
+
+    function renderCurrentUser() {
+      const user = state.user;
+      if (!user) return;
+
+      byId("welcomeTitle").textContent =
+        "ยินดีต้อนรับ " + (user.displayName || "ผู้ใช้งาน");
+
+      byId("sidebarUserName").textContent = user.displayName || "ผู้ใช้งาน";
+      byId("sidebarUsername").textContent = "@" + (user.username || "username");
+
+      renderAvatar(byId("sidebarAvatar"), user.avatarUrl, user.displayName);
+
+      byId("settingsEmail").value = user.email || "";
+      byId("settingsRole").value =
+        user.role === "admin" ? "ผู้ดูแลระบบ" : "สมาชิก";
+      byId("settingsCreatedAt").value = formatDate(user.createdAt);
+
+      byId("profileDisplayName").value = user.displayName || "";
+      byId("profileUsername").value = user.username || "";
+      byId("profileBio").value = user.bio || "";
+      byId("profileAvatarUrl").value = user.avatarUrl || "";
+      byId("profileCoverUrl").value = user.coverUrl || "";
+
+      byId("profileDisplayNamePreview").textContent =
+        user.displayName || "ชื่อของฉัน";
+      byId("profileUsernamePreview").textContent =
+        "@" + (user.username || "username");
+
+      renderAvatar(
+        byId("profileAvatarPreview"),
+        user.avatarUrl,
+        user.displayName
+      );
+
+      const coverUrl = safeUrl(user.coverUrl);
+      byId("profileCoverPreview").src = coverUrl ||
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300">' +
+          '<defs><linearGradient id="g"><stop stop-color="#6366f1"/>' +
+          '<stop offset="1" stop-color="#a5b4fc"/></linearGradient></defs>' +
+          '<rect width="100%" height="100%" fill="url(#g)"/></svg>'
         );
 
-        byId('googleSignInButton').innerHTML =
-          '<div class="muted small">กรุณาตั้งค่า Google OAuth Client ID ก่อนใช้งาน</div>';
+      const profileUrl = buildProfileUrl(user.username);
+      byId("dashboardProfileLink").value = profileUrl;
+      byId("profileLinkText").value = profileUrl;
+    }
 
+    async function initializeGoogleSignIn() {
+      if (
+        !CONFIG.GOOGLE_CLIENT_ID ||
+        CONFIG.GOOGLE_CLIENT_ID.indexOf("YOUR_GOOGLE_OAUTH_CLIENT_ID") !== -1
+      ) {
+        byId("googleSignInButton").innerHTML =
+          '<span class="muted small">ระบบยังไม่ได้ตั้งค่าการเข้าสู่ระบบ</span>';
         return;
       }
 
@@ -1991,10 +1501,7 @@
         !window.google.accounts ||
         !window.google.accounts.id
       ) {
-        window.setTimeout(
-          initializeGoogleSignIn,
-          500
-        );
+        window.setTimeout(initializeGoogleSignIn, 500);
         return;
       }
 
@@ -2007,122 +1514,73 @@
         });
 
         window.google.accounts.id.renderButton(
-          byId('googleSignInButton'),
+          byId("googleSignInButton"),
           {
-            type: 'standard',
-            theme: 'outline',
-            size: 'large',
-            text: 'signin_with',
-            shape: 'pill',
-            logo_alignment: 'left',
+            type: "standard",
+            theme: "outline",
+            size: "large",
+            text: "signin_with",
+            shape: "pill",
+            logo_alignment: "left",
             width: 280
           }
         );
 
         state.googleInitialized = true;
       } catch (error) {
-        console.error(
-          'Google Sign-In initialization failed'
-        );
-
-        byId('googleSignInButton').innerHTML =
-          '<div class="muted small">ตั้งค่า Google Sign-In ไม่สำเร็จ</div>';
+        console.error("Google Sign-In initialization failed:", error);
+        byId("googleSignInButton").innerHTML =
+          '<span class="muted small">เข้าสู่ระบบไม่สำเร็จ</span>';
       }
     }
 
     async function handleGoogleCredential(credentialResponse) {
-      if (
-        !credentialResponse ||
-        !credentialResponse.credential
-      ) {
-        showToast(
-          'ไม่ได้รับข้อมูลยืนยันตัวตนจาก Google',
-          'error'
-        );
+      if (!credentialResponse || !credentialResponse.credential) {
+        showToast("เข้าสู่ระบบไม่สำเร็จ", "error");
         return;
       }
 
       try {
-        await withLoading(
-          'กำลังเข้าสู่ระบบ...',
-          async function () {
-            const result = await apiRequest(
-              'googleLogin',
-              {
-                idToken: credentialResponse.credential,
-                userAgent: navigator.userAgent
-              },
-              {
-                auth: false
-              }
-            );
-
-            if (!result.sessionToken || !result.user) {
-              throw new Error(
-                'API ไม่ได้ส่ง sessionToken หรือข้อมูลผู้ใช้กลับมา'
-              );
+        await withLoading("กำลังเข้าสู่ระบบ...", async function () {
+          const result = await apiRequest(
+            "googleLogin",
+            {
+              credential: credentialResponse.credential
+            },
+            {
+              auth: false
             }
+          );
 
-            saveSessionToken(result.sessionToken);
-            state.user = result.user;
-
-            localStorage.setItem(
-              CONFIG.LAST_USER_KEY,
-              JSON.stringify({
-                userId: result.user.userId,
-                username: result.user.username,
-                displayName: result.user.displayName
-              })
-            );
+          if (!result.sessionToken || !result.user) {
+            throw new Error("LOGIN_FAILED");
           }
-        );
+
+          saveSessionToken(result.sessionToken);
+          state.user = result.user;
+
+          localStorage.setItem(
+            CONFIG.LAST_USER_KEY,
+            JSON.stringify({
+              userId: result.user.userId,
+              username: result.user.username,
+              displayName: result.user.displayName
+            })
+          );
+        });
 
         showAppScreen();
         renderCurrentUser();
-        await navigateTo('dashboard');
-
-        showToast('เข้าสู่ระบบสำเร็จ', 'success');
-
+        await navigateTo("dashboard");
+        showToast("เข้าสู่ระบบสำเร็จ", "success");
       } catch (error) {
-        console.error(
-          'Google login failed:',
-          error.message
-        );
-
-        showErrorDialog(
-          'เข้าสู่ระบบไม่สำเร็จ',
-          error.message
-        );
+        console.error("Google login failed:", error);
+        showErrorDialog("เข้าสู่ระบบไม่สำเร็จ", "ไม่สำเร็จ");
       }
     }
 
-
-    /* ============================================================
-       APPLICATION SCREEN MANAGEMENT
-       ============================================================ */
-
-    function showLoginScreen() {
-      byId('loginScreen').classList.remove('hidden');
-      byId('appLayout').classList.add('hidden');
-
-      byId('headerLoginButton').classList.remove('hidden');
-      byId('headerProfileButton').classList.add('hidden');
-      byId('headerNotificationButton').classList.add('hidden');
-    }
-
-    function showAppScreen() {
-      byId('loginScreen').classList.add('hidden');
-      byId('appLayout').classList.remove('hidden');
-
-      byId('headerLoginButton').classList.add('hidden');
-      byId('headerProfileButton').classList.remove('hidden');
-      byId('headerNotificationButton').classList.remove('hidden');
-    }
-
     async function restoreSession() {
-      const token = localStorage.getItem(
-        CONFIG.SESSION_STORAGE_KEY
-      );
+      const token = localStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
 
       if (!token) {
         showLoginScreen();
@@ -2132,7 +1590,8 @@
       state.sessionToken = token;
 
       try {
-        const result = await apiRequest('getMe', {});
+        const result = await apiRequest("getMe", {});
+        if (!result.user) throw new Error("SESSION_INVALID");
 
         state.user = result.user;
 
@@ -2147,2050 +1606,914 @@
 
         showAppScreen();
         renderCurrentUser();
-
         return true;
-
       } catch (error) {
+        console.warn("Session restore failed:", error);
         clearSession();
         showLoginScreen();
         return false;
       }
     }
 
-    function renderCurrentUser() {
-      const user = state.user;
-
-      if (!user) return;
-
-      byId('welcomeTitle').textContent =
-        'ยินดีต้อนรับ ' +
-        (user.displayName || 'ผู้ใช้งาน');
-
-      byId('sidebarUserName').textContent =
-        user.displayName || 'ผู้ใช้งาน';
-
-      byId('sidebarUsername').textContent =
-        '@' + (user.username || 'username');
-
-      renderAvatar(
-        byId('sidebarAvatar'),
-        user.avatarUrl,
-        user.displayName
-      );
-
-      byId('settingsEmail').value = user.email || '';
-      byId('settingsRole').value =
-        user.role === 'admin'
-          ? 'ผู้ดูแลระบบ'
-          : 'สมาชิก';
-
-      byId('settingsCreatedAt').value =
-        formatDate(user.createdAt);
-
-      const profileUrl = buildProfileUrl(
-        user.username
-      );
-
-      byId('dashboardProfileLink').value = profileUrl;
-      byId('profileLinkText').textContent = profileUrl;
-
-      byId('profileDisplayName').value =
-        user.displayName || '';
-
-      byId('profileUsername').value =
-        user.username || '';
-
-      byId('profileBio').value =
-        user.bio || '';
-
-      byId('profileDisplayNamePreview').textContent =
-        user.displayName || 'ชื่อของฉัน';
-
-      byId('profileUsernamePreview').textContent =
-        '@' + (user.username || 'username');
-
-      renderAvatar(
-        byId('profileAvatarPreview'),
-        user.avatarUrl,
-        user.displayName
-      );
-
-      const coverUrl = safeUrl(user.coverUrl);
-
-      byId('profileCoverPreview').style.backgroundImage =
-        coverUrl
-          ? 'url("' + coverUrl.replace(/"/g, '%22') + '")'
-          : '';
-
-      byId('profileCoverPreview').style.backgroundColor =
-        coverUrl ? 'transparent' : '#818cf8';
-    }
-
-    function renderAvatar(element, imageUrl, name) {
-      if (!element) return;
-
-      const url = safeUrl(imageUrl);
-
-      if (url) {
-        element.innerHTML =
-          '<img src="' + escapeHtml(url) +
-          '" alt="รูปโปรไฟล์" referrerpolicy="no-referrer">';
-      } else {
-        const first = String(name || 'A').trim().charAt(0) || 'A';
-        element.textContent = first;
-      }
-    }
-
-    function buildProfileUrl(username) {
-      const url = new URL(window.location.href);
-
-      url.searchParams.set(
-        'profile',
-        String(username || '')
-      );
-
-      url.hash = '';
-
-      return url.href;
-    }
-
-
-    /* ============================================================
-       NAVIGATION
-       ============================================================ */
-
-    async function navigateTo(page) {
-      const allowedPages = [
-        'dashboard',
-        'profile',
-        'inbox',
-        'send',
-        'stories',
-        'notifications',
-        'stats',
-        'settings',
-        'public-profile'
+    function showPage(pageName) {
+      const validPages = [
+        "dashboard",
+        "profile",
+        "inbox",
+        "send",
+        "stories",
+        "notifications",
+        "stats",
+        "settings"
       ];
 
-      if (allowedPages.indexOf(page) === -1) {
-        page = 'dashboard';
-      }
+      const page = validPages.indexOf(pageName) !== -1
+        ? pageName
+        : "dashboard";
 
-      if (
-        page !== 'public-profile' &&
-        !state.user
-      ) {
-        showLoginScreen();
-        return;
-      }
+      document.querySelectorAll(".page").forEach(function (element) {
+        element.classList.add("hidden");
+      });
+
+      byId("page-" + page).classList.remove("hidden");
+
+      document.querySelectorAll(".nav-item").forEach(function (button) {
+        button.classList.toggle("active", button.dataset.page === page);
+      });
 
       state.currentPage = page;
-
-      $$('.page-section').forEach(function (section) {
-        section.classList.add('hidden');
-      });
-
-      const target = byId('page-' + page);
-
-      if (target) {
-        target.classList.remove('hidden');
-      }
-
-      $$('.nav-item[data-page]').forEach(function (item) {
-        item.classList.toggle(
-          'active',
-          item.dataset.page === page
-        );
-      });
-
-      byId('sidebar').classList.remove('open');
-
-      switch (page) {
-        case 'dashboard':
-          await loadDashboard();
-          break;
-
-        case 'profile':
-          if (state.user) renderCurrentUser();
-          break;
-
-        case 'inbox':
-          state.inboxPage = 1;
-          await loadInbox();
-          break;
-
-        case 'stories':
-          state.storiesPage = 1;
-          await loadPublicStories();
-          await loadMyStories();
-          break;
-
-        case 'notifications':
-          state.notificationsPage = 1;
-          await loadNotifications();
-          break;
-
-        case 'stats':
-          await loadStats();
-          break;
-
-        case 'settings':
-          if (state.user) renderCurrentUser();
-          break;
-
-        case 'public-profile':
-          await loadPublicProfile(state.publicUsername);
-          break;
-
-        case 'send':
-          if (state.user && state.user.username) {
-            byId('sendRecipientUsername').value =
-              state.user.username;
-          }
-          break;
-      }
-
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    async function navigateTo(pageName) {
+      showPage(pageName);
 
-    /* ============================================================
-       DASHBOARD
-       ============================================================ */
+      if (!state.user) return;
+
+      try {
+        if (pageName === "dashboard") {
+          await loadDashboard();
+        } else if (pageName === "inbox") {
+          await loadInbox();
+        } else if (pageName === "stories") {
+          await loadStories();
+        } else if (pageName === "notifications") {
+          await loadNotifications();
+        } else if (pageName === "stats") {
+          await loadStats();
+        }
+      } catch (error) {
+        console.error("Page loading failed:", pageName, error);
+        showToast("โหลดข้อมูลไม่สำเร็จ", "error");
+      }
+    }
 
     async function loadDashboard() {
-      if (!state.user) return;
+      const result = await apiRequest("getDashboard", {});
+      const dashboard = result.dashboard || result.data || result;
 
-      try {
-        const results = await Promise.all([
-          apiRequest('getStats', {}),
-          apiRequest('listInbox', {
-            page: 1,
-            pageSize: 5,
-            status: 'active'
-          })
-        ]);
+      byId("dashboardInboxCount").textContent =
+        Number(dashboard.messageCount || dashboard.totalMessages || 0);
+      byId("dashboardUnreadCount").textContent =
+        Number(dashboard.unreadCount || dashboard.unreadMessages || 0);
+      byId("dashboardProfileViews").textContent =
+        Number(dashboard.profileViews || dashboard.viewCount || 0);
 
-        const stats = results[0].stats || {};
-        const inbox = results[1];
+      const recent = Array.isArray(dashboard.recentMessages)
+        ? dashboard.recentMessages
+        : [];
 
-        byId('dashboardReceived').textContent =
-          Number(stats.totalReceived || 0).toLocaleString('th-TH');
-
-        byId('dashboardRead').textContent =
-          Number(stats.totalRead || 0).toLocaleString('th-TH');
-
-        byId('dashboardStories').textContent =
-          Number(stats.totalStories || 0).toLocaleString('th-TH');
-
-        renderMessageList(
-          byId('dashboardRecentMessages'),
-          inbox.items || [],
-          {
-            compact: true,
-            allowActions: false
-          }
-        );
-
-        await updateNotificationIndicator();
-
-      } catch (error) {
-        showToast(
-          'โหลดภาพรวมไม่สำเร็จ: ' + error.message,
-          'error'
-        );
-      }
+      renderMessages(
+        byId("dashboardRecentMessages"),
+        recent,
+        {
+          showDelete: false,
+          compact: true
+        }
+      );
     }
 
+    async function loadInbox() {
+      const filter = byId("inboxFilter").value;
+      const search = byId("inboxSearch").value.trim();
 
-    /* ============================================================
-       PROFILE
-       ============================================================ */
+      const result = await apiRequest("getInbox", {
+        page: state.inboxPage,
+        pageSize: CONFIG.PAGE_SIZE,
+        filter: filter,
+        search: search
+      });
 
-    async function saveProfile(event) {
-      event.preventDefault();
+      const items = Array.isArray(result.items)
+        ? result.items
+        : Array.isArray(result.messages)
+          ? result.messages
+          : [];
 
-      if (!state.user) return;
+      state.inboxItems = items;
 
-      const displayName = byId(
-        'profileDisplayName'
-      ).value.trim();
+      const pagination = result.pagination || {};
+      state.inboxTotalPages = Math.max(
+        1,
+        Number(pagination.totalPages || 1)
+      );
 
-      const username = byId(
-        'profileUsername'
-      ).value.trim().toLowerCase();
+      byId("inboxPagination").textContent =
+        "หน้า " + state.inboxPage + " / " + state.inboxTotalPages;
 
-      const bio = byId('profileBio').value.trim();
+      byId("inboxPrevButton").disabled = state.inboxPage <= 1;
+      byId("inboxNextButton").disabled =
+        state.inboxPage >= state.inboxTotalPages;
 
-      if (!displayName) {
-        showToast('กรุณากรอกชื่อที่แสดง', 'error');
+      renderMessages(byId("inboxMessages"), items, {
+        showDelete: true,
+        compact: false
+      });
+    }
+
+    function renderMessages(container, messages, options) {
+      const opts = options || {};
+      container.replaceChildren();
+
+      if (!messages || messages.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML =
+          '<i class="fa-regular fa-envelope-open"></i>' +
+          "<strong>ยังไม่มีข้อความ</strong>" +
+          "<span>ข้อความจะแสดงที่นี่เมื่อมีข้อมูล</span>";
+        container.appendChild(empty);
         return;
       }
 
-      if (!/^[a-zA-Z0-9_.]{3,30}$/.test(username)) {
-        showToast(
-          'Username ต้องมี 3-30 ตัวอักษร และใช้ a-z, 0-9, _ หรือ .',
-          'error'
+      messages.forEach(function (message) {
+        const card = document.createElement("article");
+        card.className = "message-card";
+
+        const header = document.createElement("div");
+        header.className = "message-header";
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.innerHTML = '<i class="fa-solid fa-user-secret"></i>';
+
+        const meta = document.createElement("div");
+        meta.style.flex = "1";
+
+        const sender = document.createElement("strong");
+        sender.textContent = message.senderDisplayName ||
+          message.senderName || "ผู้ส่งนิรนาม";
+
+        const date = document.createElement("div");
+        date.className = "muted small";
+        date.textContent = formatDate(
+          message.createdAt || message.timestamp
         );
-        return;
-      }
 
-      try {
-        const result = await withLoading(
-          'กำลังบันทึกโปรไฟล์...',
-          async function () {
-            return await apiRequest(
-              'updateProfile',
-              {
-                displayName: displayName,
-                username: username,
-                bio: bio,
-                avatarUrl: state.uploadedAvatarUrl ||
-                  state.user.avatarUrl || '',
-                coverUrl: state.uploadedCoverUrl ||
-                  state.user.coverUrl || ''
-              }
+        meta.appendChild(sender);
+        meta.appendChild(date);
+        header.appendChild(avatar);
+        header.appendChild(meta);
+
+        const body = document.createElement("div");
+        body.className = "message-body";
+        body.textContent = message.messageText || message.text || "";
+
+        card.appendChild(header);
+        if (body.textContent) card.appendChild(body);
+
+        const imageUrl = safeUrl(message.mediaUrl || message.imageUrl);
+        if (imageUrl) {
+          const image = document.createElement("img");
+          image.className = "message-image";
+          image.src = imageUrl;
+          image.alt = "รูปภาพแนบ";
+          image.loading = "lazy";
+          image.referrerPolicy = "no-referrer";
+          card.appendChild(image);
+        }
+
+        if (message.isRead === false || message.read === false) {
+          const unread = document.createElement("div");
+          unread.className = "small";
+          unread.style.color = "var(--primary)";
+          unread.style.marginTop = "10px";
+          unread.textContent = "ยังไม่อ่าน";
+          card.appendChild(unread);
+        }
+
+        if (opts.showDelete && (message.messageId || message.id)) {
+          const actions = document.createElement("div");
+          actions.className = "message-actions";
+
+          const readButton = document.createElement("button");
+          readButton.type = "button";
+          readButton.className = "btn btn-outline";
+          readButton.innerHTML = '<i class="fa-regular fa-envelope-open"></i> อ่านแล้ว';
+          readButton.addEventListener("click", async function () {
+            try {
+              await apiRequest("markMessageRead", {
+                messageId: message.messageId || message.id
+              });
+              showToast("สำเร็จ", "success");
+              await loadInbox();
+            } catch (error) {
+              console.error("Mark read failed:", error);
+              showToast("ไม่สำเร็จ", "error");
+            }
+          });
+
+          const deleteButton = document.createElement("button");
+          deleteButton.type = "button";
+          deleteButton.className = "btn btn-outline";
+          deleteButton.innerHTML = '<i class="fa-regular fa-trash-can"></i> ลบ';
+          deleteButton.addEventListener("click", async function () {
+            const confirmed = await confirmDialog(
+              "ลบข้อความ",
+              "คุณต้องการลบข้อความนี้หรือไม่",
+              "ลบข้อความ"
             );
-          }
-        );
 
-        state.user = result.user;
-        state.uploadedAvatarUrl = '';
-        state.uploadedCoverUrl = '';
+            if (!confirmed) return;
 
-        renderCurrentUser();
+            try {
+              await apiRequest("deleteMessage", {
+                messageId: message.messageId || message.id
+              });
+              showToast("ลบสำเร็จ", "success");
+              await loadInbox();
+            } catch (error) {
+              console.error("Delete message failed:", error);
+              showToast("ลบไม่สำเร็จ", "error");
+            }
+          });
 
-        showSuccessDialog(
-          'บันทึกโปรไฟล์สำเร็จ',
-          'ข้อมูลโปรไฟล์ของคุณได้รับการบันทึกแล้ว'
-        );
-
-      } catch (error) {
-        showErrorDialog(
-          'บันทึกโปรไฟล์ไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-
-    /* ============================================================
-       IMGBB IMAGE UPLOAD
-       ============================================================ */
-
-    function validateImageFile(file) {
-      if (!file) {
-        throw new Error('กรุณาเลือกไฟล์รูปภาพ');
-      }
-
-      const allowedTypes = [
-        'image/jpeg',
-        'image/png',
-        'image/webp',
-        'image/gif'
-      ];
-
-      if (allowedTypes.indexOf(file.type) === -1) {
-        throw new Error(
-          'รองรับเฉพาะ JPG, PNG, WEBP และ GIF'
-        );
-      }
-
-      const maxBytes =
-        CONFIG.MAX_IMAGE_SIZE_MB * 1024 * 1024;
-
-      if (file.size > maxBytes) {
-        throw new Error(
-          'รูปภาพต้องมีขนาดไม่เกิน ' +
-          CONFIG.MAX_IMAGE_SIZE_MB +
-          ' MB'
-        );
-      }
-
-      return true;
-    }
-
-    async function uploadImageToImgBB(file) {
-      validateImageFile(file);
-
-      if (
-        !CONFIG.IMGBB_API_KEY ||
-        CONFIG.IMGBB_API_KEY.trim() === ''
-      ) {
-        throw new Error(
-          'ยังไม่ได้กำหนด ImgBB API Key'
-        );
-      }
-
-      const formData = new FormData();
-
-      formData.append(
-        'key',
-        CONFIG.IMGBB_API_KEY
-      );
-
-      formData.append(
-        'image',
-        file,
-        file.name || 'anonmessage-image'
-      );
-
-      let response;
-
-      try {
-        response = await fetch(
-          CONFIG.IMGBB_UPLOAD_URL,
-          {
-            method: 'POST',
-            body: formData
-          }
-        );
-      } catch (error) {
-        throw new Error(
-          'เชื่อมต่อ ImgBB ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตและการอนุญาตของเบราว์เซอร์'
-        );
-      }
-
-      let result;
-
-      try {
-        result = await response.json();
-      } catch (error) {
-        throw new Error(
-          'ImgBB ส่งข้อมูลกลับมาไม่ถูกต้อง'
-        );
-      }
-
-      if (
-        !response.ok ||
-        !result ||
-        result.success !== true ||
-        !result.data ||
-        !result.data.url
-      ) {
-        const apiMessage =
-          result &&
-          result.error &&
-          result.error.message
-            ? result.error.message
-            : 'ImgBB ไม่สามารถอัปโหลดรูปภาพได้';
-
-        throw new Error(apiMessage);
-      }
-
-      return {
-        url: result.data.url,
-        displayUrl: result.data.display_url || result.data.url,
-        deleteUrl: result.data.delete_url || '',
-        id: result.data.id || '',
-        width: result.data.width || null,
-        height: result.data.height || null,
-        size: result.data.size || file.size
-      };
-    }
-
-    async function handleImageUpload(
-      fileInputId,
-      previewContainerId,
-      previewImageId,
-      statusId,
-      successCallback
-    ) {
-      const input = byId(fileInputId);
-      const file = input.files && input.files[0];
-
-      try {
-        const result = await withLoading(
-          'กำลังอัปโหลดรูปภาพไปยัง ImgBB...',
-          async function () {
-            return await uploadImageToImgBB(file);
-          }
-        );
-
-        const imageUrl = safeUrl(result.url);
-
-        if (!imageUrl) {
-          throw new Error(
-            'ImgBB ส่ง URL ที่ไม่ถูกต้องกลับมา'
-          );
+          actions.appendChild(readButton);
+          actions.appendChild(deleteButton);
+          card.appendChild(actions);
         }
 
-        byId(previewImageId).src = imageUrl;
-
-        byId(previewContainerId)
-          .classList.remove('hidden');
-
-        byId(statusId).textContent =
-          'อัปโหลดสำเร็จ';
-
-        if (typeof successCallback === 'function') {
-          successCallback(result);
-        }
-
-        showToast(
-          'อัปโหลดรูปภาพสำเร็จ',
-          'success'
-        );
-
-      } catch (error) {
-        showErrorDialog(
-          'อัปโหลดรูปภาพไม่สำเร็จ',
-          error.message
-        );
-      }
+        container.appendChild(card);
+      });
     }
-
-    function clearFileSelection(
-      inputId,
-      previewId,
-      urlInputId,
-      callback
-    ) {
-      const input = byId(inputId);
-
-      if (input) {
-        input.value = '';
-      }
-
-      if (previewId) {
-        byId(previewId).classList.add('hidden');
-      }
-
-      if (urlInputId) {
-        byId(urlInputId).value = '';
-      }
-
-      if (typeof callback === 'function') {
-        callback();
-      }
-    }
-
-
-    /* ============================================================
-       SEND ANONYMOUS MESSAGE
-       ============================================================ */
 
     async function sendAnonymousMessage(options) {
       const opts = options || {};
 
-      const username = String(
-        opts.username || ''
-      ).trim().replace(/^@/, '').toLowerCase();
+      const username = String(opts.username || "")
+        .trim()
+        .replace(/^@/, "")
+        .toLowerCase();
 
-      const messageText = String(
-        opts.messageText || ''
-      ).trim();
-
-      const mediaUrl = safeUrl(
-        opts.mediaUrl || ''
-      );
+      const messageText = String(opts.messageText || "").trim();
+      const mediaUrl = safeUrl(opts.mediaUrl || "");
 
       if (!username && !opts.recipientUserId) {
-        throw new Error('กรุณาระบุผู้รับข้อความ');
+        throw new Error("RECIPIENT_REQUIRED");
       }
 
       if (!messageText && !mediaUrl) {
-        throw new Error(
-          'กรุณาพิมพ์ข้อความหรือแนบรูปภาพ'
-        );
+        throw new Error("MESSAGE_REQUIRED");
       }
 
       if (messageText.length > CONFIG.MAX_MESSAGE_LENGTH) {
-        throw new Error('ข้อความยาวเกิน 5,000 ตัวอักษร');
+        throw new Error("MESSAGE_TOO_LONG");
       }
 
-      const payload = {
-        username: username,
-        recipientUserId: opts.recipientUserId || '',
-        messageText: messageText,
-        mediaUrl: mediaUrl,
-        mediaType: mediaUrl ? 'image' : '',
-        senderToken: getSenderToken()
-      };
-
       return await apiRequest(
-        'sendMessage',
-        payload,
+        "sendMessage",
+        {
+          username: username,
+          recipientUserId: opts.recipientUserId || "",
+          messageText: messageText,
+          mediaUrl: mediaUrl,
+          mediaType: mediaUrl ? "image" : "",
+          senderToken: getSenderToken()
+        },
         {
           auth: false
         }
       );
     }
 
-    async function handleSendMessageForm(event) {
-      event.preventDefault();
+    async function loadStories() {
+      const result = await apiRequest("getStories", {
+        page: 1,
+        pageSize: 50
+      });
 
-      const button = $(
-        '#sendMessageForm button[type="submit"]'
-      );
+      state.stories = Array.isArray(result.items)
+        ? result.items
+        : Array.isArray(result.stories)
+          ? result.stories
+          : [];
 
-      setButtonLoading(
-        button,
-        true,
-        'กำลังส่งข้อความ...'
-      );
-
-      try {
-        const result = await withLoading(
-          'กำลังส่งข้อความ...',
-          async function () {
-            return await sendAnonymousMessage({
-              username: byId(
-                'sendRecipientUsername'
-              ).value,
-              messageText: byId(
-                'sendMessageText'
-              ).value,
-              mediaUrl: byId(
-                'sendMessageImageUrl'
-              ).value
-            });
-          }
-        );
-
-        byId('sendMessageText').value = '';
-
-        clearFileSelection(
-          'sendMessageImage',
-          'messageImagePreview',
-          'sendMessageImageUrl',
-          function () {
-            state.uploadedMessageImageUrl = '';
-          }
-        );
-
-        await showSuccessDialog(
-          'ส่งข้อความสำเร็จ',
-          result.message || 'ส่งข้อความเรียบร้อยแล้ว'
-        );
-
-      } catch (error) {
-        showErrorDialog(
-          'ส่งข้อความไม่สำเร็จ',
-          error.message
-        );
-      } finally {
-        setButtonLoading(button, false);
-      }
+      renderStories();
     }
 
+    function renderStories() {
+      const container = byId("storiesList");
+      container.replaceChildren();
 
-    /* ============================================================
-       PUBLIC PROFILE AND PUBLIC MESSAGE
-       ============================================================ */
-
-    async function loadPublicProfile(username) {
-      if (!username) {
-        showErrorDialog(
-          'ไม่พบ Username',
-          'ลิงก์โปรไฟล์นี้ไม่มี Username ที่ถูกต้อง'
-        );
+      if (!state.stories.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML =
+          '<i class="fa-regular fa-circle-play"></i>' +
+          "<strong>ยังไม่มีสตอรี่</strong>";
+        container.appendChild(empty);
         return;
       }
 
-      try {
-        const result = await apiRequest(
-          'getPublicProfile',
-          {
-            username: username
-          },
-          {
-            auth: false
-          }
-        );
+      state.stories.forEach(function (story) {
+        const item = document.createElement("article");
+        item.className = "story-item";
 
-        const profile = result.profile;
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = getInitial(story.displayName || story.username);
 
-        state.publicProfile = profile;
-        state.publicUsername = profile.username;
-        state.publicRecipientUserId = profile.userId;
+        const name = document.createElement("strong");
+        name.textContent = story.displayName || story.username || "สมาชิก";
+        name.style.display = "block";
+        name.style.overflowWrap = "anywhere";
 
-        byId('publicProfileName').textContent =
-          profile.displayName || profile.username;
+        const text = document.createElement("p");
+        text.className = "small";
+        text.textContent = story.text || story.storyText || "";
+        text.style.overflowWrap = "anywhere";
 
-        byId('publicProfileUsername').textContent =
-          '@' + profile.username;
+        const date = document.createElement("div");
+        date.className = "muted small";
+        date.textContent = formatDate(story.createdAt);
 
-        byId('publicProfileBio').textContent =
-          profile.bio || 'เจ้าของโปรไฟล์ยังไม่ได้เขียนคำแนะนำตัว';
+        item.appendChild(avatar);
+        item.appendChild(name);
+        item.appendChild(text);
+        item.appendChild(date);
 
-        renderAvatar(
-          byId('publicProfileAvatar'),
-          profile.avatarUrl,
-          profile.displayName
-        );
-
-        const coverUrl = safeUrl(profile.coverUrl);
-
-        byId('publicProfileCover').style.backgroundImage =
-          coverUrl
-            ? 'url("' + coverUrl.replace(/"/g, '%22') + '")'
-            : '';
-
-        byId('publicProfileCover').style.backgroundColor =
-          coverUrl ? 'transparent' : '#818cf8';
-
-      } catch (error) {
-        showErrorDialog(
-          'โหลดโปรไฟล์ไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-    async function handlePublicSendMessage(event) {
-      event.preventDefault();
-
-      if (!state.publicProfile) {
-        showToast(
-          'ไม่พบข้อมูลโปรไฟล์ผู้รับ',
-          'error'
-        );
-        return;
-      }
-
-      try {
-        const result = await withLoading(
-          'กำลังส่งข้อความ...',
-          async function () {
-            return await sendAnonymousMessage({
-              username: state.publicProfile.username,
-              recipientUserId: state.publicProfile.userId,
-              messageText: byId(
-                'publicSendMessageText'
-              ).value,
-              mediaUrl: byId(
-                'publicSendImageUrl'
-              ).value
-            });
-          }
-        );
-
-        byId('publicSendMessageText').value = '';
-
-        clearFileSelection(
-          'publicSendImageFile',
-          'publicSendImagePreview',
-          'publicSendImageUrl',
-          function () {
-            state.uploadedPublicImageUrl = '';
-          }
-        );
-
-        await showSuccessDialog(
-          'ส่งข้อความแล้ว',
-          result.message || 'ส่งข้อความเรียบร้อยแล้ว'
-        );
-
-      } catch (error) {
-        showErrorDialog(
-          'ส่งข้อความไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-
-    /* ============================================================
-       INBOX
-       ============================================================ */
-
-    async function loadInbox() {
-      const list = byId('inboxList');
-
-      list.innerHTML =
-        '<div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><strong>กำลังโหลดข้อความ</strong></div>';
-
-      try {
-        const result = await apiRequest(
-          'listInbox',
-          {
-            page: state.inboxPage,
-            pageSize: Number(
-              byId('inboxPageSize').value
-            ),
-            status: byId('inboxStatusFilter').value
-          }
-        );
-
-        state.inboxTotalPages =
-          result.pagination &&
-          result.pagination.totalPages
-            ? result.pagination.totalPages
-            : 1;
-
-        renderMessageList(
-          list,
-          result.items || [],
-          {
-            compact: false,
-            allowActions:
-              byId('inboxStatusFilter').value === 'active'
-          }
-        );
-
-        renderPagination(
-          byId('inboxPagination'),
-          state.inboxPage,
-          state.inboxTotalPages,
-          function (page) {
-            state.inboxPage = page;
-            loadInbox();
-          }
-        );
-
-      } catch (error) {
-        list.innerHTML =
-          '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><strong>โหลดข้อความไม่สำเร็จ</strong><span>' +
-          escapeHtml(error.message) +
-          '</span></div>';
-      }
-    }
-
-    function renderMessageList(
-      container,
-      messages,
-      options
-    ) {
-      const opts = options || {};
-
-      if (!messages.length) {
-        container.innerHTML =
-          '<div class="empty-state">' +
-          '<i class="fa-regular fa-envelope-open"></i>' +
-          '<strong>ยังไม่มีข้อความ</strong>' +
-          '<span>เมื่อมีข้อความใหม่ รายการจะแสดงที่นี่</span>' +
-          '</div>';
-
-        return;
-      }
-
-      container.innerHTML = messages.map(function (message) {
-        const read = Boolean(message.readAt);
-        const status = String(message.status || 'active');
-
-        const imageUrl = safeUrl(message.mediaUrl);
-
-        const imageHtml = imageUrl
-          ? '<img class="message-media" src="' +
-            escapeHtml(imageUrl) +
-            '" alt="รูปภาพที่แนบมากับข้อความ" loading="lazy" referrerpolicy="no-referrer">'
-          : '';
-
-        const actions = opts.allowActions
-          ? '<div class="form-actions">' +
-            (!read
-              ? '<button class="button button-secondary button-compact" data-action="read-message" data-id="' +
-                escapeHtml(message.messageId) +
-                '"><i class="fa-regular fa-envelope-open"></i> อ่านแล้ว</button>'
-              : '') +
-            '<button class="button button-secondary button-compact" data-action="report-message" data-id="' +
-              escapeHtml(message.messageId) +
-              '"><i class="fa-regular fa-flag"></i> รายงาน</button>' +
-            '<button class="button button-danger button-compact" data-action="delete-message" data-id="' +
-              escapeHtml(message.messageId) +
-              '"><i class="fa-regular fa-trash-can"></i> ลบ</button>' +
-            '</div>'
-          : '';
-
-        return (
-          '<article class="list-item">' +
-            '<div class="list-item-top">' +
-              '<div class="meta">' +
-                '<span><i class="fa-regular fa-clock"></i> ' +
-                  escapeHtml(formatDate(message.createdAt)) +
-                '</span>' +
-                '<span class="pill ' +
-                  (read ? 'pill-success' : 'pill-warning') +
-                '">' +
-                  (read ? 'อ่านแล้ว' : 'ยังไม่อ่าน') +
-                '</span>' +
-              '</div>' +
-              '<span class="pill">' +
-                escapeHtml(status) +
-              '</span>' +
-            '</div>' +
-            '<div class="message-content">' +
-              escapeHtml(message.messageText || '') +
-            '</div>' +
-            imageHtml +
-            '<div class="meta" style="margin-bottom:12px">' +
-              '<span><i class="fa-solid fa-user-secret"></i> ผู้ส่งนิรนาม</span>' +
-            '</div>' +
-            actions +
-          '</article>'
-        );
-      }).join('');
-    }
-
-    async function handleInboxAction(action, messageId) {
-      try {
-        if (action === 'read-message') {
-          await apiRequest('readMessage', {
-            messageId: messageId
+        item.addEventListener("click", function () {
+          Swal.fire({
+            title: story.displayName || "สตอรี่",
+            text: story.text || story.storyText || "",
+            confirmButtonText: "ปิด",
+            confirmButtonColor: "#4f46e5"
           });
-
-          showToast('ทำเครื่องหมายว่าอ่านแล้ว', 'success');
-          await loadInbox();
-          return;
-        }
-
-        if (action === 'delete-message') {
-          const confirmed = await confirmDialog(
-            'ลบข้อความนี้?',
-            'ข้อความจะถูกนำออกจากรายการที่ใช้งาน',
-            'ลบข้อความ'
-          );
-
-          if (!confirmed) return;
-
-          await apiRequest('deleteMessage', {
-            messageId: messageId
-          });
-
-          showToast('ลบข้อความแล้ว', 'success');
-          await loadInbox();
-          return;
-        }
-
-        if (action === 'report-message') {
-          const result = await Swal.fire({
-            title: 'รายงานข้อความ',
-            input: 'select',
-            inputOptions: {
-              harassment: 'คุกคามหรือกลั่นแกล้ง',
-              spam: 'สแปมหรือโฆษณารบกวน',
-              abuse: 'เนื้อหาไม่เหมาะสม',
-              privacy: 'ละเมิดความเป็นส่วนตัว',
-              other: 'อื่น ๆ'
-            },
-            inputPlaceholder: 'เลือกเหตุผล',
-            showCancelButton: true,
-            confirmButtonText: 'ส่งรายงาน',
-            cancelButtonText: 'ยกเลิก',
-            confirmButtonColor: '#4f46e5',
-            inputValidator: function (value) {
-              if (!value) {
-                return 'กรุณาเลือกเหตุผล';
-              }
-            }
-          });
-
-          if (!result.isConfirmed) return;
-
-          await apiRequest('reportMessage', {
-            messageId: messageId,
-            reason: result.value,
-            details: ''
-          });
-
-          showToast('ส่งรายงานแล้ว', 'success');
-        }
-
-      } catch (error) {
-        showErrorDialog(
-          'ดำเนินการไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-
-    /* ============================================================
-       STORIES
-       ============================================================ */
-
-    async function createStory(event) {
-      event.preventDefault();
-
-      const storyText = byId('storyText').value.trim();
-      const mediaUrl = safeUrl(
-        byId('storyImageUrl').value
-      );
-
-      if (!storyText && !mediaUrl) {
-        showToast(
-          'กรุณาใส่ข้อความหรือรูปภาพในสตอรี่',
-          'error'
-        );
-        return;
-      }
-
-      try {
-        const result = await withLoading(
-          'กำลังเผยแพร่สตอรี่...',
-          async function () {
-            return await apiRequest(
-              'createStory',
-              {
-                storyText: storyText,
-                mediaUrl: mediaUrl,
-                mediaType: mediaUrl ? 'image' : ''
-              }
-            );
-          }
-        );
-
-        byId('storyText').value = '';
-
-        clearFileSelection(
-          'storyImageFile',
-          'storyImagePreview',
-          'storyImageUrl',
-          function () {
-            state.uploadedStoryImageUrl = '';
-          }
-        );
-
-        showToast('เผยแพร่สตอรี่แล้ว', 'success');
-
-        await loadMyStories();
-        await loadPublicStories();
-
-      } catch (error) {
-        showErrorDialog(
-          'เผยแพร่สตอรี่ไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-    async function loadMyStories() {
-      const container = byId('myStoriesList');
-
-      container.innerHTML =
-        '<div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><strong>กำลังโหลดสตอรี่</strong></div>';
-
-      try {
-        const result = await apiRequest(
-          'listMyStories',
-          {}
-        );
-
-        const items = result.items || [];
-
-        if (!items.length) {
-          container.innerHTML =
-            '<div class="empty-state"><i class="fa-regular fa-circle-play"></i><strong>คุณยังไม่มีสตอรี่</strong><span>สร้างสตอรี่แรกของคุณได้จากแบบฟอร์มด้านบน</span></div>';
-          return;
-        }
-
-        container.innerHTML = items.map(function (story) {
-          const imageUrl = safeUrl(story.mediaUrl);
-
-          return (
-            '<article class="story-card">' +
-              (imageUrl
-                ? '<img src="' + escapeHtml(imageUrl) +
-                  '" alt="สตอรี่" loading="lazy">'
-                : '') +
-              '<div class="story-text">' +
-                '<div class="story-user">สตอรี่ของฉัน</div>' +
-                '<div>' + escapeHtml(story.storyText || '') + '</div>' +
-                '<div class="small" style="margin-top:5px">' +
-                  escapeHtml(formatDate(story.createdAt)) +
-                '</div>' +
-                '<button class="button button-danger button-compact" style="margin-top:8px" data-action="delete-story" data-id="' +
-                  escapeHtml(story.storyId) +
-                '"><i class="fa-regular fa-trash-can"></i> ลบ</button>' +
-              '</div>' +
-            '</article>'
-          );
-        }).join('');
-
-      } catch (error) {
-        container.innerHTML =
-          '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><strong>โหลดสตอรี่ไม่สำเร็จ</strong><span>' +
-          escapeHtml(error.message) +
-          '</span></div>';
-      }
-    }
-
-    async function loadPublicStories() {
-      const container = byId('publicStoriesList');
-
-      container.innerHTML =
-        '<div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><strong>กำลังโหลดสตอรี่</strong></div>';
-
-      try {
-        const result = await apiRequest(
-          'listPublicStories',
-          {
-            page: state.storiesPage,
-            pageSize: 12
-          },
-          {
-            auth: false
-          }
-        );
-
-        const items = result.items || [];
-
-        state.storiesTotalPages =
-          result.pagination &&
-          result.pagination.totalPages
-            ? result.pagination.totalPages
-            : 1;
-
-        if (!items.length) {
-          container.innerHTML =
-            '<div class="empty-state"><i class="fa-regular fa-circle-play"></i><strong>ยังไม่มีสตอรี่สาธารณะ</strong></div>';
-        } else {
-          container.innerHTML = items.map(function (story) {
-            const imageUrl = safeUrl(story.mediaUrl);
-            const user = story.user || {};
-
-            return (
-              '<article class="story-card">' +
-                (imageUrl
-                  ? '<img src="' + escapeHtml(imageUrl) +
-                    '" alt="สตอรี่" loading="lazy">'
-                  : '') +
-                '<div class="story-text">' +
-                  '<div class="story-user">' +
-                    escapeHtml(user.displayName || user.username || 'ผู้ใช้') +
-                  '</div>' +
-                  '<div>' + escapeHtml(story.storyText || '') + '</div>' +
-                  '<div class="small" style="margin-top:5px">' +
-                    escapeHtml(formatDate(story.createdAt)) +
-                  '</div>' +
-                '</div>' +
-              '</article>'
-            );
-          }).join('');
-        }
-
-        renderPagination(
-          byId('storiesPagination'),
-          state.storiesPage,
-          state.storiesTotalPages,
-          function (page) {
-            state.storiesPage = page;
-            loadPublicStories();
-          }
-        );
-
-      } catch (error) {
-        container.innerHTML =
-          '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><strong>โหลดสตอรี่ไม่สำเร็จ</strong><span>' +
-          escapeHtml(error.message) +
-          '</span></div>';
-      }
-    }
-
-    async function deleteStory(storyId) {
-      const confirmed = await confirmDialog(
-        'ลบสตอรี่?',
-        'สตอรี่จะไม่แสดงในรายการที่ใช้งาน',
-        'ลบสตอรี่'
-      );
-
-      if (!confirmed) return;
-
-      try {
-        await apiRequest('deleteStory', {
-          storyId: storyId
         });
 
-        showToast('ลบสตอรี่แล้ว', 'success');
-
-        await loadMyStories();
-        await loadPublicStories();
-
-      } catch (error) {
-        showErrorDialog(
-          'ลบสตอรี่ไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-
-    /* ============================================================
-       STATISTICS
-       ============================================================ */
-
-    async function loadStats() {
-      try {
-        const result = await apiRequest(
-          'getStats',
-          {}
-        );
-
-        const stats = result.stats || {};
-
-        byId('statsReceived').textContent =
-          Number(stats.totalReceived || 0).toLocaleString('th-TH');
-
-        byId('statsRead').textContent =
-          Number(stats.totalRead || 0).toLocaleString('th-TH');
-
-        byId('statsUnread').textContent =
-          Number(stats.totalUnread || 0).toLocaleString('th-TH');
-
-        const rate = Math.max(
-          0,
-          Math.min(
-            100,
-            Number(stats.readRate || 0)
-          )
-        );
-
-        byId('readRateBar').style.width = rate + '%';
-        byId('readRateText').textContent = rate + '%';
-
-      } catch (error) {
-        showErrorDialog(
-          'โหลดสถิติไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-
-    /* ============================================================
-       NOTIFICATIONS
-       ============================================================ */
-
-    async function loadNotifications() {
-      const container = byId('notificationsList');
-
-      container.innerHTML =
-        '<div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><strong>กำลังโหลดการแจ้งเตือน</strong></div>';
-
-      try {
-        const result = await apiRequest(
-          'listMyNotifications',
-          {
-            page: state.notificationsPage,
-            pageSize: 20
-          }
-        );
-
-        state.notificationsTotalPages =
-          result.pagination &&
-          result.pagination.totalPages
-            ? result.pagination.totalPages
-            : 1;
-
-        const items = result.items || [];
-
-        if (!items.length) {
-          container.innerHTML =
-            '<div class="empty-state"><i class="fa-regular fa-bell-slash"></i><strong>ไม่มีการแจ้งเตือน</strong></div>';
-        } else {
-          container.innerHTML = items.map(function (item) {
-            const unread = !item.readAt;
-
-            return (
-              '<article class="list-item">' +
-                '<div class="list-item-top">' +
-                  '<strong>' + escapeHtml(item.title || 'การแจ้งเตือน') + '</strong>' +
-                  '<span class="pill ' +
-                    (unread ? 'pill-warning' : 'pill-success') +
-                  '">' +
-                    (unread ? 'ยังไม่อ่าน' : 'อ่านแล้ว') +
-                  '</span>' +
-                '</div>' +
-                '<div class="message-content">' +
-                  escapeHtml(item.body || '') +
-                '</div>' +
-                '<div class="meta" style="margin-bottom:10px">' +
-                  escapeHtml(formatDate(item.createdAt)) +
-                '</div>' +
-                (unread
-                  ? '<button class="button button-secondary button-compact" data-action="read-notification" data-id="' +
-                    escapeHtml(item.notificationId) +
-                    '"><i class="fa-regular fa-envelope-open"></i> ทำเครื่องหมายว่าอ่านแล้ว</button>'
-                  : '') +
-              '</article>'
-            );
-          }).join('');
-        }
-
-        renderPagination(
-          byId('notificationsPagination'),
-          state.notificationsPage,
-          state.notificationsTotalPages,
-          function (page) {
-            state.notificationsPage = page;
-            loadNotifications();
-          }
-        );
-
-        await updateNotificationIndicator();
-
-      } catch (error) {
-        container.innerHTML =
-          '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><strong>โหลดการแจ้งเตือนไม่สำเร็จ</strong><span>' +
-          escapeHtml(error.message) +
-          '</span></div>';
-      }
-    }
-
-    async function markNotificationRead(notificationId) {
-      try {
-        await apiRequest(
-          'markNotificationRead',
-          {
-            notificationId: notificationId
-          }
-        );
-
-        await loadNotifications();
-
-      } catch (error) {
-        showErrorDialog(
-          'แก้ไขการแจ้งเตือนไม่สำเร็จ',
-          error.message
-        );
-      }
-    }
-
-    async function updateNotificationIndicator() {
-      try {
-        const result = await apiRequest(
-          'listMyNotifications',
-          {
-            page: 1,
-            pageSize: 50
-          }
-        );
-
-        const items = result.items || [];
-
-        const hasUnread = items.some(function (item) {
-          return !item.readAt;
-        });
-
-        byId('notificationDot').classList.toggle(
-          'hidden',
-          !hasUnread
-        );
-
-      } catch (error) {
-        /*
-         * ไม่ทำให้หน้า Dashboard ล้มเหลว
-         * หาก API แจ้งเตือนยังไม่พร้อม
-         */
-      }
-    }
-
-
-    /* ============================================================
-       PAGINATION
-       ============================================================ */
-
-    function renderPagination(
-      container,
-      currentPage,
-      totalPages,
-      callback
-    ) {
-      const total = Math.max(
-        1,
-        Number(totalPages || 1)
-      );
-
-      const current = Math.min(
-        total,
-        Math.max(1, Number(currentPage || 1))
-      );
-
-      if (total <= 1) {
-        container.innerHTML = '';
-        return;
-      }
-
-      const buttons = [];
-
-      buttons.push(
-        '<button class="button button-secondary button-compact" data-page-number="' +
-          (current - 1) +
-          '"' +
-          (current <= 1 ? ' disabled' : '') +
-        '><i class="fa-solid fa-chevron-left"></i></button>'
-      );
-
-      let start = Math.max(1, current - 2);
-      let end = Math.min(total, current + 2);
-
-      if (end - start < 4) {
-        if (start === 1) {
-          end = Math.min(total, start + 4);
-        } else if (end === total) {
-          start = Math.max(1, end - 4);
-        }
-      }
-
-      for (let page = start; page <= end; page++) {
-        buttons.push(
-          '<button class="button ' +
-            (page === current
-              ? 'button-primary'
-              : 'button-secondary') +
-            ' button-compact" data-page-number="' +
-            page +
-          '">' + page + '</button>'
-        );
-      }
-
-      buttons.push(
-        '<button class="button button-secondary button-compact" data-page-number="' +
-          (current + 1) +
-          '"' +
-          (current >= total ? ' disabled' : '') +
-        '><i class="fa-solid fa-chevron-right"></i></button>'
-      );
-
-      container.innerHTML = buttons.join('');
-
-      container.querySelectorAll(
-        '[data-page-number]'
-      ).forEach(function (button) {
-        button.addEventListener('click', function () {
-          const page = Number(
-            button.dataset.pageNumber
-          );
-
-          if (
-            page >= 1 &&
-            page <= total &&
-            page !== current
-          ) {
-            callback(page);
-          }
-        });
+        container.appendChild(item);
       });
     }
 
+    async function loadNotifications() {
+      const result = await apiRequest("getNotifications", {
+        page: 1,
+        pageSize: 50
+      });
 
-    /* ============================================================
-       PROFILE LINK
-       ============================================================ */
+      state.notifications = Array.isArray(result.items)
+        ? result.items
+        : Array.isArray(result.notifications)
+          ? result.notifications
+          : [];
 
-    async function copyProfileLink() {
-      if (!state.user || !state.user.username) {
-        showToast(
-          'ยังไม่มี Username สำหรับสร้างลิงก์',
-          'error'
-        );
+      renderNotifications();
+    }
+
+    function renderNotifications() {
+      const container = byId("notificationsList");
+      container.replaceChildren();
+
+      if (!state.notifications.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML =
+          '<i class="fa-regular fa-bell"></i>' +
+          "<strong>ไม่มีการแจ้งเตือน</strong>";
+        container.appendChild(empty);
         return;
       }
 
-      const url = buildProfileUrl(
-        state.user.username
-      );
+      state.notifications.forEach(function (notification) {
+        const item = document.createElement("div");
+        item.className = "notification-item";
+
+        const icon = document.createElement("div");
+        icon.className = "notification-icon";
+        icon.innerHTML = '<i class="fa-regular fa-bell"></i>';
+
+        const content = document.createElement("div");
+        content.style.flex = "1";
+
+        const title = document.createElement("strong");
+        title.textContent = notification.title || "การแจ้งเตือน";
+
+        const body = document.createElement("div");
+        body.textContent = notification.message ||
+          notification.text || "มีการแจ้งเตือนใหม่";
+
+        const date = document.createElement("div");
+        date.className = "muted small";
+        date.textContent = formatDate(notification.createdAt);
+
+        content.appendChild(title);
+        content.appendChild(body);
+        content.appendChild(date);
+
+        item.appendChild(icon);
+        item.appendChild(content);
+        container.appendChild(item);
+      });
+    }
+
+    async function loadStats() {
+      const result = await apiRequest("getStats", {});
+      state.stats = result.stats || result.data || result;
+
+      const stats = state.stats;
+
+      byId("statsMessageCount").textContent =
+        Number(stats.messageCount || stats.totalMessages || 0);
+      byId("statsProfileViews").textContent =
+        Number(stats.profileViews || stats.viewCount || 0);
+      byId("statsStoryCount").textContent =
+        Number(stats.storyCount || stats.totalStories || 0);
+
+      byId("statsDetails").textContent =
+        "ข้อความที่ได้รับ " + Number(stats.messageCount || stats.totalMessages || 0) +
+        " รายการ · เข้าชมโปรไฟล์ " +
+        Number(stats.profileViews || stats.viewCount || 0) +
+        " ครั้ง · สตอรี่ " +
+        Number(stats.storyCount || stats.totalStories || 0) +
+        " รายการ";
+    }
+
+    async function uploadImageToImgBB(file) {
+      /*
+       * ระบบนี้ไม่ฝัง API key ลงในหน้าเว็บ
+       * ต้องนำ API key ของผู้ให้บริการอัปโหลดรูปภาพไปเก็บในฝั่ง Worker
+       * และสร้าง endpoint อัปโหลดที่ตรวจสอบสิทธิ์/ขนาดไฟล์
+       * ฟังก์ชันนี้จะไม่ส่งไฟล์ไปยัง endpoint ที่ยังไม่ได้กำหนด
+       */
+      if (!file) throw new Error("FILE_REQUIRED");
+
+      if (!file.type || file.type.indexOf("image/") !== 0) {
+        throw new Error("INVALID_IMAGE");
+      }
+
+      if (file.size > CONFIG.MAX_IMAGE_BYTES) {
+        throw new Error("IMAGE_TOO_LARGE");
+      }
+
+      const workerUrl = getApiUrl();
+      const response = await fetch(workerUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+          action: "uploadImage",
+          data: {
+            fileName: file.name,
+            mimeType: file.type,
+            size: file.size,
+            dataUrl: await fileToDataUrl(file)
+          }
+        }),
+        cache: "no-store"
+      });
+
+      if (!response.ok) throw new Error("UPLOAD_FAILED");
+
+      const result = await response.json();
+
+      if (!result || result.ok !== true || !result.url) {
+        throw new Error("UPLOAD_FAILED");
+      }
+
+      const url = safeUrl(result.url);
+      if (!url) throw new Error("UPLOAD_FAILED");
+
+      return url;
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+
+        reader.onload = function () {
+          resolve(String(reader.result || ""));
+        };
+
+        reader.onerror = function () {
+          reject(new Error("FILE_READ_FAILED"));
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleProfileSave(event) {
+      event.preventDefault();
+
+      const displayName = byId("profileDisplayName").value.trim();
+      const username = byId("profileUsername").value.trim()
+        .replace(/^@/, "").toLowerCase();
+      const bio = byId("profileBio").value.trim();
+      const avatarUrl = safeUrl(byId("profileAvatarUrl").value);
+      const coverUrl = safeUrl(byId("profileCoverUrl").value);
+
+      if (!displayName || !username) {
+        showToast("กรุณากรอกข้อมูลให้ครบ", "error");
+        return;
+      }
+
+      if (!/^[a-zA-Z0-9_.-]{1,30}$/.test(username)) {
+        showToast("ชื่อผู้ใช้ไม่ถูกต้อง", "error");
+        return;
+      }
 
       try {
-        if (
-          navigator.clipboard &&
-          window.isSecureContext
-        ) {
-          await navigator.clipboard.writeText(url);
-        } else {
-          const textarea = document.createElement('textarea');
-          textarea.value = url;
-          textarea.style.position = 'fixed';
-          textarea.style.opacity = '0';
+        await withLoading("กำลังบันทึก...", async function () {
+          const result = await apiRequest("updateProfile", {
+            displayName: displayName,
+            username: username,
+            bio: bio,
+            avatarUrl: avatarUrl,
+            coverUrl: coverUrl
+          });
 
-          document.body.appendChild(textarea);
-          textarea.select();
-
-          const success = document.execCommand('copy');
-          textarea.remove();
-
-          if (!success) {
-            throw new Error('เบราว์เซอร์ไม่อนุญาตให้คัดลอก');
+          if (result.user) {
+            state.user = result.user;
+          } else {
+            state.user = Object.assign({}, state.user, {
+              displayName: displayName,
+              username: username,
+              bio: bio,
+              avatarUrl: avatarUrl,
+              coverUrl: coverUrl
+            });
           }
-        }
-
-        showToast('คัดลอกลิงก์โปรไฟล์แล้ว', 'success');
-
-      } catch (error) {
-        Swal.fire({
-          title: 'ลิงก์โปรไฟล์ของคุณ',
-          input: 'text',
-          inputValue: url,
-          confirmButtonText: 'ปิด',
-          confirmButtonColor: '#4f46e5'
         });
+
+        renderCurrentUser();
+        showToast("บันทึกสำเร็จ", "success");
+      } catch (error) {
+        console.error("Profile update failed:", error);
+        showToast("บันทึกไม่สำเร็จ", "error");
       }
     }
 
+    async function handleSendMessage(event) {
+      event.preventDefault();
 
-    /* ============================================================
-       LOGOUT
-       ============================================================ */
+      const username = byId("recipientUsername").value.trim();
+      const messageText = byId("anonymousMessageText").value.trim();
+      const file = state.selectedMessageImage;
+
+      if (!username) {
+        showToast("กรุณาระบุผู้รับ", "error");
+        return;
+      }
+
+      if (!messageText && !file) {
+        showToast("กรุณาพิมพ์ข้อความหรือแนบรูปภาพ", "error");
+        return;
+      }
+
+      if (messageText.length > CONFIG.MAX_MESSAGE_LENGTH) {
+        showToast("ข้อความยาวเกินกำหนด", "error");
+        return;
+      }
+
+      const button = byId("sendMessageButton");
+      button.disabled = true;
+
+      try {
+        await withLoading("กำลังส่งข้อความ...", async function () {
+          let mediaUrl = "";
+
+          if (file) {
+            mediaUrl = await uploadImageToImgBB(file);
+          }
+
+          await sendAnonymousMessage({
+            username: username,
+            messageText: messageText,
+            mediaUrl: mediaUrl
+          });
+        });
+
+        byId("anonymousMessageText").value = "";
+        byId("messageCharacterCount").textContent = "0";
+        clearMessageImage();
+        showToast("ส่งข้อความสำเร็จ", "success");
+
+        if (state.user && username.toLowerCase() ===
+            String(state.user.username || "").toLowerCase()) {
+          await loadInbox();
+        }
+      } catch (error) {
+        console.error("Send message failed:", error);
+        showToast("ส่งข้อความไม่สำเร็จ", "error");
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function handleStorySubmit(event) {
+      event.preventDefault();
+
+      const text = byId("storyText").value.trim();
+
+      if (!text) {
+        showToast("กรุณากรอกข้อความ", "error");
+        return;
+      }
+
+      if (text.length > CONFIG.MAX_STORY_LENGTH) {
+        showToast("ข้อความยาวเกินกำหนด", "error");
+        return;
+      }
+
+      try {
+        await withLoading("กำลังเผยแพร่...", async function () {
+          await apiRequest("createStory", {
+            text: text
+          });
+        });
+
+        byId("storyText").value = "";
+        showToast("เผยแพร่สำเร็จ", "success");
+        await loadStories();
+      } catch (error) {
+        console.error("Create story failed:", error);
+        showToast("เผยแพร่ไม่สำเร็จ", "error");
+      }
+    }
 
     async function logout() {
       const confirmed = await confirmDialog(
-        'ออกจากระบบ?',
-        'คุณต้องเข้าสู่ระบบใหม่เพื่อจัดการโปรไฟล์และอ่านข้อความ',
-        'ออกจากระบบ'
+        "ออกจากระบบ",
+        "คุณต้องการออกจากระบบหรือไม่",
+        "ออกจากระบบ"
       );
 
       if (!confirmed) return;
 
       try {
         if (getSessionToken()) {
-          await apiRequest(
-            'logout',
-            {},
-            {
-              auth: true
-            }
-          );
+          await apiRequest("logout", {});
         }
       } catch (error) {
-        /*
-         * ล้าง session ฝั่ง browser แม้ API logout
-         * จะไม่ตอบกลับ เพื่อไม่ให้ค้างอยู่ในหน้าเดิม
-         */
-        console.warn(
-          'Logout API did not complete:',
-          error.message
-        );
+        console.warn("Logout request failed:", error);
       } finally {
         clearSession();
         showLoginScreen();
-        showToast('ออกจากระบบแล้ว', 'success');
+        showToast("ออกจากระบบแล้ว", "success");
       }
     }
 
+    async function copyText(text) {
+      const value = String(text || "");
+      if (!value) {
+        showToast("ไม่มีข้อมูลให้คัดลอก", "error");
+        return;
+      }
 
-    /* ============================================================
-       EVENT BINDINGS
-       ============================================================ */
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          const textarea = document.createElement("textarea");
+          textarea.value = value;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
 
-    function bindNavigationEvents() {
-      $$('.nav-item[data-page]').forEach(function (button) {
-        button.addEventListener('click', function () {
+          const copied = document.execCommand("copy");
+          textarea.remove();
+
+          if (!copied) throw new Error("COPY_FAILED");
+        }
+
+        showToast("คัดลอกสำเร็จ", "success");
+      } catch (error) {
+        console.error("Copy failed:", error);
+        showToast("คัดลอกไม่สำเร็จ", "error");
+      }
+    }
+
+    function clearMessageImage() {
+      state.selectedMessageImage = null;
+      byId("messageImageFile").value = "";
+      byId("messageImagePreview").src = "";
+      byId("messageImagePreview").classList.add("hidden");
+      byId("removeMessageImageButton").classList.add("hidden");
+    }
+
+    function handleMessageImageChange() {
+      const input = byId("messageImageFile");
+      const file = input.files && input.files[0];
+
+      if (!file) {
+        clearMessageImage();
+        return;
+      }
+
+      if (!file.type || file.type.indexOf("image/") !== 0) {
+        clearMessageImage();
+        showToast("กรุณาเลือกไฟล์รูปภาพ", "error");
+        return;
+      }
+
+      if (file.size > CONFIG.MAX_IMAGE_BYTES) {
+        clearMessageImage();
+        showToast("ไฟล์มีขนาดใหญ่เกินกำหนด", "error");
+        return;
+      }
+
+      state.selectedMessageImage = file;
+
+      const preview = byId("messageImagePreview");
+      preview.src = URL.createObjectURL(file);
+      preview.classList.remove("hidden");
+      byId("removeMessageImageButton").classList.remove("hidden");
+    }
+
+    function bindEvents() {
+      document.querySelectorAll("[data-page]").forEach(function (button) {
+        button.addEventListener("click", function () {
           navigateTo(button.dataset.page);
         });
       });
 
-      $$('[data-goto]').forEach(function (button) {
-        button.addEventListener('click', function () {
-          navigateTo(button.dataset.goto);
+      document.querySelectorAll("[data-go]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          navigateTo(button.dataset.go);
         });
       });
 
-      byId('brandHome').addEventListener('click', function (event) {
+      byId("brandHome").addEventListener("click", function (event) {
         event.preventDefault();
-
         if (state.user) {
-          navigateTo('dashboard');
+          navigateTo("dashboard");
         }
       });
 
-      byId('mobileNavToggle').addEventListener(
-        'click',
-        function () {
-          byId('sidebar').classList.toggle('open');
+      byId("headerLoginButton").addEventListener("click", function () {
+        byId("loginScreen").scrollIntoView({ behavior: "smooth" });
+      });
+
+      byId("headerProfileButton").addEventListener("click", function () {
+        navigateTo("profile");
+      });
+
+      byId("headerNotificationButton").addEventListener("click", function () {
+        navigateTo("notifications");
+      });
+
+      byId("logoutButton").addEventListener("click", logout);
+      byId("settingsLogoutButton").addEventListener("click", logout);
+
+      byId("profileForm").addEventListener("submit", handleProfileSave);
+      byId("sendMessageForm").addEventListener("submit", handleSendMessage);
+      byId("storyForm").addEventListener("submit", handleStorySubmit);
+
+      byId("copyProfileLinkButton").addEventListener("click", function () {
+        copyText(byId("dashboardProfileLink").value);
+      });
+
+      byId("copyProfilePageLinkButton").addEventListener("click", function () {
+        copyText(byId("profileLinkText").value);
+      });
+
+      byId("openProfileLinkButton").addEventListener("click", function () {
+        const url = safeUrl(byId("dashboardProfileLink").value);
+        if (url) window.open(url, "_blank", "noopener,noreferrer");
+      });
+
+      byId("refreshInboxButton").addEventListener("click", async function () {
+        try {
+          await withLoading("กำลังโหลด...", loadInbox);
+          showToast("สำเร็จ", "success");
+        } catch (error) {
+          console.error("Inbox refresh failed:", error);
+          showToast("โหลดข้อมูลไม่สำเร็จ", "error");
         }
-      );
+      });
 
-      byId('headerProfileButton').addEventListener(
-        'click',
-        function () {
-          navigateTo('profile');
+      byId("refreshNotificationsButton").addEventListener("click", async function () {
+        try {
+          await withLoading("กำลังโหลด...", loadNotifications);
+          showToast("สำเร็จ", "success");
+        } catch (error) {
+          console.error("Notification refresh failed:", error);
+          showToast("โหลดข้อมูลไม่สำเร็จ", "error");
         }
-      );
+      });
 
-      byId('headerNotificationButton').addEventListener(
-        'click',
-        function () {
-          navigateTo('notifications');
+      byId("refreshStatsButton").addEventListener("click", async function () {
+        try {
+          await withLoading("กำลังโหลด...", loadStats);
+          showToast("สำเร็จ", "success");
+        } catch (error) {
+          console.error("Stats refresh failed:", error);
+          showToast("โหลดข้อมูลไม่สำเร็จ", "error");
         }
-      );
+      });
 
-      byId('headerLoginButton').addEventListener(
-        'click',
-        function () {
-          showLoginScreen();
-        }
-      );
+      byId("inboxFilter").addEventListener("change", function () {
+        state.inboxPage = 1;
+        loadInbox().catch(function (error) {
+          console.error("Inbox filter failed:", error);
+          showToast("โหลดข้อมูลไม่สำเร็จ", "error");
+        });
+      });
 
-      byId('sidebarLogoutButton').addEventListener(
-        'click',
-        logout
-      );
-
-      byId('settingsLogoutButton').addEventListener(
-        'click',
-        logout
-      );
-
-      byId('copyProfileLinkButton').addEventListener(
-        'click',
-        copyProfileLink
-      );
-
-      byId('dashboardCopyLinkButton').addEventListener(
-        'click',
-        copyProfileLink
-      );
-
-      byId('bannerProfileButton').addEventListener(
-        'click',
-        function () {
-          navigateTo('profile');
-        }
-      );
-
-      byId('refreshDashboardButton').addEventListener(
-        'click',
-        loadDashboard
-      );
-
-      byId('profileRefreshButton').addEventListener(
-        'click',
-        async function () {
-          try {
-            const result = await apiRequest('getMe', {});
-            state.user = result.user;
-            renderCurrentUser();
-
-            showToast('โหลดข้อมูลโปรไฟล์แล้ว', 'success');
-          } catch (error) {
-            showErrorDialog(
-              'โหลดโปรไฟล์ไม่สำเร็จ',
-              error.message
-            );
-          }
-        }
-      );
-
-      byId('profileCancelButton').addEventListener(
-        'click',
-        function () {
-          state.uploadedAvatarUrl = '';
-          state.uploadedCoverUrl = '';
-
-          clearFileSelection(
-            'profileAvatarFile',
-            'avatarUploadPreview'
-          );
-
-          clearFileSelection(
-            'profileCoverFile',
-            'coverUploadPreview'
-          );
-
-          renderCurrentUser();
-        }
-      );
-    }
-
-    function bindFormEvents() {
-      byId('profileForm').addEventListener(
-        'submit',
-        saveProfile
-      );
-
-      byId('sendMessageForm').addEventListener(
-        'submit',
-        handleSendMessageForm
-      );
-
-      byId('storyForm').addEventListener(
-        'submit',
-        createStory
-      );
-
-      byId('publicSendMessageForm').addEventListener(
-        'submit',
-        handlePublicSendMessage
-      );
-
-      byId('inboxStatusFilter').addEventListener(
-        'change',
-        function () {
+      let searchTimer = null;
+      byId("inboxSearch").addEventListener("input", function () {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(function () {
           state.inboxPage = 1;
-          loadInbox();
-        }
-      );
-
-      byId('inboxPageSize').addEventListener(
-        'change',
-        function () {
-          state.inboxPage = 1;
-          loadInbox();
-        }
-      );
-
-      byId('refreshInboxButton').addEventListener(
-        'click',
-        loadInbox
-      );
-
-      byId('refreshStoriesButton').addEventListener(
-        'click',
-        async function () {
-          await loadPublicStories();
-          await loadMyStories();
-        }
-      );
-
-      byId('loadPublicStoriesButton').addEventListener(
-        'click',
-        loadPublicStories
-      );
-
-      byId('refreshNotificationsButton').addEventListener(
-        'click',
-        loadNotifications
-      );
-
-      byId('refreshStatsButton').addEventListener(
-        'click',
-        loadStats
-      );
-
-      byId('publicProfileSendButton').addEventListener(
-        'click',
-        function () {
-          byId('publicSendMessageText').focus();
-
-          byId('publicSendMessageForm').scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
+          loadInbox().catch(function (error) {
+            console.error("Inbox search failed:", error);
+            showToast("ค้นหาไม่สำเร็จ", "error");
           });
-        }
-      );
-    }
+        }, 350);
+      });
 
-    function bindUploadEvents() {
-      byId('uploadAvatarButton').addEventListener(
-        'click',
-        function () {
-          handleImageUpload(
-            'profileAvatarFile',
-            'avatarUploadPreview',
-            'avatarUploadImage',
-            'avatarUploadStatus',
-            function (result) {
-              state.uploadedAvatarUrl = result.url;
-            }
-          );
-        }
-      );
-
-      byId('uploadCoverButton').addEventListener(
-        'click',
-        function () {
-          handleImageUpload(
-            'profileCoverFile',
-            'coverUploadPreview',
-            'coverUploadImage',
-            'coverUploadStatus',
-            function (result) {
-              state.uploadedCoverUrl = result.url;
-            }
-          );
-        }
-      );
-
-      byId('uploadMessageImageButton').addEventListener(
-        'click',
-        function () {
-          handleImageUpload(
-            'sendMessageImage',
-            'messageImagePreview',
-            'messageImagePreviewImage',
-            'messageImageStatus',
-            function (result) {
-              state.uploadedMessageImageUrl = result.url;
-              byId('sendMessageImageUrl').value = result.url;
-            }
-          );
-        }
-      );
-
-      byId('uploadStoryImageButton').addEventListener(
-        'click',
-        function () {
-          handleImageUpload(
-            'storyImageFile',
-            'storyImagePreview',
-            'storyImagePreviewImage',
-            'storyImageStatus',
-            function (result) {
-              state.uploadedStoryImageUrl = result.url;
-              byId('storyImageUrl').value = result.url;
-            }
-          );
-        }
-      );
-
-      byId('uploadPublicSendImageButton').addEventListener(
-        'click',
-        function () {
-          handleImageUpload(
-            'publicSendImageFile',
-            'publicSendImagePreview',
-            'publicSendImagePreviewImage',
-            'publicSendImageStatus',
-            function (result) {
-              state.uploadedPublicImageUrl = result.url;
-              byId('publicSendImageUrl').value = result.url;
-            }
-          );
-        }
-      );
-
-      byId('removeAvatarSelectionButton').addEventListener(
-        'click',
-        function () {
-          clearFileSelection(
-            'profileAvatarFile',
-            'avatarUploadPreview',
-            null,
-            function () {
-              state.uploadedAvatarUrl = '';
-            }
-          );
-        }
-      );
-
-      byId('removeCoverSelectionButton').addEventListener(
-        'click',
-        function () {
-          clearFileSelection(
-            'profileCoverFile',
-            'coverUploadPreview',
-            null,
-            function () {
-              state.uploadedCoverUrl = '';
-            }
-          );
-        }
-      );
-
-      byId('removeMessageImageButton').addEventListener(
-        'click',
-        function () {
-          clearFileSelection(
-            'sendMessageImage',
-            'messageImagePreview',
-            'sendMessageImageUrl',
-            function () {
-              state.uploadedMessageImageUrl = '';
-            }
-          );
-        }
-      );
-
-      byId('removeStoryImageButton').addEventListener(
-        'click',
-        function () {
-          clearFileSelection(
-            'storyImageFile',
-            'storyImagePreview',
-            'storyImageUrl',
-            function () {
-              state.uploadedStoryImageUrl = '';
-            }
-          );
-        }
-      );
-
-      byId('removePublicSendImageButton').addEventListener(
-        'click',
-        function () {
-          clearFileSelection(
-            'publicSendImageFile',
-            'publicSendImagePreview',
-            'publicSendImageUrl',
-            function () {
-              state.uploadedPublicImageUrl = '';
-            }
-          );
-        }
-      );
-    }
-
-    function bindDelegatedEvents() {
-      document.addEventListener('click', function (event) {
-        const actionButton = event.target.closest(
-          '[data-action]'
-        );
-
-        if (!actionButton) return;
-
-        const action = actionButton.dataset.action;
-        const id = actionButton.dataset.id;
-
-        if (!action || !id) return;
-
-        if (
-          action === 'read-message' ||
-          action === 'delete-message' ||
-          action === 'report-message'
-        ) {
-          handleInboxAction(action, id);
-          return;
-        }
-
-        if (action === 'delete-story') {
-          deleteStory(id);
-          return;
-        }
-
-        if (action === 'read-notification') {
-          markNotificationRead(id);
+      byId("inboxPrevButton").addEventListener("click", async function () {
+        if (state.inboxPage <= 1) return;
+        state.inboxPage--;
+        try {
+          await loadInbox();
+        } catch (error) {
+          console.error("Previous inbox page failed:", error);
+          showToast("โหลดข้อมูลไม่สำเร็จ", "error");
         }
       });
 
-      document.addEventListener('click', function (event) {
-        const sidebar = byId('sidebar');
-        const toggle = byId('mobileNavToggle');
-
-        if (
-          window.innerWidth <= 760 &&
-          sidebar.classList.contains('open') &&
-          !sidebar.contains(event.target) &&
-          !toggle.contains(event.target)
-        ) {
-          sidebar.classList.remove('open');
+      byId("inboxNextButton").addEventListener("click", async function () {
+        if (state.inboxPage >= state.inboxTotalPages) return;
+        state.inboxPage++;
+        try {
+          await loadInbox();
+        } catch (error) {
+          console.error("Next inbox page failed:", error);
+          showToast("โหลดข้อมูลไม่สำเร็จ", "error");
         }
       });
+
+      byId("anonymousMessageText").addEventListener("input", function () {
+        byId("messageCharacterCount").textContent =
+          String(byId("anonymousMessageText").value.length);
+      });
+
+      byId("messageImageFile").addEventListener("change", handleMessageImageChange);
+      byId("removeMessageImageButton").addEventListener("click", clearMessageImage);
     }
-
-
-    /* ============================================================
-       URL ROUTING
-       ============================================================ */
-
-    async function handleInitialRoute() {
-      const url = new URL(window.location.href);
-      const profile = url.searchParams.get('profile');
-
-      if (profile) {
-        state.publicUsername = profile
-          .trim()
-          .replace(/^@/, '')
-          .toLowerCase();
-
-        if (state.user) {
-          showAppScreen();
-          await navigateTo('public-profile');
-        } else {
-          /*
-           * โปรไฟล์สาธารณะสามารถแสดงได้โดยไม่ล็อกอิน
-           * แต่หน้าเข้าสู่ระบบยังเป็นจุดเริ่มต้นของแอป
-           * จึงให้ผู้ใช้เข้าสู่ระบบก่อนในเส้นทางนี้
-           * หากต้องการให้ผู้ที่ยังไม่เข้าสู่ระบบส่งข้อความได้
-           * ต้องปรับ routing ให้แสดง public profile แบบ guest
-           */
-          showLoginScreen();
-        }
-
-        return true;
-      }
-
-      return false;
-    }
-
-
-    /* ============================================================
-       INITIALIZATION
-       ============================================================ */
 
     async function initializeApp() {
-      bindNavigationEvents();
-      bindFormEvents();
-      bindUploadEvents();
-      bindDelegatedEvents();
+      bindEvents();
+      showLoginScreen();
+      await initializeGoogleSignIn();
 
-      initializeGoogleSignIn();
+      const loggedIn = await restoreSession();
 
-      const restored = await restoreSession();
-
-      if (restored) {
-        const handledRoute = await handleInitialRoute();
-
-        if (!handledRoute) {
-          await navigateTo('dashboard');
-        }
-      } else {
-        const url = new URL(window.location.href);
-        const profile = url.searchParams.get('profile');
-
-        if (profile) {
-          state.publicUsername = profile
-            .trim()
-            .replace(/^@/, '')
-            .toLowerCase();
-
-          /*
-           * หน้าโปรไฟล์สาธารณะควรแยกออกจากหน้าสมาชิก
-           * เพื่อให้ผู้ส่งข้อความไม่ต้องล็อกอิน
-           */
-          await initializeGuestProfileRoute();
-        } else {
-          showLoginScreen();
+      if (loggedIn) {
+        try {
+          await navigateTo("dashboard");
+        } catch (error) {
+          console.error("Initial dashboard load failed:", error);
+          showToast("โหลดข้อมูลไม่สำเร็จ", "error");
         }
       }
-    }
-
-    async function initializeGuestProfileRoute() {
-      const loginScreen = byId('loginScreen');
-      const appLayout = byId('appLayout');
-
-      loginScreen.classList.add('hidden');
-      appLayout.classList.remove('hidden');
 
       /*
-       * ซ่อน Sidebar สำหรับผู้ที่ยังไม่เข้าสู่ระบบ
-       * และแสดงเฉพาะส่วนโปรไฟล์สาธารณะ
+       * รองรับการเปิดลิงก์โปรไฟล์ด้วย ?user=username
+       * หากยังไม่ได้เข้าสู่ระบบ ผู้ใช้สามารถอ่านชื่อผู้รับ
+       * และส่งข้อความนิรนามได้จากหน้าส่งข้อความหลังเข้าสู่หน้าเว็บ
        */
-      byId('sidebar').classList.add('hidden');
+      const params = new URLSearchParams(window.location.search);
+      const recipient = params.get("user");
 
-      const layout = $('.layout');
-      layout.style.gridTemplateColumns = 'minmax(0, 1fr)';
-
-      byId('headerLoginButton').classList.remove('hidden');
-      byId('headerProfileButton').classList.add('hidden');
-      byId('headerNotificationButton').classList.add('hidden');
-
-      $$('.page-section').forEach(function (section) {
-        section.classList.add('hidden');
-      });
-
-      byId('page-public-profile').classList.remove('hidden');
-      state.currentPage = 'public-profile';
-
-      await loadPublicProfile(state.publicUsername);
+      if (recipient) {
+        byId("recipientUsername").value =
+          recipient.replace(/^@/, "").trim();
+        if (loggedIn) {
+          await navigateTo("send");
+        }
+      }
     }
 
-
-    /* ============================================================
-       START APPLICATION
-       ============================================================ */
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-        initializeApp().catch(function (error) {
-          console.error(
-            'Application initialization failed:',
-            error.message
-          );
-
-          showLoginScreen();
-
-          showToast(
-            'เริ่มต้นระบบไม่สำเร็จ กรุณาตรวจสอบการตั้งค่า',
-            'error'
-          );
-        });
-      }
-    );
+    document.addEventListener("DOMContentLoaded", function () {
+      initializeApp().catch(function (error) {
+        console.error("Application initialization failed:", error);
+        showToast("เริ่มต้นระบบไม่สำเร็จ", "error");
+      });
+    });
   </script>
 </body>
-</html>
+              </html>
