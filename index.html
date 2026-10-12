@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#4f46e5">
   <meta name="description" content="AnonMessage - พื้นที่ส่งข้อความนิรนามและแบ่งปันความรู้สึก">
-  <title>AnonMessage | ส่งข้อความนิรนาม</title>
+  <title>AnonMGS | ส่งข้อความแบบไม่ระบุตัวตน</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -832,7 +832,7 @@
         <div class="page-heading">
           <div>
             <h1 id="welcomeTitle">ภาพรวม</h1>
-            <p>จัดการโปรไฟล์และข้อความของคุณได้ในที่เดียว</p>
+            <p>จัดการโปรไฟล์และข้อความของคุณ</p>
           </div>
           <button class="btn btn-primary" type="button" data-go="send">
             <i class="fa-regular fa-paper-plane"></i> ส่งข้อความ
@@ -859,7 +859,7 @@
 
         <div class="card">
           <h2 class="card-title"><span><i class="fa-solid fa-link"></i> ลิงก์โปรไฟล์ของฉัน</span></h2>
-          <p class="muted">แชร์ลิงก์นี้ให้ผู้อื่นเพื่อรับข้อความนิรนาม</p>
+          <p class="muted">แชร์ลิงก์นี้ให้ผู้อื่นเพื่อรับข้อความ</p>
           <div class="field">
             <input class="input" id="dashboardProfileLink" readonly>
           </div>
@@ -1095,8 +1095,8 @@
      */
     const CONFIG = Object.freeze({
       APP_NAME: "AnonMessage",
-      API_BASE_URL: "https://YOUR-CLOUDFLARE-WORKER-URL",
-      GOOGLE_CLIENT_ID: "YOUR_GOOGLE_OAUTH_CLIENT_ID",
+      API_BASE_URL: "https://aged-wind-2abe.thepickffcer.workers.dev/",
+      GOOGLE_CLIENT_ID: "1022921992521-66fjmcq5qhrsrtk0hu6e6no84sn51ka6.apps.googleusercontent.com",
 
       SESSION_STORAGE_KEY: "anonmessage_session_token",
       SENDER_STORAGE_KEY: "anonmessage_sender_token",
