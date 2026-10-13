@@ -1,35 +1,1474 @@
+
 <!doctype html>
-<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ActiGallery | คลังภาพกิจกรรม</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2447a8">
+<meta name="description" content="ActiGallery คลังภาพกิจกรรมออนไลน์ รวมอัลบั้มภาพจากหน่วยงานต่าง ๆ ไว้ในที่เดียว">
+<title>ActiGallery | คลังภาพกิจกรรม</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root{--ink:#172033;--muted:#6d778a;--line:#e5eaf2;--brand:#2447a8;--bg:#f6f8fc}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Thai",sans-serif}button,input{font:inherit;cursor:pointer}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:4}.nav{max-width:1200px;margin:auto;padding:14px 20px;display:flex;align-items:center;gap:14px}.brand{font-weight:700;font-size:21px;display:flex;align-items:center;gap:10px;white-space:nowrap}.mark{background:linear-gradient(135deg,#203b8d,#5878e9);color:#fff;border-radius:11px;width:38px;height:38px;display:grid;place-items:center}.search{margin-left:auto;max-width:440px;flex:1;position:relative}.search input{width:100%;border:1px solid var(--line);border-radius:12px;background:#f9faff;padding:11px 14px;outline:none}.wrap{max-width:1200px;margin:auto;padding:24px 20px 55px}.hero{padding:32px;border-radius:22px;color:#fff;background:linear-gradient(115deg,#172554,#2849a4 60%,#5c7be2);display:flex;justify-content:space-between;align-items:center;gap:20px}.hero h1{font-size:clamp(26px,4vw,40px);line-height:1.3;margin:8px 0}.hero p{color:#dce5ff;margin:0;max-width:700px}.eyebrow{font-size:11px;letter-spacing:.14em;color:#cbd7ff}.countbox{border:1px solid #ffffff38;background:#ffffff12;border-radius:16px;padding:15px 23px;text-align:center;white-space:nowrap}.countbox b{display:block;font-size:29px}.head{display:flex;justify-content:space-between;align-items:center;margin:28px 0 15px;gap:12px}.head h2{margin:0;font-size:23px}.head p{margin:3px 0 0;color:var(--muted);font-size:13px}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 13px;border-radius:10px}.btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.chip{border:1px solid var(--line);border-radius:99px;padding:7px 13px;background:white;color:#59657a}.chip.active{background:#eaf0ff;border-color:#cad6ff;color:#2447a8}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.album{border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden;cursor:pointer;transition:.18s}.album:hover{transform:translateY(-3px);box-shadow:0 12px 28px #1a2b4b12}.cover{aspect-ratio:1.35;background:#e9edf5;position:relative}.cover img{width:100%;height:100%;object-fit:cover}.num{position:absolute;right:10px;bottom:10px;background:#111827c9;color:#fff;border-radius:7px;padding:4px 8px;font-size:12px}.info{padding:13px}.info h3{font-size:16px;margin:0 0 5px}.info p{font-size:12px;color:var(--muted);margin:0;min-height:36px}.meta{font-size:11px;color:#7b8597;margin-top:10px;display:flex;justify-content:space-between;gap:8px}.empty{grid-column:1/-1;text-align:center;padding:50px 15px;color:var(--muted);background:white;border:1px dashed #d7deeb;border-radius:15px}.modal{display:none;position:fixed;inset:0;background:#0a1120c9;z-index:10;align-items:center;justify-content:center;padding:12px}.modal.open{display:flex}.box{width:min(100%,1050px);max-height:95vh;overflow:auto;background:white;border-radius:18px}.mhead{position:sticky;top:0;background:white;z-index:2;border-bottom:1px solid var(--line);padding:16px 20px;display:flex;gap:12px;align-items:center}.mhead h2{margin:0;font-size:20px}.mhead p{margin:3px 0 0;color:var(--muted);font-size:12px}.grow{flex:1}.close{border:0;border-radius:50%;width:37px;height:37px;font-size:22px;background:#eff2f7}.tools{padding:12px 18px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}.photos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:14px}.photo{aspect-ratio:1;position:relative;background:#edf0f6;border-radius:9px;overflow:hidden;cursor:pointer}.photo img{width:100%;height:100%;object-fit:cover}.check{display:none;position:absolute;right:8px;top:8px;border:2px solid white;width:23px;height:23px;border-radius:50%;background:#0004}.selecting .check{display:block}.photo.selected .check{background:#3159ce}.photo.selected .check:after{content:"✓";color:#fff;display:block;text-align:center;margin-top:-1px}.bar{display:none;position:fixed;z-index:15;bottom:20px;left:50%;transform:translateX(-50%);background:#172554;color:white;border-radius:14px;padding:10px;align-items:center;gap:8px;box-shadow:0 10px 30px #0004}.bar.show{display:flex}.bar button{border:0;border-radius:8px;padding:8px 10px}.light{display:none;position:fixed;inset:0;z-index:20;background:#030611f5;align-items:center;justify-content:center;padding:20px}.light.open{display:flex}.light img{max-width:92vw;max-height:84vh;object-fit:contain}.light button{position:absolute;border:0;border-radius:50%;width:42px;height:42px;background:#ffffff22;color:#fff;font-size:25px}.light .x{top:16px;right:16px}.light .prev{left:15px}.light .next{right:15px}.progress{display:none;padding:0 18px 18px}.track{height:7px;background:#e8ecf4;border-radius:9px;overflow:hidden}.fill{height:100%;width:0;background:#3159ce}.toast{position:fixed;z-index:30;bottom:18px;left:50%;transform:translate(-50%,15px);opacity:0;background:#172033;color:#fff;padding:10px 15px;border-radius:10px;transition:.2s;max-width:90vw}.toast.show{opacity:1;transform:translate(-50%,0)}footer{text-align:center;padding:24px;background:#fff;border-top:1px solid var(--line);color:#7a8494;font-size:12px}
-@media(max-width:950px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:650px){.nav{flex-wrap:wrap;padding:12px 14px}.search{order:2;flex-basis:100%;max-width:none}.wrap{padding:16px 12px 40px}.hero{padding:22px;display:block}.countbox{display:none}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.info{padding:10px}.info h3{font-size:14px}.info p{font-size:11px}.photos{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:8px}.mhead{padding:13px}.tools{padding:10px}.head h2{font-size:20px}}@media(max-width:390px){.photos{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style></head><body>
-<header class="top"><div class="nav"><div class="brand"><span class="mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span>ActiGallery</div><label class="search"><input id="q" type="search" placeholder="ค้นหากิจกรรมหรือหน่วยงาน…"></label></div></header>
-<main class="wrap"><section class="hero"><div><div class="eyebrow">ACTIVITY PHOTO ARCHIVE</div><h1>ทุกกิจกรรม ทุกความทรงจำ<br>รวมไว้ในที่เดียว</h1><p>ค้นพบภาพกิจกรรมจากหน่วยงานต่าง ๆ เปิดดู แชร์ลิงก์ และดาวน์โหลดภาพที่ต้องการได้อย่างสะดวก</p></div><div class="countbox"><b id="albumCount">—</b>อัลบั้มกิจกรรม</div></section><div class="head"><div><h2>อัลบั้มกิจกรรม</h2><p id="subtitle">กำลังโหลดข้อมูลจาก Firebase…</p></div><button class="btn" id="refresh">รีเฟรช</button></div><div class="filters" id="filters"><button class="chip active" data-org="all">ทั้งหมด</button></div><div class="grid" id="grid"></div></main><footer>ActiGallery · คลังภาพกิจกรรมออนไลน์</footer>
-<div class="modal" id="modal"><div class="box"><div class="mhead"><div class="grow"><h2 id="title"></h2><p id="desc"></p></div><button class="close" id="close">×</button></div><div class="tools"><button class="btn primary" id="select">เลือกภาพ</button><button class="btn" id="share">แชร์อัลบั้ม</button><button class="btn" id="all">ดาวน์โหลดทั้งหมด</button></div><div class="photos" id="photos"></div><div class="progress" id="prog"><p id="progText">กำลังเตรียมไฟล์…</p><div class="track"><div class="fill" id="fill"></div></div></div></div></div>
-<div class="light" id="light"><button class="x" id="lx">×</button><button class="prev" id="lp">‹</button><img id="li" alt="ภาพกิจกรรม"><button class="next" id="ln">›</button></div>
-<div class="bar" id="bar"><span id="selCount">เลือกแล้ว 0 รูป</span><button id="downloadSel">ดาวน์โหลดที่เลือก</button><button id="cancel">ยกเลิก</button></div><div class="toast" id="toast"></div>
+:root {
+  --ink: #172033;
+  --muted: #6d778a;
+  --line: #e5eaf2;
+  --brand: #2447a8;
+  --brand-light: #eaf0ff;
+  --bg: #f6f8fc;
+  --white: #fff;
+  --danger: #b42318;
+  --radius: 16px;
+  --shadow: 0 12px 28px #1a2b4b12;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "IBM Plex Sans Thai", sans-serif;
+}
+body.modal-open { overflow: hidden; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button:focus-visible, input:focus-visible {
+  outline: 3px solid #90aaff;
+  outline-offset: 2px;
+}
+.top {
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+.nav {
+  max-width: 1200px;
+  margin: auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand {
+  font-weight: 700;
+  font-size: 21px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.mark {
+  background: linear-gradient(135deg, #203b8d, #5878e9);
+  color: #fff;
+  border-radius: 11px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+}
+.search {
+  margin-left: auto;
+  max-width: 440px;
+  flex: 1;
+}
+.search input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f9faff;
+  padding: 11px 14px;
+  outline: none;
+}
+.wrap {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px 20px 55px;
+}
+.hero {
+  padding: 32px;
+  border-radius: 22px;
+  color: #fff;
+  background: linear-gradient(115deg, #172554, #2849a4 60%, #5c7be2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.hero h1 {
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.3;
+  margin: 8px 0;
+}
+.hero p {
+  color: #dce5ff;
+  margin: 0;
+  max-width: 700px;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: #cbd7ff;
+}
+.countbox {
+  border: 1px solid #ffffff38;
+  background: #ffffff12;
+  border-radius: 16px;
+  padding: 15px 23px;
+  text-align: center;
+  white-space: nowrap;
+}
+.countbox b {
+  display: block;
+  font-size: 29px;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 28px 0 15px;
+  gap: 12px;
+}
+.head h2 { margin: 0; font-size: 23px; }
+.head p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  padding: 9px 13px;
+  border-radius: 10px;
+  transition: .15s;
+}
+.btn:hover:not(:disabled) { background: #f1f4fa; }
+.btn.primary {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.btn.primary:hover:not(:disabled) { background: #193987; }
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.category-title {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 18px 0 8px;
+}
+.category-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.chip {
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 7px 13px;
+  background: #fff;
+  color: #59657a;
+  transition: .15s;
+}
+.chip:hover { border-color: #b8c8f6; }
+.chip.active {
+  background: var(--brand-light);
+  border-color: #cad6ff;
+  color: var(--brand);
+  font-weight: 600;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.album {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  overflow: hidden;
+  cursor: pointer;
+  transition: .18s;
+}
+.album:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.cover {
+  aspect-ratio: 1.35;
+  background: #e9edf5;
+  position: relative;
+  overflow: hidden;
+}
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #9aa6bd;
+}
+.cover-placeholder svg { width: 44px; height: 44px; }
+.num {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: #111827d9;
+  color: #fff;
+  border-radius: 7px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.info { padding: 13px; }
+.info h3 {
+  font-size: 16px;
+  margin: 0 0 5px;
+  overflow-wrap: anywhere;
+}
+.info p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  min-height: 36px;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.meta {
+  font-size: 11px;
+  color: #7b8597;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.category-label {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  color: #2447a8;
+  background: #edf2ff;
+  font-size: 11px;
+}
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px 15px;
+  color: var(--muted);
+  background: white;
+  border: 1px dashed #d7deeb;
+  border-radius: 15px;
+}
+.empty strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: var(--ink);
+}
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0a1120c9;
+  z-index: 10;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+.modal.open { display: flex; }
+.box {
+  width: min(100%, 1050px);
+  max-height: 95vh;
+  overflow: auto;
+  background: white;
+  border-radius: 18px;
+}
+.mhead {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 2;
+  border-bottom: 1px solid var(--line);
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.mhead h2 { margin: 0; font-size: 20px; overflow-wrap: anywhere; }
+.mhead p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: pre-line;
+}
+.grow { flex: 1; min-width: 0; }
+.close {
+  border: 0;
+  border-radius: 50%;
+  width: 37px;
+  height: 37px;
+  font-size: 22px;
+  background: #eff2f7;
+  flex-shrink: 0;
+}
+.tools {
+  padding: 12px 18px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+}
+.photos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 14px;
+}
+.photo {
+  aspect-ratio: 1;
+  position: relative;
+  background: #edf0f6;
+  border-radius: 9px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo:focus-visible {
+  outline: 3px solid #90aaff;
+  outline-offset: 2px;
+}
+.check {
+  display: none;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  border: 2px solid white;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: #0006;
+  box-shadow: 0 1px 5px #0004;
+}
+.selecting .check { display: block; }
+.photo.selected .check { background: #3159ce; }
+.photo.selected .check:after {
+  content: "✓";
+  color: #fff;
+  display: block;
+  text-align: center;
+  margin-top: -1px;
+}
+.bar {
+  display: none;
+  position: fixed;
+  z-index: 15;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #172554;
+  color: white;
+  border-radius: 14px;
+  padding: 10px;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 30px #0004;
+  max-width: calc(100vw - 20px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.bar.show { display: flex; }
+.bar button {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.progress { display: none; padding: 0 18px 18px; }
+.track {
+  height: 7px;
+  background: #e8ecf4;
+  border-radius: 9px;
+  overflow: hidden;
+}
+.fill {
+  height: 100%;
+  width: 0;
+  background: #3159ce;
+  transition: width .15s;
+}
+.progress p {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.light {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #030611f5;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.light.open { display: flex; }
+.light img {
+  max-width: 92vw;
+  max-height: 84vh;
+  object-fit: contain;
+}
+.light button {
+  position: absolute;
+  border: 0;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  background: #ffffff22;
+  color: #fff;
+  font-size: 25px;
+}
+.light .x { top: 16px; right: 16px; }
+.light .prev { left: 15px; }
+.light .next { right: 15px; }
+.toast {
+  position: fixed;
+  z-index: 30;
+  bottom: 18px;
+  left: 50%;
+  transform: translate(-50%, 15px);
+  opacity: 0;
+  pointer-events: none;
+  background: #172033;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: .2s;
+  max-width: 90vw;
+  text-align: center;
+}
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+footer {
+  text-align: center;
+  padding: 24px;
+  background: #fff;
+  border-top: 1px solid var(--line);
+  color: #7a8494;
+  font-size: 12px;
+}
+@media(max-width: 950px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media(max-width: 650px) {
+  .nav { flex-wrap: wrap; padding: 12px 14px; }
+  .search { order: 2; flex-basis: 100%; max-width: none; }
+  .wrap { padding: 16px 12px 40px; }
+  .hero { padding: 22px; display: block; }
+  .countbox { display: none; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .info { padding: 10px; }
+  .info h3 { font-size: 14px; }
+  .info p { font-size: 11px; }
+  .photos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; padding: 8px; }
+  .mhead { padding: 13px; }
+  .tools { padding: 10px; }
+  .head h2 { font-size: 20px; }
+}
+@media(max-width: 390px) {
+  .photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+</style>
+</head>
+
+<body>
+<header class="top">
+  <div class="nav">
+    <div class="brand">
+      <span class="mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <path d="m21 15-5-5L5 21"></path>
+        </svg>
+      </span>
+      ActiGallery
+    </div>
+    <label class="search">
+      <input id="q" type="search" placeholder="ค้นหากิจกรรม หมวดหมู่ หรือหน่วยงาน…" aria-label="ค้นหาอัลบั้ม">
+    </label>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">ACTIVITY PHOTO ARCHIVE</div>
+      <h1>ทุกกิจกรรม ทุกความทรงจำ<br>รวมไว้ในที่เดียว</h1>
+      <p>ค้นพบภาพกิจกรรมจากหน่วยงานต่าง ๆ เปิดดู แชร์ลิงก์ และดาวน์โหลดภาพที่ต้องการได้อย่างสะดวก</p>
+    </div>
+    <div class="countbox">
+      <b id="albumCount">—</b>
+      อัลบั้มกิจกรรม
+    </div>
+  </section>
+
+  <div class="head">
+    <div>
+      <h2>อัลบั้มกิจกรรม</h2>
+      <p id="subtitle">กำลังโหลดข้อมูลจาก Firebase…</p>
+    </div>
+    <button class="btn" id="refresh" type="button">รีเฟรช</button>
+  </div>
+
+  <div class="category-title">เลือกหมวดหมู่กิจกรรม</div>
+  <div class="category-filters" id="categoryFilters">
+    <button class="chip active" data-category="all" type="button">อัลบั้มทั้งหมด</button>
+  </div>
+
+  <div class="category-title">กรองตามหน่วยงาน</div>
+  <div class="filters" id="filters">
+    <button class="chip active" data-org="all" type="button">ทุกหน่วยงาน</button>
+  </div>
+
+  <div class="grid" id="grid" aria-live="polite"></div>
+</main>
+
+<footer>ActiGallery · คลังภาพกิจกรรมออนไลน์</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="title">
+  <div class="box">
+    <div class="mhead">
+      <div class="grow">
+        <h2 id="title"></h2>
+        <p id="desc"></p>
+      </div>
+      <button class="close" id="close" type="button" aria-label="ปิดหน้าต่าง">×</button>
+    </div>
+    <div class="tools">
+      <button class="btn primary" id="select" type="button">เลือกภาพ</button>
+      <button class="btn" id="share" type="button">แชร์อัลบั้ม</button>
+      <button class="btn" id="all" type="button">ดาวน์โหลดทั้งหมด</button>
+    </div>
+    <div class="photos" id="photos"></div>
+    <div class="progress" id="prog">
+      <p id="progText">กำลังเตรียมไฟล์…</p>
+      <div class="track"><div class="fill" id="fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="light" id="light" role="dialog" aria-modal="true" aria-label="ดูภาพขนาดใหญ่">
+  <button class="x" id="lx" type="button" aria-label="ปิดภาพ">×</button>
+  <button class="prev" id="lp" type="button" aria-label="ภาพก่อนหน้า">‹</button>
+  <img id="li" alt="ภาพกิจกรรม">
+  <button class="next" id="ln" type="button" aria-label="ภาพถัดไป">›</button>
+</div>
+
+<div class="bar" id="bar">
+  <span id="selCount">เลือกแล้ว 0 รูป</span>
+  <button id="downloadSel" type="button">ดาวน์โหลดที่เลือก</button>
+  <button id="cancel" type="button">ยกเลิก</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import{getFirestore,collection,getDocs,query,where,orderBy,limit,doc,getDoc}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"REPLACE_WITH_FIREBASE_WEB_API_KEY",authDomain:"REPLACE_WITH_PROJECT_ID.firebaseapp.com",projectId:"REPLACE_WITH_PROJECT_ID",appId:"REPLACE_WITH_FIREBASE_APP_ID"};
-const db=getFirestore(initializeApp(firebaseConfig)), $=id=>document.getElementById(id);
-const S={albums:[],list:[],org:"all",album:null,photos:[],selected:new Set(),selecting:false,idx:0};
-const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function toast(s){$("toast").textContent=s;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),3000)}
-function date(v){try{let d=v?.toDate?v.toDate():new Date(v);return v?new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"short",year:"numeric"}).format(d):""}catch{return""}}
-async function load(){try{$("grid").innerHTML='<div class="empty">กำลังโหลดอัลบั้ม…</div>';const snap=await getDocs(query(collection(db,"albums"),where("status","==","published"),orderBy("publishedAt","desc"),limit(250)));S.albums=snap.docs.map(d=>({id:d.id,...d.data()}));const ids=[...new Set(S.albums.map(a=>a.organizationId).filter(Boolean))];const orgs={};await Promise.all(ids.map(async id=>{try{const d=await getDoc(doc(db,"organizations",id));if(d.exists())orgs[id]=d.data()}catch{}}));S.albums=S.albums.map(a=>({...a,org:orgs[a.organizationId]||{name:a.organizationName||"หน่วยงาน"}}));filters();draw();const id=new URLSearchParams(location.search).get("album");if(id){const a=S.albums.find(x=>x.id===id);if(a)open(a)}}catch(e){console.error(e);$("grid").innerHTML='<div class="empty">โหลดข้อมูลไม่ได้ โปรดตรวจ Firebase config, Firestore Rules และ Indexes</div>';toast("เชื่อมต่อ Firebase ไม่สำเร็จ")}}
-function filters(){const orgs=[...new Map(S.albums.filter(a=>a.organizationId).map(a=>[a.organizationId,a.org])).entries()];$("filters").innerHTML='<button class="chip active" data-org="all">ทั้งหมด</button>'+orgs.map(([id,o])=>`<button class="chip" data-org="${esc(id)}">${esc(o.name)}</button>`).join("");$("filters").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.org=b.dataset.org;$("filters").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));draw()})}
-function draw(){const q=$("q").value.toLowerCase();S.list=S.albums.filter(a=>(S.org==="all"||a.organizationId===S.org)&&[a.title,a.description,a.org.name].some(x=>String(x||"").toLowerCase().includes(q)));$("albumCount").textContent=S.albums.length;$("subtitle").textContent=`พบ ${S.list.length} อัลบั้ม`; $("grid").innerHTML=S.list.length?S.list.map(a=>`<article class="album" data-id="${a.id}"><div class="cover">${a.coverUrl?`<img loading="lazy" src="${esc(a.coverUrl)}" alt="">`:""}<span class="num">${Number(a.photoCount||0)} รูป</span></div><div class="info"><h3>${esc(a.title)}</h3><p>${esc(a.description)}</p><div class="meta"><span>${esc(a.org.name)}</span><span>${date(a.eventDate||a.publishedAt)}</span></div></div></article>`).join(""):'<div class="empty">ยังไม่พบอัลบั้มกิจกรรม</div>';document.querySelectorAll(".album").forEach(el=>el.onclick=()=>open(S.list.find(a=>a.id===el.dataset.id)))}
-async function open(a){S.album=a;S.selected.clear();S.selecting=false;$("title").textContent=a.title;$("desc").textContent=[a.org.name,date(a.eventDate||a.publishedAt),a.description].filter(Boolean).join(" · ");$("modal").classList.add("open");document.body.style.overflow="hidden";const u=new URL(location.href);u.searchParams.set("album",a.id);history.replaceState({},"",u);$("photos").innerHTML='<div class="empty">กำลังโหลดภาพ…</div>';try{const snap=await getDocs(query(collection(db,"photos"),where("albumId","==",a.id),where("status","==","ready"),orderBy("sortOrder","asc")));S.photos=snap.docs.map(d=>({id:d.id,...d.data()}));drawPhotos()}catch(e){console.error(e);$("photos").innerHTML='<div class="empty">โหลดภาพไม่สำเร็จ โปรดตรวจ Rules/Indexes</div>'}}
-function url(p){return p.displayUrl||p.url}
-function drawPhotos(){$("photos").classList.toggle("selecting",S.selecting);$("photos").innerHTML=S.photos.map((p,i)=>`<div class="photo ${S.selected.has(p.id)?"selected":""}" data-i="${i}"><img loading="lazy" src="${esc(url(p))}" alt=""><span class="check"></span></div>`).join("");$("photos").querySelectorAll(".photo").forEach(el=>el.onclick=()=>{const p=S.photos[+el.dataset.i];if(S.selecting){S.selected.has(p.id)?S.selected.delete(p.id):S.selected.add(p.id);drawPhotos();syncBar()}else{S.idx=+el.dataset.i;showLight()}});$("select").textContent=S.selecting?"ยกเลิกการเลือก":"เลือกภาพ";$("all").disabled=!S.photos.length;syncBar()}
-function syncBar(){$("bar").classList.toggle("show",S.selecting&&S.selected.size>0);$("selCount").textContent=`เลือกแล้ว ${S.selected.size} รูป`}
-function close(){ $("modal").classList.remove("open");document.body.style.overflow="";S.album=null;S.selected.clear();S.selecting=false;syncBar();const u=new URL(location.href);u.searchParams.delete("album");history.replaceState({},"",u)}
-function showLight(){$("li").src=url(S.photos[S.idx]);$("light").classList.add("open");$("lp").style.visibility=S.idx?"visible":"hidden";$("ln").style.visibility=S.idx<S.photos.length-1?"visible":"hidden"}
-function safe(s){return String(s||"ActiGallery").replace(/[\\/:*?"<>|]/g,"-").slice(0,80)}
-function ext(type){return({"image/png":"png","image/webp":"webp","image/gif":"gif","image/avif":"avif"})[type]||"jpg"}
-function save(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}
-async function download(list){if(!list.length)return toast("ไม่มีภาพให้ดาวน์โหลด");$("prog").style.display="block";$("fill").style.width="0%";if(list.length===1){try{const r=await fetch(url(list[0]));if(!r.ok)throw Error();const b=await r.blob();save(b,safe(S.album.title)+"."+ext(b.type))}catch{window.open(url(list[0]),"_blank","noopener");toast("เปิดภาพในแท็บใหม่ เนื่องจากเว็บต้นทางไม่อนุญาตดาวน์โหลดโดยตรง")}finally{$("prog").style.display="none"}return}try{const{default:JSZip}=await import("https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm"),zip=new JSZip();let ok=0,failed=0;for(let i=0;i<list.length;i++){try{const r=await fetch(url(list[i]));if(!r.ok)throw Error();const b=await r.blob();zip.file(`${String(i+1).padStart(3,"0")}.${ext(b.type)}`,b);ok++}catch{failed++}$("fill").style.width=(i+1)/list.length*75+"%";$("progText").textContent=`กำลังรวบรวมภาพ ${i+1}/${list.length} · ล้มเหลว ${failed}`}if(!ok)throw Error();$("progText").textContent="กำลังบีบอัด ZIP…";const b=await zip.generateAsync({type:"blob"},m=>$("fill").style.width=75+m.percent*.25+"%");save(b,safe(S.album.title)+".zip");toast(`ดาวน์โหลด ${ok} ภาพ${failed?` · ล้มเหลว ${failed} ภาพ`:""}`)}catch(e){console.error(e);toast("สร้าง ZIP ไม่สำเร็จ อาจเป็นเพราะ CORS ของแหล่งภาพ")}finally{setTimeout(()=>$("prog").style.display="none",2200)}}
-$("q").oninput=draw;$("refresh").onclick=load;$("close").onclick=close;$("modal").onclick=e=>{if(e.target===$("modal"))close()};$("select").onclick=()=>{S.selecting=!S.selecting;if(!S.selecting)S.selected.clear();drawPhotos()};$("cancel").onclick=()=>{S.selecting=false;S.selected.clear();drawPhotos()};$("downloadSel").onclick=()=>download(S.photos.filter(p=>S.selected.has(p.id)));$("all").onclick=()=>download(S.photos);$("share").onclick=async()=>{const u=new URL(location.href);u.searchParams.set("album",S.album.id);try{if(navigator.share)await navigator.share({title:S.album.title,url:u.href});else{await navigator.clipboard.writeText(u.href);toast("คัดลอกลิงก์แล้ว")}}catch(e){if(e.name!=="AbortError")toast("แชร์ไม่สำเร็จ")}};$("lx").onclick=()=>$("light").classList.remove("open");$("lp").onclick=()=>{if(S.idx>0){S.idx--;showLight()}};$("ln").onclick=()=>{if(S.idx<S.photos.length-1){S.idx++;showLight()}};document.addEventListener("keydown",e=>{if(e.key==="Escape"){ $("light").classList.remove("open");if($("modal").classList.contains("open"))close()}if($("light").classList.contains("open")){if(e.key==="ArrowLeft")$("lp").click();if(e.key==="ArrowRight")$("ln").click()}});load();
-</script></body></html>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+/*
+ * ตั้งค่า Firebase Web Config ของโปรเจกต์จริงตรงนี้
+ * ห้ามใส่รหัสผ่านผู้ดูแลระบบหรือ ImgBB API Key ในไฟล์นี้
+ */
+const firebaseConfig = {
+  apiKey: "REPLACE_WITH_FIREBASE_WEB_API_KEY",
+  authDomain: "REPLACE_WITH_PROJECT_ID.firebaseapp.com",
+  projectId: "REPLACE_WITH_PROJECT_ID",
+  appId: "REPLACE_WITH_FIREBASE_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+
+const S = {
+  albums: [],
+  list: [],
+  org: "all",
+  category: "all",
+  album: null,
+  photos: [],
+  selected: new Set(),
+  selecting: false,
+  idx: 0,
+  loading: false
+};
+
+const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+}[char]));
+
+function toast(message) {
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => {
+    $("toast").classList.remove("show");
+  }, 3200);
+}
+
+function date(value) {
+  if (!value) return "";
+  try {
+    const d = typeof value.toDate === "function"
+      ? value.toDate()
+      : new Date(value);
+
+    if (Number.isNaN(d.getTime())) return "";
+
+    return new Intl.DateTimeFormat("th-TH", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }).format(d);
+  } catch {
+    return "";
+  }
+}
+
+function albumCategories(album) {
+  /*
+   * รองรับชื่อฟิลด์หมวดหมู่หลายรูปแบบ
+   * เพื่อให้ทำงานกับข้อมูลอัลบั้มที่บันทึกไว้ใน Firestore ได้
+   */
+  const raw = [
+    album.category,
+    album.categoryName,
+    album.albumCategory,
+    album.activityCategory,
+    ...(Array.isArray(album.categories) ? album.categories : []),
+    ...(Array.isArray(album.tags) ? album.tags : [])
+  ];
+
+  return [...new Set(
+    raw
+      .map(value => String(value ?? "").trim())
+      .filter(Boolean)
+  )];
+}
+
+function normalizeText(value) {
+  return String(value ?? "").trim().toLocaleLowerCase("th");
+}
+
+function imageUrl(photo) {
+  return photo.displayUrl || photo.url || photo.imageUrl || "";
+}
+
+function albumCover(album) {
+  return album.coverUrl || album.thumbnailUrl || album.cover || "";
+}
+
+function albumPhotoCount(album) {
+  const value = Number(album.photoCount);
+  return Number.isFinite(value) && value >= 0 ? value : 0;
+}
+
+async function load() {
+  if (S.loading) return;
+  S.loading = true;
+
+  $("grid").innerHTML = `
+    <div class="empty">
+      <strong>กำลังโหลดอัลบั้ม</strong>
+      กำลังเชื่อมต่อฐานข้อมูล Firebase…
+    </div>
+  `;
+
+  $("refresh").disabled = true;
+
+  try {
+    /*
+     * อ่านเฉพาะอัลบั้มที่มีสถานะ published
+     * Firestore Rules ต้องอนุญาตให้บุคคลทั่วไปอ่านอัลบั้มที่เผยแพร่แล้ว
+     */
+    const snapshot = await getDocs(
+      query(
+        collection(db, "albums"),
+        where("status", "==", "published"),
+        orderBy("publishedAt", "desc"),
+        limit(250)
+      )
+    );
+
+    S.albums = snapshot.docs.map(document => ({
+      id: document.id,
+      ...document.data()
+    }));
+
+    /*
+     * โหลดชื่อหน่วยงานเพื่อใช้แสดงในการ์ดและตัวกรอง
+     */
+    const organizationIds = [
+      ...new Set(
+        S.albums
+          .map(album => album.organizationId)
+          .filter(Boolean)
+      )
+    ];
+
+    const organizations = {};
+
+    await Promise.all(
+      organizationIds.map(async organizationId => {
+        try {
+          const organizationSnapshot = await getDoc(
+            doc(db, "organizations", organizationId)
+          );
+
+          if (organizationSnapshot.exists()) {
+            organizations[organizationId] = {
+              id: organizationSnapshot.id,
+              ...organizationSnapshot.data()
+            };
+          }
+        } catch (error) {
+          console.warn(
+            "ไม่สามารถโหลดข้อมูลหน่วยงาน:",
+            organizationId,
+            error
+          );
+        }
+      })
+    );
+
+    S.albums = S.albums.map(album => ({
+      ...album,
+      org: organizations[album.organizationId] || {
+        name: album.organizationName || "หน่วยงาน"
+      }
+    }));
+
+    buildFilters();
+    draw();
+
+    /*
+     * หาก URL มี ?album=DOCUMENT_ID ให้เปิดอัลบั้มนั้น
+     * รองรับการแชร์ลิงก์ไปยังอัลบั้มโดยตรง
+     */
+    const albumId = new URLSearchParams(location.search).get("album");
+
+    if (albumId) {
+      const album = S.albums.find(item => item.id === albumId);
+
+      if (album) {
+        await openAlbum(album, false);
+      } else {
+        toast("ไม่พบอัลบั้มนี้ หรืออัลบั้มยังไม่ได้เผยแพร่");
+      }
+    }
+  } catch (error) {
+    console.error("โหลดอัลบั้มไม่สำเร็จ:", error);
+
+    $("grid").innerHTML = `
+      <div class="empty">
+        <strong>ไม่สามารถโหลดข้อมูลได้</strong>
+        โปรดตรวจสอบ Firebase Config, Firestore Rules,
+        ชื่อฟิลด์สถานะ และ Firestore Indexes
+      </div>
+    `;
+
+    $("subtitle").textContent = "ไม่สามารถโหลดข้อมูลจากฐานข้อมูลได้";
+    toast("เชื่อมต่อ Firebase ไม่สำเร็จ");
+  } finally {
+    S.loading = false;
+    $("refresh").disabled = false;
+  }
+}
+
+function buildFilters() {
+  /*
+   * สร้างหมวดหมู่จากข้อมูลอัลบั้มจริง
+   * ไม่ได้กำหนดรายชื่อหมวดหมู่ไว้ตายตัวในหน้าเว็บ
+   */
+  const categories = [
+    ...new Set(S.albums.flatMap(albumCategories))
+  ].sort((a, b) => a.localeCompare(b, "th"));
+
+  $("categoryFilters").innerHTML = [
+    `<button class="chip" data-category="all" type="button">อัลบั้มทั้งหมด</button>`,
+    ...categories.map(category => `
+      <button
+        class="chip"
+        data-category="${esc(category)}"
+        type="button"
+      >${esc(category)}</button>
+    `)
+  ].join("");
+
+  $("categoryFilters").querySelectorAll("button").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.category === S.category
+    );
+
+    button.addEventListener("click", () => {
+      S.category = button.dataset.category;
+
+      $("categoryFilters").querySelectorAll("button").forEach(item => {
+        item.classList.toggle("active", item === button);
+      });
+
+      draw();
+    });
+  });
+
+  /*
+   * สร้างตัวกรองหน่วยงาน
+   */
+  const organizations = [
+    ...new Map(
+      S.albums
+        .filter(album => album.organizationId)
+        .map(album => [
+          album.organizationId,
+          album.org
+        ])
+    ).entries()
+  ].sort((a, b) =>
+    String(a[1]?.name || "").localeCompare(
+      String(b[1]?.name || ""),
+      "th"
+    )
+  );
+
+  $("filters").innerHTML = [
+    `<button class="chip" data-org="all" type="button">ทุกหน่วยงาน</button>`,
+    ...organizations.map(([id, organization]) => `
+      <button
+        class="chip"
+        data-org="${esc(id)}"
+        type="button"
+      >${esc(organization.name || "หน่วยงาน")}</button>
+    `)
+  ].join("");
+
+  $("filters").querySelectorAll("button").forEach(button => {
+    button.classList.toggle("active", button.dataset.org === S.org);
+
+    button.addEventListener("click", () => {
+      S.org = button.dataset.org;
+
+      $("filters").querySelectorAll("button").forEach(item => {
+        item.classList.toggle("active", item === button);
+      });
+
+      draw();
+    });
+  });
+}
+
+function draw() {
+  const searchText = normalizeText($("q").value);
+
+  S.list = S.albums.filter(album => {
+    const organizationMatch =
+      S.org === "all" || album.organizationId === S.org;
+
+    const categoryMatch =
+      S.category === "all" ||
+      albumCategories(album).includes(S.category);
+
+    const searchable = [
+      album.title,
+      album.description,
+      album.org?.name,
+      ...albumCategories(album)
+    ];
+
+    const searchMatch =
+      !searchText ||
+      searchable.some(value =>
+        normalizeText(value).includes(searchText)
+      );
+
+    return organizationMatch && categoryMatch && searchMatch;
+  });
+
+  $("albumCount").textContent = S.albums.length.toLocaleString("th-TH");
+  $("subtitle").textContent =
+    `พบ ${S.list.length.toLocaleString("th-TH")} อัลบั้ม`;
+
+  if (!S.list.length) {
+    $("grid").innerHTML = `
+      <div class="empty">
+        <strong>ไม่พบอัลบั้มกิจกรรม</strong>
+        ลองเปลี่ยนหมวดหมู่ คำค้นหา หรือหน่วยงานที่เลือก
+      </div>
+    `;
+    return;
+  }
+
+  $("grid").innerHTML = S.list.map(album => {
+    const cover = albumCover(album);
+    const categories = albumCategories(album);
+    const photoCount = albumPhotoCount(album);
+    const eventDate = date(album.eventDate || album.publishedAt);
+
+    return `
+      <article
+        class="album"
+        data-id="${esc(album.id)}"
+        tabindex="0"
+        role="button"
+        aria-label="เปิดอัลบั้ม ${esc(album.title || "ไม่มีชื่อ")}"
+      >
+        <div class="cover">
+          ${
+            cover
+              ? `<img loading="lazy" src="${esc(cover)}" alt="${esc(album.title || "ภาพหน้าปกอัลบั้ม")}" referrerpolicy="no-referrer">`
+              : `
+                <div class="cover-placeholder" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <path d="m21 15-5-5L5 21"></path>
+                  </svg>
+                </div>
+              `
+          }
+          <span class="num">${photoCount.toLocaleString("th-TH")} รูป</span>
+        </div>
+
+        <div class="info">
+          <h3>${esc(album.title || "ไม่มีชื่ออัลบั้ม")}</h3>
+          <p>${esc(album.description || "ไม่มีรายละเอียดอัลบั้ม")}</p>
+
+          <div class="meta">
+            <span>${esc(album.org?.name || "หน่วยงาน")}</span>
+            <span>${esc(eventDate)}</span>
+          </div>
+
+          ${
+            categories.length
+              ? `<div class="category-label">${esc(categories.join(" · "))}</div>`
+              : ""
+          }
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  $("grid").querySelectorAll(".album").forEach(element => {
+    const openSelectedAlbum = () => {
+      const album = S.list.find(item => item.id === element.dataset.id);
+      if (album) openAlbum(album);
+    };
+
+    element.addEventListener("click", openSelectedAlbum);
+
+    element.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openSelectedAlbum();
+      }
+    });
+  });
+}
+
+async function openAlbum(album, updateUrl = true) {
+  S.album = album;
+  S.photos = [];
+  S.selected.clear();
+  S.selecting = false;
+  S.idx = 0;
+
+  $("title").textContent = album.title || "อัลบั้มกิจกรรม";
+
+  $("desc").textContent = [
+    album.org?.name,
+    date(album.eventDate || album.publishedAt),
+    album.description
+  ].filter(Boolean).join(" · ");
+
+  $("modal").classList.add("open");
+  document.body.classList.add("modal-open");
+
+  if (updateUrl) {
+    const url = new URL(location.href);
+    url.searchParams.set("album", album.id);
+    history.replaceState({}, "", url);
+  }
+
+  $("photos").innerHTML = `
+    <div class="empty">
+      <strong>กำลังโหลดภาพ</strong>
+      กรุณารอสักครู่…
+    </div>
+  `;
+
+  $("prog").style.display = "none";
+  $("fill").style.width = "0%";
+
+  try {
+    /*
+     * โหลดเฉพาะรูปของอัลบั้มที่เลือกและมีสถานะ ready
+     * รูปต้องมี albumId, status และ sortOrder ตามโครงสร้างระบบ
+     */
+    const snapshot = await getDocs(
+      query(
+        collection(db, "photos"),
+        where("albumId", "==", album.id),
+        where("status", "==", "ready"),
+        orderBy("sortOrder", "asc")
+      )
+    );
+
+    S.photos = snapshot.docs.map(document => ({
+      id: document.id,
+      ...document.data()
+    })).filter(photo => imageUrl(photo));
+
+    drawPhotos();
+  } catch (error) {
+    console.error("โหลดรูปภาพไม่สำเร็จ:", error);
+
+    $("photos").innerHTML = `
+      <div class="empty">
+        <strong>โหลดรูปภาพไม่สำเร็จ</strong>
+        โปรดตรวจสอบ Firestore Rules, ฟิลด์ albumId,
+        status, sortOrder และ Indexes
+      </div>
+    `;
+
+    toast("ไม่สามารถโหลดรูปภาพในอัลบั้มได้");
+  }
+}
+
+function drawPhotos() {
+  $("photos").classList.toggle("selecting", S.selecting);
+
+  if (!S.photos.length) {
+    $("photos").innerHTML = `
+      <div class="empty">
+        <strong>อัลบั้มนี้ยังไม่มีภาพ</strong>
+        เมื่อมีรูปภาพที่พร้อมเผยแพร่ รูปจะแสดงที่นี่
+      </div>
+    `;
+  } else {
+    $("photos").innerHTML = S.photos.map((photo, index) => `
+      <div
+        class="photo ${S.selected.has(photo.id) ? "selected" : ""}"
+        data-i="${index}"
+        tabindex="0"
+        role="button"
+        aria-label="ภาพที่ ${index + 1}"
+      >
+        <img
+          loading="lazy"
+          src="${esc(imageUrl(photo))}"
+          alt="ภาพกิจกรรม ${index + 1}"
+          referrerpolicy="no-referrer"
+        >
+        <span class="check" aria-hidden="true"></span>
+      </div>
+    `).join("");
+  }
+
+  $("photos").querySelectorAll(".photo").forEach(element => {
+    const activate = () => {
+      const index = Number(element.dataset.i);
+      const photo = S.photos[index];
+
+      if (!photo) return;
+
+      if (S.selecting) {
+        if (S.selected.has(photo.id)) {
+          S.selected.delete(photo.id);
+        } else {
+          S.selected.add(photo.id);
+        }
+
+        drawPhotos();
+        syncBar();
+      } else {
+        S.idx = index;
+        showLight();
+      }
+    };
+
+    element.addEventListener("click", activate);
+
+    element.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  $("select").textContent = S.selecting
+    ? "ยกเลิกการเลือก"
+    : "เลือกภาพ";
+
+  $("all").disabled = !S.photos.length;
+
+  syncBar();
+}
+
+function syncBar() {
+  $("bar").classList.toggle(
+    "show",
+    S.selecting && S.selected.size > 0
+  );
+
+  $("selCount").textContent =
+    `เลือกแล้ว ${S.selected.size.toLocaleString("th-TH")} รูป`;
+
+  $("downloadSel").disabled = S.selected.size === 0;
+}
+
+function closeAlbum() {
+  $("modal").classList.remove("open");
+  document.body.classList.remove("modal-open");
+
+  S.album = null;
+  S.photos = [];
+  S.selected.clear();
+  S.selecting = false;
+
+  $("light").classList.remove("open");
+  $("bar").classList.remove("show");
+  $("prog").style.display = "none";
+
+  const url = new URL(location.href);
+  url.searchParams.delete("album");
+  history.replaceState({}, "", url);
+}
+
+function showLight() {
+  const photo = S.photos[S.idx];
+  if (!photo) return;
+
+  $("li").src = imageUrl(photo);
+  $("light").classList.add("open");
+
+  $("lp").style.visibility = S.idx > 0 ? "visible" : "hidden";
+  $("ln").style.visibility =
+    S.idx < S.photos.length - 1 ? "visible" : "hidden";
+}
+
+function safeFilename(value) {
+  return String(value || "ActiGallery")
+    .replace(/[\\/:*?"<>|]/g, "-")
+    .replace(/\s+/g, " ")
+    .slice(0, 80);
+}
+
+function extensionFromMime(mimeType) {
+  const extensions = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/gif": "gif",
+    "image/avif": "avif",
+    "image/bmp": "bmp"
+  };
+
+  return extensions[mimeType] || "jpg";
+}
+
+function saveBlob(blob, filename) {
+  const objectUrl = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+
+  anchor.href = objectUrl;
+  anchor.download = filename;
+  anchor.style.display = "none";
+
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+}
+
+async function downloadPhotos(photos) {
+  if (!photos.length) {
+    toast("ไม่มีภาพให้ดาวน์โหลด");
+    return;
+  }
+
+  $("prog").style.display = "block";
+  $("fill").style.width = "0%";
+  $("progText").textContent = "กำลังเตรียมไฟล์…";
+
+  const albumName = safeFilename(S.album?.title || "ActiGallery");
+
+  /*
+   * หากเลือกภาพเดียว ให้ดาวน์โหลดเป็นไฟล์ภาพโดยตรง
+   */
+  if (photos.length === 1) {
+    try {
+      const response = await fetch(imageUrl(photos[0]));
+
+      if (!response.ok) {
+        throw new Error("ไม่สามารถดาวน์โหลดรูปภาพได้");
+      }
+
+      const blob = await response.blob();
+
+      saveBlob(
+        blob,
+        `${albumName}.${extensionFromMime(blob.type)}`
+      );
+
+      toast("เริ่มดาวน์โหลดรูปภาพแล้ว");
+    } catch (error) {
+      console.error(error);
+
+      window.open(imageUrl(photos[0]), "_blank", "noopener,noreferrer");
+
+      toast(
+        "เปิดภาพในแท็บใหม่ เนื่องจากแหล่งภาพอาจไม่อนุญาตให้ดาวน์โหลดโดยตรง"
+      );
+    } finally {
+      $("prog").style.display = "none";
+    }
+
+    return;
+  }
+
+  /*
+   * หลายภาพจะรวมเป็น ZIP ด้วย JSZip
+   * เบราว์เซอร์ต้องสามารถ fetch รูปจากแหล่งภาพได้
+   * หาก ImgBB หรือโดเมนต้นทางไม่อนุญาต CORS อาจดาวน์โหลดไม่ได้
+   */
+  try {
+    const { default: JSZip } = await import(
+      "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm"
+    );
+
+    const zip = new JSZip();
+    let succeeded = 0;
+    let failed = 0;
+
+    for (let index = 0; index < photos.length; index++) {
+      const photo = photos[index];
+
+      try {
+        const response = await fetch(imageUrl(photo));
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        const blob = await response.blob();
+        const filename =
+          `${String(index + 1).padStart(3, "0")}.` +
+          extensionFromMime(blob.type);
+
+        zip.file(filename, blob);
+        succeeded++;
+      } catch (error) {
+        failed++;
+        console.warn("ดาวน์โหลดภาพไม่สำเร็จ:", photo.id, error);
+      }
+
+      const percent = ((index + 1) / photos.length) * 75;
+      $("fill").style.width = `${percent}%`;
+      $("progText").textContent =
+        `กำลังรวบรวมภาพ ${index + 1}/${photos.length} · ล้มเหลว ${failed}`;
+    }
+
+    if (!succeeded) {
+      throw new Error(
+        "ไม่สามารถรวบรวมภาพได้ อาจเกิดจากข้อจำกัด CORS"
+      );
+    }
+
+    $("progText").textContent = "กำลังบีบอัดไฟล์ ZIP…";
+
+    const zipBlob = await zip.generateAsync(
+      { type: "blob" },
+      metadata => {
+        $("fill").style.width =
+          `${75 + metadata.percent * 0.25}%`;
+      }
+    );
+
+    saveBlob(zipBlob, `${albumName}.zip`);
+
+    toast(
+      `ดาวน์โหลด ${succeeded} ภาพแล้ว` +
+      (failed ? ` · ล้มเหลว ${failed} ภาพ` : "")
+    );
+  } catch (error) {
+    console.error("สร้าง ZIP ไม่สำเร็จ:", error);
+
+    toast(
+      "สร้าง ZIP ไม่สำเร็จ โปรดตรวจสอบ CORS ของแหล่งภาพ"
+    );
+  } finally {
+    setTimeout(() => {
+      $("prog").style.display = "none";
+    }, 2200);
+  }
+}
+
+/* =========================================================
+ * EVENT HANDLERS
+ * ========================================================= */
+
+$("q").addEventListener("input", draw);
+
+$("refresh").addEventListener("click", () => {
+  load();
+});
+
+$("close").addEventListener("click", closeAlbum);
+
+$("modal").addEventListener("click", event => {
+  if (event.target === $("modal")) {
+    closeAlbum();
+  }
+});
+
+$("select").addEventListener("click", () => {
+  S.selecting = !S.selecting;
+
+  if (!S.selecting) {
+    S.selected.clear();
+  }
+
+  drawPhotos();
+});
+
+$("cancel").addEventListener("click", () => {
+  S.selecting = false;
+  S.selected.clear();
+  drawPhotos();
+});
+
+$("downloadSel").addEventListener("click", () => {
+  const selectedPhotos = S.photos.filter(photo =>
+    S.selected.has(photo.id)
+  );
+
+  downloadPhotos(selectedPhotos);
+});
+
+$("all").addEventListener("click", () => {
+  downloadPhotos(S.photos);
+});
+
+$("share").addEventListener("click", async () => {
+  if (!S.album) return;
+
+  const url = new URL(location.href);
+  url.searchParams.set("album", S.album.id);
+
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: S.album.title || "ActiGallery",
+        text: "ชมอัลบั้มภาพกิจกรรม",
+        url: url.href
+      });
+    } else if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url.href);
+      toast("คัดลอกลิงก์อัลบั้มแล้ว");
+    } else {
+      window.prompt("คัดลอกลิงก์อัลบั้มนี้", url.href);
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      console.error(error);
+      toast("แชร์อัลบั้มไม่สำเร็จ");
+    }
+  }
+});
+
+$("lx").addEventListener("click", () => {
+  $("light").classList.remove("open");
+});
+
+$("lp").addEventListener("click", () => {
+  if (S.idx > 0) {
+    S.idx--;
+    showLight();
+  }
+});
+
+$("ln").addEventListener("click", () => {
+  if (S.idx < S.photos.length - 1) {
+    S.idx++;
+    showLight();
+  }
+});
+
+$("light").addEventListener("click", event => {
+  if (event.target === $("light")) {
+    $("light").classList.remove("open");
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    if ($("light").classList.contains("open")) {
+      $("light").classList.remove("open");
+    } else if ($("modal").classList.contains("open")) {
+      closeAlbum();
+    }
+  }
+
+  if ($("light").classList.contains("open")) {
+    if (event.key === "ArrowLeft") {
+      $("lp").click();
+    }
+
+    if (event.key === "ArrowRight") {
+      $("ln").click();
+    }
+  }
+});
+
+/* เริ่มโหลดข้อมูลจริงจาก Firebase */
+load();
+</script>
+</body>
+</html>
