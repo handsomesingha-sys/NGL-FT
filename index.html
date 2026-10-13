@@ -535,7 +535,7 @@ footer {
   <div class="head">
     <div>
       <h2>อัลบั้มกิจกรรม</h2>
-      <p id="subtitle">กำลังโหลดข้อมูลจาก Firebase…</p>
+      <p id="subtitle">กำลังโหลดข้อมูล…</p>
     </div>
     <button class="btn" id="refresh" type="button">รีเฟรช</button>
   </div>
@@ -715,7 +715,7 @@ async function load() {
   $("grid").innerHTML = `
     <div class="empty">
       <strong>กำลังโหลดอัลบั้ม</strong>
-      กำลังเชื่อมต่อฐานข้อมูล Firebase…
+      กำลังโหลดข้อมูล…
     </div>
   `;
 
@@ -812,8 +812,8 @@ async function load() {
       </div>
     `;
 
-    $("subtitle").textContent = "ไม่สามารถโหลดข้อมูลจากฐานข้อมูลได้";
-    toast("เชื่อมต่อ Firebase ไม่สำเร็จ");
+    $("subtitle").textContent = "ไม่สามารถโหลดฐานข้อมูลได้";
+    toast("เชื่อมต่อฐานข้อมูลไม่สำเร็จ");
   } finally {
     S.loading = false;
     $("refresh").disabled = false;
