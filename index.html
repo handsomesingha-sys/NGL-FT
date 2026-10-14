@@ -2305,66 +2305,78 @@
       return response;
     }
 
-    async function apiRequest(action, params = {}) {
-      if (!isConfiguredApiUrl()) {
-        throw new Error(
-          'ยังไม่ได้ตั้งค่า API_URL กรุณาใส่ URL ของ Google Apps Script Web App ในไฟล์ index.html'
-        );
-      }
+    
+async function apiRequest(action, params = {}) {
+  if (!isConfiguredApiUrl()) {
+    throw new Error(
+      'ยังไม่ได้ตั้งค่า API_URL กรุณาใส่ URL ของ Google Apps Script Web App ในไฟล์ index.html'
+    );
+  }
 
-      const controller = new AbortController();
-      const timeout = setTimeout(
-        () => controller.abort(),
-        CONFIG.REQUEST_TIMEOUT_MS
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    CONFIG.REQUEST_TIMEOUT_MS
+  );
+
+  try {
+    /*
+     * Public API ใช้ GET ให้ตรงกับ doGet(e) ใน Code.gs
+     * เพื่อให้ getPublicAlbums, getPublicAlbum,
+     * getAlbumPhotos และ getPublicCategories ทำงานได้
+     */
+    const url = new URL(CONFIG.API_URL);
+    url.searchParams.set('action', action);
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(key, String(value));
+      }
+    });
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      redirect: 'follow',
+      cache: 'no-store',
+      signal: controller.signal
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        'การเชื่อมต่อ API ล้มเหลว (HTTP ' + response.status + ')'
       );
-
-      try {
-        const payload = {
-          action: action,
-          ...params
-        };
-
-        const response = await fetch(CONFIG.API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
-          body: JSON.stringify(payload),
-          redirect: 'follow',
-          signal: controller.signal
-        });
-
-        if (!response.ok) {
-          throw new Error('การเชื่อมต่อ API ล้มเหลว (HTTP ' + response.status + ')');
-        }
-
-        const text = await response.text();
-
-        if (!text) {
-          throw new Error('API ส่งข้อมูลว่างกลับมา');
-        }
-
-        let json;
-
-        try {
-          json = JSON.parse(text);
-        } catch (error) {
-          throw new Error(
-            'ไม่สามารถอ่านข้อมูลจาก API ได้ กรุณาตรวจสอบการ Deploy และสิทธิ์การเข้าถึง Web App'
-          );
-        }
-
-        return unwrapApiResponse(json);
-      } catch (error) {
-        if (error && error.name === 'AbortError') {
-          throw new Error('การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่อีกครั้ง');
-        }
-
-        throw error;
-      } finally {
-        clearTimeout(timeout);
-      }
     }
+
+    const text = await response.text();
+
+    if (!text || !text.trim()) {
+      throw new Error('API ส่งข้อมูลว่างกลับมา');
+    }
+
+    let json;
+
+    try {
+      json = JSON.parse(text);
+    } catch (error) {
+      throw new Error(
+        'อ่านข้อมูล API ไม่สำเร็จ กรุณาตรวจสอบ URL และการ Deploy Google Apps Script'
+      );
+    }
+
+    return unwrapApiResponse(json);
+
+  } catch (error) {
+    if (error && error.name === 'AbortError') {
+      throw new Error(
+        'การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่อีกครั้ง'
+      );
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
     function normalizeAlbum(raw) {
       const album = raw || {};
