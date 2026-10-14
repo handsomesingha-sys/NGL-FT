@@ -1,0 +1,4242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta name="description" content="ActiGallery คลังภาพกิจกรรม รวบรวมภาพความทรงจำ ดาวน์โหลดและแบ่งปันอัลบั้มกิจกรรมได้ง่าย ๆ">
+<meta property="og:site_name" content="ActiGallery">
+<meta property="og:title" content="ActiGallery — คลังภาพกิจกรรม">
+<meta property="og:description" content="ค้นหา รับชม และดาวน์โหลดภาพกิจกรรมได้ในที่เดียว">
+<meta property="og:type" content="website">
+<meta property="og:image" content="">
+<title>ActiGallery — คลังภาพกิจกรรม</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://i.ibb.co">
+
+<style>
+:root {
+--primary: #3659e3;
+--primary-dark: #2846bf;
+--primary-soft: #edf1ff;
+--text: #182033;
+--text-secondary: #697386;
+--text-muted: #8a93a5;
+--background: #f6f8fc;
+--surface: #ffffff;
+--border: #e7eaf1;
+--success: #16845b;
+--success-soft: #e8f8f0;
+--danger: #c73945;
+--danger-soft: #fff0f1;
+--warning: #946200;
+--warning-soft: #fff7df;
+--shadow-sm: 0 2px 8px rgba(20, 35, 80, 0.04);
+--shadow-md: 0 10px 30px rgba(20, 35, 80, 0.09);
+--shadow-lg: 0 24px 70px rgba(20, 35, 80, 0.18);
+--radius-sm: 10px;
+--radius-md: 16px;
+--radius-lg: 24px;
+--content-width: 1240px;
+--font: "Inter", "IBM Plex Sans Thai", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+box-sizing: border-box;
+}
+
+html {
+scroll-behavior: smooth;
+scroll-padding-top: 90px;
+}
+
+body {
+margin: 0;
+color: var(--text);
+background: var(--background);
+font-family: var(--font);
+font-size: 15px;
+line-height: 1.65;
+-webkit-font-smoothing: antialiased;
+overflow-x: hidden;
+}
+
+body.modal-open {
+overflow: hidden;
+}
+
+button,
+input,
+select {
+font: inherit;
+}
+
+button {
+cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+outline: 3px solid rgba(54, 89, 227, 0.3);
+outline-offset: 3px;
+}
+
+button:disabled {
+opacity: 0.55;
+cursor: not-allowed;
+}
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+img {
+display: block;
+max-width: 100%;
+}
+
+.hidden {
+display: none !important;
+}
+
+.container {
+width: min(var(--content-width), calc(100% - 40px));
+margin-inline: auto;
+}
+
+.muted {
+color: var(--text-secondary);
+}
+
+.small {
+font-size: 12px;
+}
+
+.topbar {
+position: sticky;
+top: 0;
+z-index: 100;
+background: rgba(255, 255, 255, 0.94);
+border-bottom: 1px solid rgba(231, 234, 241, 0.9);
+backdrop-filter: blur(18px);
+-webkit-backdrop-filter: blur(18px);
+}
+
+.topbar-inner {
+min-height: 74px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 20px;
+}
+
+.brand {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+min-width: 0;
+}
+
+.brand-logo {
+width: 44px;
+height: 44px;
+flex: 0 0 44px;
+display: grid;
+place-items: center;
+color: #fff;
+background: linear-gradient(145deg, #5575ff, #304fd2);
+border-radius: 14px;
+box-shadow: 0 7px 18px rgba(54, 89, 227, 0.23);
+}
+
+.brand-logo svg {
+width: 25px;
+height: 25px;
+}
+
+.brand-name {
+font-size: 21px;
+font-weight: 850;
+letter-spacing: -0.7px;
+line-height: 1.2;
+}
+
+.brand-subtitle {
+margin-top: 3px;
+color: var(--text-secondary);
+font-size: 11px;
+line-height: 1.3;
+}
+
+.topbar-actions {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.button {
+min-height: 42px;
+padding: 10px 15px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+border: 1px solid transparent;
+border-radius: 11px;
+font-size: 13px;
+font-weight: 750;
+line-height: 1.2;
+transition:
+background 0.18s ease,
+border-color 0.18s ease,
+transform 0.18s ease,
+box-shadow 0.18s ease;
+}
+
+.button:hover:not(:disabled) {
+transform: translateY(-1px);
+}
+
+.button svg {
+width: 17px;
+height: 17px;
+flex: 0 0 auto;
+}
+
+.button-primary {
+color: #fff;
+background: var(--primary);
+box-shadow: 0 5px 12px rgba(54, 89, 227, 0.15);
+}
+
+.button-primary:hover:not(:disabled) {
+background: var(--primary-dark);
+}
+
+.button-secondary {
+color: var(--text);
+background: #fff;
+border-color: var(--border);
+}
+
+.button-secondary:hover:not(:disabled) {
+background: #f8f9fd;
+border-color: #cbd2e2;
+}
+
+.button-soft {
+color: var(--primary);
+background: var(--primary-soft);
+}
+
+.button-danger {
+color: var(--danger);
+background: var(--danger-soft);
+border-color: #ffd9dc;
+}
+
+.button-plain {
+color: var(--text-secondary);
+background: transparent;
+border-color: transparent;
+}
+
+.button-small {
+min-height: 34px;
+padding: 7px 10px;
+font-size: 12px;
+border-radius: 9px;
+}
+
+.button-block {
+width: 100%;
+}
+
+.hero {
+position: relative;
+overflow: hidden;
+padding: 64px 0 55px;
+background:
+radial-gradient(ellipse at 85% 10%, rgba(117, 147, 255, 0.18), transparent 36%),
+radial-gradient(ellipse at 10% 90%, rgba(116, 174, 255, 0.13), transparent 32%),
+linear-gradient(135deg, #ffffff 0%, #f2f5ff 52%, #f8faff 100%);
+border-bottom: 1px solid #edf0f7;
+}
+
+.hero::before {
+content: "";
+position: absolute;
+width: 320px;
+height: 320px;
+right: -120px;
+bottom: -200px;
+border: 1px solid rgba(54, 89, 227, 0.12);
+border-radius: 50%;
+box-shadow:
+0 0 0 32px rgba(54, 89, 227, 0.025),
+0 0 0 64px rgba(54, 89, 227, 0.02);
+pointer-events: none;
+}
+
+.hero-content {
+position: relative;
+z-index: 1;
+max-width: 790px;
+}
+
+.eyebrow {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+padding: 7px 12px;
+color: var(--primary);
+background: #fff;
+border: 1px solid #e3e8ff;
+border-radius: 100px;
+font-size: 12px;
+font-weight: 800;
+letter-spacing: 0.15px;
+}
+
+.eyebrow-dot {
+width: 7px;
+height: 7px;
+background: #4f70f0;
+border-radius: 50%;
+box-shadow: 0 0 0 4px rgba(79, 112, 240, 0.12);
+}
+
+.hero h1 {
+margin: 21px 0 13px;
+font-size: clamp(32px, 5vw, 52px);
+line-height: 1.2;
+letter-spacing: -1.6px;
+font-weight: 900;
+}
+
+.hero h1 span {
+color: var(--primary);
+}
+
+.hero-description {
+max-width: 610px;
+margin: 0;
+color: var(--text-secondary);
+font-size: clamp(14px, 2vw, 17px);
+line-height: 1.9;
+}
+
+.hero-stats {
+display: flex;
+flex-wrap: wrap;
+gap: 12px;
+margin-top: 27px;
+}
+
+.stat-pill {
+min-height: 43px;
+display: inline-flex;
+align-items: center;
+gap: 9px;
+padding: 9px 14px;
+color: #4f5a70;
+background: rgba(255, 255, 255, 0.82);
+border: 1px solid #e7eaf5;
+border-radius: 12px;
+font-size: 12px;
+}
+
+.stat-pill strong {
+color: var(--text);
+font-size: 14px;
+}
+
+.stat-pill svg {
+width: 17px;
+height: 17px;
+color: var(--primary);
+}
+
+.main-content {
+padding: 36px 0 75px;
+}
+
+.album-view-banner {
+margin-bottom: 24px;
+padding: 17px 19px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 14px;
+background: #fff;
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+box-shadow: var(--shadow-sm);
+}
+
+.album-view-banner-title {
+display: flex;
+align-items: center;
+gap: 11px;
+font-weight: 800;
+}
+
+.album-view-banner-title svg {
+width: 21px;
+height: 21px;
+color: var(--primary);
+}
+
+.section-heading {
+margin-bottom: 23px;
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+gap: 20px;
+}
+
+.section-title {
+margin: 0;
+font-size: 25px;
+font-weight: 900;
+letter-spacing: -0.55px;
+line-height: 1.35;
+}
+
+.section-description {
+margin: 6px 0 0;
+color: var(--text-secondary);
+font-size: 13px;
+}
+
+.results-count {
+color: var(--text-secondary);
+font-size: 12px;
+white-space: nowrap;
+}
+
+.toolbar {
+margin-bottom: 25px;
+display: grid;
+grid-template-columns: minmax(220px, 1fr) minmax(170px, 230px) auto;
+align-items: center;
+gap: 12px;
+}
+
+.search-box {
+min-height: 47px;
+padding: 0 14px;
+display: flex;
+align-items: center;
+gap: 10px;
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 12px;
+transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.search-box:focus-within {
+border-color: #8da1ff;
+box-shadow: 0 0 0 3px rgba(54, 89, 227, 0.08);
+}
+
+.search-box svg {
+width: 19px;
+height: 19px;
+flex: 0 0 auto;
+color: var(--text-muted);
+}
+
+.search-box input {
+width: 100%;
+min-width: 0;
+padding: 12px 0;
+color: var(--text);
+background: transparent;
+border: 0;
+outline: 0;
+font-size: 13px;
+}
+
+.search-box input::placeholder {
+color: #9aa2b2;
+}
+
+.select-control {
+width: 100%;
+min-height: 47px;
+padding: 0 36px 0 13px;
+color: #465168;
+background-color: #fff;
+border: 1px solid var(--border);
+border-radius: 12px;
+font-size: 13px;
+outline: none;
+}
+
+.view-toggle {
+min-height: 47px;
+padding: 4px;
+display: inline-flex;
+gap: 3px;
+background: #e9edf5;
+border-radius: 12px;
+}
+
+.view-toggle button {
+width: 39px;
+display: grid;
+place-items: center;
+color: #798399;
+background: transparent;
+border: 0;
+border-radius: 9px;
+}
+
+.view-toggle button.active {
+color: var(--primary);
+background: #fff;
+box-shadow: 0 2px 6px rgba(25, 39, 80, 0.08);
+}
+
+.view-toggle svg {
+width: 19px;
+height: 19px;
+}
+
+.album-grid {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 23px;
+}
+
+.album-grid.list-view {
+grid-template-columns: 1fr;
+gap: 13px;
+}
+
+.album-card {
+min-width: 0;
+overflow: hidden;
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 17px;
+box-shadow: var(--shadow-sm);
+transition:
+transform 0.2s ease,
+box-shadow 0.2s ease,
+border-color 0.2s ease;
+}
+
+.album-card:hover {
+transform: translateY(-4px);
+border-color: #d6def8;
+box-shadow: var(--shadow-md);
+}
+
+.album-cover {
+position: relative;
+overflow: hidden;
+aspect-ratio: 16 / 10;
+background: linear-gradient(135deg, #e9edfa, #f5f6fb);
+}
+
+.album-cover img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.35s ease;
+}
+
+.album-card:hover .album-cover img {
+transform: scale(1.045);
+}
+
+.cover-placeholder {
+width: 100%;
+height: 100%;
+display: grid;
+place-items: center;
+color: #9aa7cb;
+background:
+radial-gradient(circle at 20% 20%, #f9fbff 0, transparent 40%),
+linear-gradient(145deg, #e8edff, #f5f7fc);
+}
+
+.cover-placeholder svg {
+width: 47px;
+height: 47px;
+opacity: 0.8;
+}
+
+.cover-shade {
+position: absolute;
+inset: 45% 0 0;
+background: linear-gradient(transparent, rgba(13, 22, 44, 0.42));
+pointer-events: none;
+}
+
+.photo-count-badge {
+position: absolute;
+left: 12px;
+bottom: 12px;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+padding: 6px 9px;
+color: #fff;
+background: rgba(17, 24, 39, 0.66);
+border: 1px solid rgba(255, 255, 255, 0.16);
+border-radius: 8px;
+font-size: 11px;
+font-weight: 700;
+backdrop-filter: blur(8px);
+}
+
+.photo-count-badge svg {
+width: 14px;
+height: 14px;
+}
+
+.album-card-body {
+padding: 17px;
+}
+
+.album-category {
+margin-bottom: 8px;
+display: inline-flex;
+align-items: center;
+gap: 5px;
+padding: 4px 8px;
+color: var(--primary);
+background: var(--primary-soft);
+border-radius: 6px;
+font-size: 10px;
+font-weight: 800;
+}
+
+.album-title {
+margin: 0;
+display: -webkit-box;
+overflow: hidden;
+color: var(--text);
+font-size: 17px;
+font-weight: 850;
+line-height: 1.5;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow-wrap: anywhere;
+}
+
+.album-description {
+min-height: 44px;
+margin: 8px 0 14px;
+display: -webkit-box;
+overflow: hidden;
+color: var(--text-secondary);
+font-size: 12px;
+line-height: 1.8;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow-wrap: anywhere;
+}
+
+.album-card-footer {
+padding-top: 13px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 8px;
+border-top: 1px solid #f0f2f7;
+}
+
+.album-date {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+color: var(--text-muted);
+font-size: 11px;
+}
+
+.album-date svg {
+width: 14px;
+height: 14px;
+}
+
+.album-card-footer .button {
+flex-shrink: 0;
+}
+
+.album-grid.list-view .album-card {
+display: grid;
+grid-template-columns: 230px minmax(0, 1fr);
+}
+
+.album-grid.list-view .album-cover {
+height: 100%;
+min-height: 190px;
+aspect-ratio: auto;
+}
+
+.album-grid.list-view .album-card-body {
+padding: 20px;
+}
+
+.album-grid.list-view .album-description {
+min-height: 0;
+-webkit-line-clamp: 3;
+}
+
+.skeleton {
+overflow: hidden;
+background: #e9edf5;
+border-radius: 8px;
+position: relative;
+}
+
+.skeleton::after {
+content: "";
+position: absolute;
+inset: 0;
+transform: translateX(-100%);
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent);
+animation: shimmer 1.35s infinite;
+}
+
+@keyframes shimmer {
+100% {
+transform: translateX(100%);
+}
+}
+
+.skeleton-card {
+overflow: hidden;
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 17px;
+}
+
+.skeleton-cover {
+aspect-ratio: 16 / 10;
+}
+
+.skeleton-body {
+padding: 17px;
+}
+
+.skeleton-line {
+height: 12px;
+margin-bottom: 12px;
+}
+
+.skeleton-line.short {
+width: 45%;
+}
+
+.skeleton-line.medium {
+width: 72%;
+}
+
+.skeleton-line.long {
+width: 100%;
+}
+
+.empty-state {
+padding: 70px 20px;
+text-align: center;
+background: #fff;
+border: 1px dashed #dbe1ee;
+border-radius: var(--radius-lg);
+}
+
+.empty-icon {
+width: 70px;
+height: 70px;
+margin: 0 auto 18px;
+display: grid;
+place-items: center;
+color: #7890e8;
+background: #eef2ff;
+border-radius: 23px;
+}
+
+.empty-icon svg {
+width: 32px;
+height: 32px;
+}
+
+.empty-state h3 {
+margin: 0 0 7px;
+font-size: 19px;
+font-weight: 850;
+}
+
+.empty-state p {
+max-width: 420px;
+margin: 0 auto 20px;
+color: var(--text-secondary);
+font-size: 13px;
+}
+
+.pagination {
+margin-top: 35px;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-wrap: wrap;
+gap: 8px;
+}
+
+.page-button {
+min-width: 40px;
+height: 40px;
+padding: 0 11px;
+display: grid;
+place-items: center;
+color: #4c5870;
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 10px;
+font-size: 12px;
+font-weight: 750;
+}
+
+.page-button.active {
+color: #fff;
+background: var(--primary);
+border-color: var(--primary);
+}
+
+.page-button svg {
+width: 17px;
+height: 17px;
+}
+
+.page-info {
+margin: 0 8px;
+color: var(--text-secondary);
+font-size: 12px;
+}
+
+.footer {
+padding: 34px 0;
+background: #fff;
+border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 22px;
+}
+
+.footer-brand {
+font-size: 15px;
+font-weight: 900;
+letter-spacing: -0.3px;
+}
+
+.footer-text {
+margin-top: 5px;
+color: var(--text-secondary);
+font-size: 11px;
+}
+
+.footer-right {
+color: var(--text-muted);
+font-size: 11px;
+text-align: right;
+}
+
+/* Album detail modal */
+
+.modal {
+position: fixed;
+inset: 0;
+z-index: 500;
+padding: 22px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: rgba(13, 20, 39, 0.62);
+backdrop-filter: blur(7px);
+-webkit-backdrop-filter: blur(7px);
+animation: fade-in 0.15s ease;
+}
+
+@keyframes fade-in {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+
+.modal-panel {
+width: min(1120px, 100%);
+max-height: min(92vh, 1000px);
+display: flex;
+flex-direction: column;
+overflow: hidden;
+background: #fff;
+border-radius: 21px;
+box-shadow: var(--shadow-lg);
+animation: modal-up 0.2s ease;
+}
+
+@keyframes modal-up {
+from {
+opacity: 0;
+transform: translateY(10px) scale(0.99);
+}
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+
+.modal-header {
+min-height: 76px;
+padding: 17px 23px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 15px;
+border-bottom: 1px solid var(--border);
+}
+
+.modal-heading {
+min-width: 0;
+}
+
+.modal-title {
+margin: 0;
+overflow: hidden;
+font-size: 19px;
+font-weight: 900;
+line-height: 1.45;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.modal-subtitle {
+margin-top: 3px;
+color: var(--text-secondary);
+font-size: 11px;
+}
+
+.icon-button {
+width: 39px;
+height: 39px;
+flex: 0 0 auto;
+display: grid;
+place-items: center;
+color: #667087;
+background: #f3f5f9;
+border: 1px solid transparent;
+border-radius: 11px;
+transition: background 0.15s ease;
+}
+
+.icon-button:hover {
+color: var(--text);
+background: #e9edf5;
+}
+
+.icon-button svg {
+width: 20px;
+height: 20px;
+}
+
+.modal-description {
+padding: 14px 23px;
+color: var(--text-secondary);
+background: #fbfcff;
+border-bottom: 1px solid var(--border);
+font-size: 13px;
+line-height: 1.8;
+white-space: pre-wrap;
+overflow-wrap: anywhere;
+}
+
+.gallery-toolbar {
+padding: 13px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 12px;
+background: #fff;
+border-bottom: 1px solid var(--border);
+}
+
+.gallery-selection-info {
+display: flex;
+align-items: center;
+flex-wrap: wrap;
+gap: 11px;
+color: var(--text-secondary);
+font-size: 12px;
+}
+
+.selection-count {
+color: var(--primary);
+font-weight: 850;
+}
+
+.selection-link {
+padding: 4px 0;
+color: var(--primary);
+background: transparent;
+border: 0;
+font-size: 12px;
+font-weight: 750;
+}
+
+.gallery-actions {
+display: flex;
+align-items: center;
+flex-wrap: wrap;
+gap: 7px;
+}
+
+.gallery-content {
+min-height: 180px;
+padding: 20px;
+overflow: auto;
+overscroll-behavior: contain;
+background: #f8f9fc;
+}
+
+.photo-grid {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 13px;
+}
+
+.photo-card {
+position: relative;
+min-width: 0;
+overflow: hidden;
+background: #fff;
+border: 2px solid transparent;
+border-radius: 12px;
+box-shadow: 0 2px 6px rgba(20, 35, 80, 0.04);
+transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.photo-card.selected {
+border-color: var(--primary);
+box-shadow: 0 0 0 2px rgba(54, 89, 227, 0.13);
+}
+
+.photo-image-wrap {
+position: relative;
+overflow: hidden;
+aspect-ratio: 1 / 1;
+background: #e9edf5;
+}
+
+.photo-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+cursor: zoom-in;
+transition: transform 0.2s ease;
+}
+
+.photo-card:hover .photo-image {
+transform: scale(1.04);
+}
+
+.photo-select {
+position: absolute;
+top: 9px;
+left: 9px;
+z-index: 2;
+width: 27px;
+height: 27px;
+display: grid;
+place-items: center;
+color: #526078;
+background: rgba(255, 255, 255, 0.95);
+border: 1px solid rgba(221, 226, 238, 0.9);
+border-radius: 8px;
+box-shadow: 0 2px 6px rgba(10, 20, 50, 0.12);
+}
+
+.photo-select svg {
+width: 16px;
+height: 16px;
+}
+
+.photo-card.selected .photo-select {
+color: #fff;
+background: var(--primary);
+border-color: var(--primary);
+}
+
+.photo-number {
+position: absolute;
+right: 8px;
+bottom: 8px;
+padding: 3px 7px;
+color: #fff;
+background: rgba(17, 24, 39, 0.63);
+border-radius: 6px;
+font-size: 10px;
+font-weight: 800;
+}
+
+.photo-card-footer {
+padding: 8px 9px 9px;
+}
+
+.photo-filename {
+display: block;
+overflow: hidden;
+color: #59647a;
+font-size: 10px;
+line-height: 1.5;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.gallery-loading {
+min-height: 220px;
+display: grid;
+place-items: center;
+align-content: center;
+gap: 12px;
+color: var(--text-secondary);
+text-align: center;
+font-size: 13px;
+}
+
+.spinner {
+width: 29px;
+height: 29px;
+border: 3px solid #e2e7f5;
+border-top-color: var(--primary);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+to {
+transform: rotate(360deg);
+}
+}
+
+.modal-footer {
+min-height: 63px;
+padding: 12px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+border-top: 1px solid var(--border);
+background: #fff;
+}
+
+.modal-footer-note {
+color: var(--text-secondary);
+font-size: 11px;
+}
+
+/* Lightbox */
+
+.lightbox {
+position: fixed;
+inset: 0;
+z-index: 700;
+padding: 22px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 14px;
+background: rgba(5, 8, 17, 0.95);
+animation: fade-in 0.15s ease;
+}
+
+.lightbox-top {
+width: min(1200px, 100%);
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 15px;
+color: #fff;
+}
+
+.lightbox-caption {
+min-width: 0;
+overflow: hidden;
+font-size: 12px;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.lightbox-controls {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.lightbox .icon-button {
+color: #fff;
+background: rgba(255, 255, 255, 0.12);
+border-color: rgba(255, 255, 255, 0.12);
+}
+
+.lightbox-image-wrap {
+position: relative;
+width: min(1200px, 100%);
+height: min(76vh, 760px);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.lightbox-image {
+max-width: 100%;
+max-height: 100%;
+width: auto;
+height: auto;
+object-fit: contain;
+border-radius: 5px;
+user-select: none;
+}
+
+.lightbox-nav {
+position: absolute;
+top: 50%;
+width: 43px;
+height: 43px;
+display: grid;
+place-items: center;
+color: #fff;
+background: rgba(255, 255, 255, 0.13);
+border: 1px solid rgba(255, 255, 255, 0.14);
+border-radius: 50%;
+transform: translateY(-50%);
+}
+
+.lightbox-nav:hover {
+background: rgba(255, 255, 255, 0.23);
+}
+
+.lightbox-nav svg {
+width: 22px;
+height: 22px;
+}
+
+.lightbox-prev {
+left: 10px;
+}
+
+.lightbox-next {
+right: 10px;
+}
+
+.lightbox-bottom {
+color: rgba(255, 255, 255, 0.75);
+font-size: 12px;
+}
+
+/* Toasts and dialogs */
+
+.toast-container {
+position: fixed;
+right: 20px;
+bottom: 20px;
+z-index: 1000;
+width: min(380px, calc(100vw - 40px));
+display: flex;
+flex-direction: column;
+gap: 10px;
+pointer-events: none;
+}
+
+.toast {
+padding: 13px 15px;
+display: flex;
+align-items: flex-start;
+gap: 10px;
+color: var(--text);
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 13px;
+box-shadow: var(--shadow-lg);
+font-size: 12px;
+line-height: 1.65;
+animation: toast-in 0.2s ease;
+pointer-events: auto;
+}
+
+@keyframes toast-in {
+from {
+opacity: 0;
+transform: translateY(8px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.toast-icon {
+width: 24px;
+height: 24px;
+flex: 0 0 24px;
+display: grid;
+place-items: center;
+color: var(--success);
+background: var(--success-soft);
+border-radius: 8px;
+}
+
+.toast-icon svg {
+width: 15px;
+height: 15px;
+}
+
+.toast.error .toast-icon {
+color: var(--danger);
+background: var(--danger-soft);
+}
+
+.toast.warning .toast-icon {
+color: var(--warning);
+background: var(--warning-soft);
+}
+
+.confirm-overlay {
+position: fixed;
+inset: 0;
+z-index: 900;
+padding: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: rgba(13, 20, 39, 0.5);
+backdrop-filter: blur(4px);
+}
+
+.confirm-dialog {
+width: min(390px, 100%);
+padding: 25px;
+background: #fff;
+border-radius: 18px;
+box-shadow: var(--shadow-lg);
+}
+
+.confirm-dialog h3 {
+margin: 0 0 9px;
+font-size: 18px;
+font-weight: 900;
+}
+
+.confirm-dialog p {
+margin: 0;
+color: var(--text-secondary);
+font-size: 13px;
+line-height: 1.8;
+overflow-wrap: anywhere;
+}
+
+.confirm-actions {
+margin-top: 22px;
+display: flex;
+justify-content: flex-end;
+gap: 9px;
+}
+
+/* Responsive */
+
+@media (max-width: 1020px) {
+.album-grid {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.photo-grid {
+grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.hero {
+padding: 52px 0 46px;
+}
+}
+
+@media (max-width: 700px) {
+.container {
+width: min(100% - 28px, var(--content-width));
+}
+
+.topbar-inner {
+min-height: 65px;
+gap: 10px;
+}
+
+.brand {
+gap: 9px;
+}
+
+.brand-logo {
+width: 39px;
+height: 39px;
+flex-basis: 39px;
+border-radius: 12px;
+}
+
+.brand-logo svg {
+width: 22px;
+height: 22px;
+}
+
+.brand-name {
+font-size: 18px;
+}
+
+.brand-subtitle {
+font-size: 10px;
+}
+
+.topbar-actions .button {
+min-height: 37px;
+padding: 8px 10px;
+font-size: 11px;
+}
+
+.hero {
+padding: 41px 0 38px;
+}
+
+.hero h1 {
+margin-top: 17px;
+font-size: clamp(29px, 8vw, 39px);
+letter-spacing: -1px;
+}
+
+.hero-description {
+font-size: 13px;
+}
+
+.hero-stats {
+gap: 8px;
+margin-top: 21px;
+}
+
+.stat-pill {
+min-height: 38px;
+padding: 7px 10px;
+font-size: 10px;
+}
+
+.stat-pill strong {
+font-size: 12px;
+}
+
+.main-content {
+padding: 27px 0 52px;
+}
+
+.section-heading {
+align-items: flex-start;
+flex-direction: column;
+gap: 7px;
+margin-bottom: 17px;
+}
+
+.section-title {
+font-size: 22px;
+}
+
+.toolbar {
+grid-template-columns: minmax(0, 1fr) auto;
+gap: 9px;
+margin-bottom: 18px;
+}
+
+.search-box {
+grid-column: 1 / -1;
+min-height: 44px;
+}
+
+.select-control {
+min-height: 44px;
+font-size: 12px;
+}
+
+.view-toggle {
+min-height: 44px;
+}
+
+.view-toggle button {
+width: 35px;
+}
+
+.album-grid {
+gap: 13px;
+}
+
+.album-card {
+border-radius: 13px;
+}
+
+.album-card-body {
+padding: 11px;
+}
+
+.album-title {
+font-size: 13px;
+line-height: 1.5;
+}
+
+.album-description {
+min-height: 38px;
+margin: 6px 0 10px;
+font-size: 10px;
+line-height: 1.7;
+}
+
+.album-category {
+margin-bottom: 6px;
+padding: 3px 6px;
+font-size: 9px;
+}
+
+.album-card-footer {
+padding-top: 9px;
+align-items: flex-start;
+flex-direction: column;
+}
+
+.album-card-footer .button {
+width: 100%;
+min-height: 32px;
+padding: 6px 8px;
+font-size: 10px;
+}
+
+.album-date {
+font-size: 9px;
+}
+
+.photo-count-badge {
+left: 7px;
+bottom: 7px;
+padding: 5px 7px;
+font-size: 9px;
+}
+
+.album-grid.list-view .album-card {
+grid-template-columns: 115px minmax(0, 1fr);
+}
+
+.album-grid.list-view .album-cover {
+min-height: 155px;
+}
+
+.album-grid.list-view .album-card-body {
+padding: 11px;
+}
+
+.album-grid.list-view .album-card-footer {
+flex-direction: row;
+align-items: center;
+}
+
+.album-grid.list-view .album-card-footer .button {
+width: auto;
+}
+
+.modal {
+padding: 0;
+align-items: stretch;
+}
+
+.modal-panel {
+width: 100%;
+max-height: 100%;
+height: 100%;
+border-radius: 0;
+}
+
+.modal-header {
+min-height: 66px;
+padding: 12px 14px;
+}
+
+.modal-title {
+font-size: 16px;
+}
+
+.modal-description {
+padding: 11px 15px;
+font-size: 12px;
+}
+
+.gallery-toolbar {
+padding: 10px 12px;
+align-items: flex-start;
+flex-direction: column;
+gap: 9px;
+}
+
+.gallery-selection-info {
+width: 100%;
+justify-content: space-between;
+gap: 7px;
+}
+
+.gallery-actions {
+width: 100%;
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gallery-actions .button {
+min-width: 0;
+padding: 8px 5px;
+font-size: 10px;
+}
+
+.gallery-content {
+padding: 11px;
+}
+
+.photo-grid {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 9px;
+}
+
+.photo-card {
+border-radius: 10px;
+}
+
+.photo-select {
+top: 6px;
+left: 6px;
+width: 25px;
+height: 25px;
+}
+
+.photo-card-footer {
+padding: 6px 7px 7px;
+}
+
+.photo-filename {
+font-size: 9px;
+}
+
+.modal-footer {
+min-height: 58px;
+padding: 9px 12px;
+}
+
+.modal-footer-note {
+max-width: 52%;
+font-size: 10px;
+}
+
+.modal-footer .button {
+min-height: 36px;
+padding: 8px 10px;
+font-size: 11px;
+}
+
+.album-view-banner {
+align-items: flex-start;
+flex-direction: column;
+padding: 13px;
+}
+
+.footer-inner {
+align-items: flex-start;
+flex-direction: column;
+gap: 15px;
+}
+
+.footer-right {
+text-align: left;
+}
+
+.lightbox {
+padding: 12px;
+}
+
+.lightbox-image-wrap {
+height: min(74vh, 700px);
+}
+
+.lightbox-nav {
+width: 37px;
+height: 37px;
+}
+
+.lightbox-prev {
+left: 3px;
+}
+
+.lightbox-next {
+right: 3px;
+}
+
+.toast-container {
+right: 12px;
+bottom: 12px;
+width: calc(100vw - 24px);
+}
+}
+
+@media (max-width: 380px) {
+.container {
+width: calc(100% - 22px);
+}
+
+.brand-name {
+font-size: 16px;
+}
+
+.brand-subtitle {
+max-width: 145px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.topbar-actions .button {
+padding: 7px 8px;
+}
+
+.album-grid {
+gap: 9px;
+}
+
+.album-card-body {
+padding: 9px;
+}
+
+.album-title {
+font-size: 12px;
+}
+
+.album-grid.list-view .album-card {
+grid-template-columns: 98px minmax(0, 1fr);
+}
+}
+
+@media (prefers-reduced-motion: reduce) {
+*,
+*::before,
+*::after {
+scroll-behavior: auto !important;
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.01ms !important;
+}
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+<div class="container topbar-inner">
+<a class="brand" href="/" aria-label="ActiGallery หน้าแรก" id="brandHome">
+<span class="brand-logo" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="18" height="18" rx="4"></rect>
+<circle cx="8.5" cy="8.5" r="1.5"></circle>
+<path d="m21 15-5-5L5 21"></path>
+</svg>
+</span>
+<span>
+<span class="brand-name">ActiGallery</span>
+<span class="brand-subtitle">ACTIVITY PHOTO GALLERY</span>
+</span>
+</a>
+
+<div class="topbar-actions">
+<button class="button button-secondary" id="headerHomeButton" type="button">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="m3 10 9-7 9 7"></path>
+<path d="M5 9v11h14V9"></path>
+<path d="M9 20v-6h6v6"></path>
+</svg>
+<span>หน้าแรก</span>
+</button>
+<button class="button button-primary" id="headerShareButton" type="button">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="18" cy="5" r="3"></circle>
+<circle cx="6" cy="12" r="3"></circle>
+<circle cx="18" cy="19" r="3"></circle>
+<path d="m8.7 10.7 6.6-4.4"></path>
+<path d="m8.7 13.3 6.6 4.4"></path>
+</svg>
+<span>แชร์เว็บไซต์</span>
+</button>
+</div>
+</div>
+</header>
+
+<section class="hero" id="heroSection">
+<div class="container">
+<div class="hero-content">
+<div class="eyebrow">
+<span class="eyebrow-dot"></span>
+PHOTO COLLECTION
+</div>
+
+<h1>ทุกกิจกรรม <span>มีความทรงจำ</span></h1>
+
+<p class="hero-description">
+คลังภาพกิจกรรมที่รวบรวมช่วงเวลาสำคัญไว้ในที่เดียว
+ค้นหาอัลบั้ม เปิดชมภาพ และดาวน์โหลดรูปภาพที่คุณต้องการ
+</p>
+
+<div class="hero-stats">
+<div class="stat-pill">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="18" height="18" rx="3"></rect>
+<circle cx="8.5" cy="8.5" r="1.5"></circle>
+<path d="m21 15-5-5L5 21"></path>
+</svg>
+<span>อัลบั้มทั้งหมด</span>
+<strong id="statAlbums">—</strong>
+</div>
+
+<div class="stat-pill">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="4" width="18" height="16" rx="3"></rect>
+<circle cx="8.5" cy="9" r="1.5"></circle>
+<path d="m21 15-5-5L5 20"></path>
+</svg>
+<span>รวมภาพกิจกรรม</span>
+<strong id="statPhotos">—</strong>
+</div>
+
+<div class="stat-pill">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="9"></circle>
+<path d="M12 7v5l3 2"></path>
+</svg>
+<span>เข้าชมได้ตลอดเวลา</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<main class="main-content">
+<div class="container">
+<div id="albumViewBanner" class="album-view-banner hidden">
+<div class="album-view-banner-title">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="18" height="18" rx="4"></rect>
+<path d="M8 8h8M8 12h8M8 16h5"></path>
+</svg>
+<div>
+<div id="sharedAlbumBannerTitle">อัลบั้มที่แชร์</div>
+<div class="muted small">คุณกำลังเปิดลิงก์อัลบั้มโดยตรง</div>
+</div>
+</div>
+<button class="button button-secondary button-small" id="backToAlbumsButton" type="button">
+ดูอัลบั้มทั้งหมด
+</button>
+</div>
+
+<section id="albumsSection">
+<div class="section-heading">
+<div>
+<h2 class="section-title">อัลบั้มกิจกรรม</h2>
+<p class="section-description">เลือกอัลบั้มเพื่อเปิดดูรูปภาพและดาวน์โหลด</p>
+</div>
+<div class="results-count" id="resultsCount">กำลังโหลดอัลบั้ม...</div>
+</div>
+
+<div class="toolbar">
+<label class="search-box" for="searchInput">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="11" cy="11" r="7"></circle>
+<path d="m20 20-4-4"></path>
+</svg>
+<input
+id="searchInput"
+type="search"
+placeholder="ค้นหาชื่อกิจกรรมหรือรายละเอียด..."
+autocomplete="off"
+aria-label="ค้นหาอัลบั้มกิจกรรม">
+</label>
+
+<select id="categorySelect" class="select-control" aria-label="เลือกหมวดหมู่">
+<option value="">ทุกหมวดหมู่</option>
+</select>
+
+<div class="view-toggle" aria-label="รูปแบบการแสดงผล">
+<button type="button" id="gridViewButton" class="active"
+aria-label="แสดงแบบตาราง" title="แสดงแบบตาราง">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="7" height="7" rx="1"></rect>
+<rect x="14" y="3" width="7" height="7" rx="1"></rect>
+<rect x="3" y="14" width="7" height="7" rx="1"></rect>
+<rect x="14" y="14" width="7" height="7" rx="1"></rect>
+</svg>
+</button>
+<button type="button" id="listViewButton"
+aria-label="แสดงแบบรายการ" title="แสดงแบบรายการ">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M9 5h12M9 12h12M9 19h12"></path>
+<circle cx="4" cy="5" r="1"></circle>
+<circle cx="4" cy="12" r="1"></circle>
+<circle cx="4" cy="19" r="1"></circle>
+</svg>
+</button>
+</div>
+</div>
+
+<div id="albumGrid" class="album-grid" aria-live="polite"></div>
+
+<div id="albumsEmptyState" class="empty-state hidden">
+<div class="empty-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="18" height="18" rx="4"></rect>
+<circle cx="8.5" cy="8.5" r="1.5"></circle>
+<path d="m21 15-5-5L5 21"></path>
+</svg>
+</div>
+<h3 id="albumsEmptyTitle">ยังไม่มีอัลบั้มกิจกรรม</h3>
+<p id="albumsEmptyDescription">
+เมื่อมีอัลบั้มที่เผยแพร่แล้ว อัลบั้มจะแสดงที่หน้านี้
+</p>
+<button class="button button-secondary" id="clearSearchButton" type="button">
+ล้างตัวกรอง
+</button>
+</div>
+
+<div id="pagination" class="pagination hidden" aria-label="เปลี่ยนหน้าอัลบั้ม"></div>
+</section>
+</div>
+</main>
+
+<footer class="footer">
+<div class="container footer-inner">
+<div>
+<div class="footer-brand">ActiGallery</div>
+<div class="footer-text">คลังภาพกิจกรรมและความทรงจำ</div>
+</div>
+<div class="footer-right">
+<div>© <span id="footerYear"></span> ActiGallery</div>
+<div>Activity Photo Gallery</div>
+</div>
+</div>
+</footer>
+
+<!-- Album gallery modal -->
+<div id="albumModal" class="modal hidden" role="dialog"
+aria-modal="true" aria-labelledby="modalAlbumTitle">
+<div class="modal-panel">
+<div class="modal-header">
+<div class="modal-heading">
+<h2 class="modal-title" id="modalAlbumTitle">อัลบั้มกิจกรรม</h2>
+<div class="modal-subtitle" id="modalAlbumSubtitle">กำลังโหลดรายละเอียด...</div>
+</div>
+<button class="icon-button" id="closeAlbumModalButton" type="button"
+aria-label="ปิดอัลบั้ม">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="m18 6-12 12M6 6l12 12"></path>
+</svg>
+</button>
+</div>
+
+<div id="modalAlbumDescription" class="modal-description hidden"></div>
+
+<div class="gallery-toolbar">
+<div class="gallery-selection-info">
+<span id="galleryPhotoCount">กำลังโหลดภาพ...</span>
+<span class="selection-count" id="selectedPhotoCount">เลือกแล้ว 0 รูป</span>
+<button class="selection-link" id="selectAllButton" type="button">เลือกทั้งหมด</button>
+<button class="selection-link" id="clearSelectionButton" type="button">ยกเลิกการเลือก</button>
+</div>
+
+<div class="gallery-actions">
+<button class="button button-secondary button-small" id="shareAlbumButton" type="button">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="18" cy="5" r="3"></circle>
+<circle cx="6" cy="12" r="3"></circle>
+<circle cx="18" cy="19" r="3"></circle>
+<path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"></path>
+</svg>
+แชร์อัลบั้ม
+</button>
+<button class="button button-secondary button-small" id="downloadSelectedButton" type="button" disabled>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<path d="m7 10 5 5 5-5M12 15V3"></path>
+</svg>
+ดาวน์โหลดที่เลือก
+</button>
+<button class="button button-primary button-small" id="downloadAllButton" type="button" disabled>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<path d="m7 10 5 5 5-5M12 15V3"></path>
+</svg>
+ดาวน์โหลดทั้งหมด
+</button>
+</div>
+</div>
+
+<div class="gallery-content" id="galleryContent">
+<div class="gallery-loading" id="galleryLoading">
+<div class="spinner"></div>
+<div>กำลังโหลดรูปภาพ...</div>
+</div>
+<div id="photoGrid" class="photo-grid hidden"></div>
+<div id="galleryEmptyState" class="empty-state hidden">
+<div class="empty-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="18" height="18" rx="4"></rect>
+<path d="M8 12h8M12 8v8"></path>
+</svg>
+</div>
+<h3 id="galleryEmptyTitle">ยังไม่มีรูปภาพ</h3>
+<p id="galleryEmptyDescription">อัลบั้มนี้ยังไม่มีรูปภาพให้แสดง</p>
+</div>
+</div>
+
+<div class="modal-footer">
+<div class="modal-footer-note" id="downloadStatusText">
+เลือกรูปภาพที่ต้องการดาวน์โหลดได้
+</div>
+<button class="button button-secondary" id="modalDoneButton" type="button">
+เสร็จสิ้น
+</button>
+</div>
+</div>
+</div>
+
+<!-- Full-size image viewer -->
+<div id="lightbox" class="lightbox hidden" role="dialog"
+aria-modal="true" aria-label="ดูรูปภาพขนาดใหญ่">
+<div class="lightbox-top">
+<div class="lightbox-caption" id="lightboxCaption">รูปภาพ</div>
+<div class="lightbox-controls">
+<button class="icon-button" id="lightboxDownloadButton" type="button"
+aria-label="ดาวน์โหลดรูปนี้" title="ดาวน์โหลดรูปนี้">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<path d="m7 10 5 5 5-5M12 15V3"></path>
+</svg>
+</button>
+<button class="icon-button" id="closeLightboxButton" type="button"
+aria-label="ปิดรูปภาพ">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="m18 6-12 12M6 6l12 12"></path>
+</svg>
+</button>
+</div>
+</div>
+
+<div class="lightbox-image-wrap">
+<button class="lightbox-nav lightbox-prev" id="lightboxPrevButton"
+type="button" aria-label="รูปก่อนหน้า">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="m15 18-6-6 6-6"></path>
+</svg>
+</button>
+
+<img id="lightboxImage" class="lightbox-image" src="" alt="รูปภาพขนาดใหญ่">
+
+<button class="lightbox-nav lightbox-next" id="lightboxNextButton"
+type="button" aria-label="รูปถัดไป">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="m9 18 6-6-6-6"></path>
+</svg>
+</button>
+</div>
+
+<div class="lightbox-bottom" id="lightboxCounter">1 / 1</div>
+</div>
+
+<!-- Toast notifications -->
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<!-- Confirmation dialog -->
+<div id="confirmOverlay" class="confirm-overlay hidden" role="dialog"
+aria-modal="true" aria-labelledby="confirmTitle">
+<div class="confirm-dialog">
+<h3 id="confirmTitle">ยืนยันการทำรายการ</h3>
+<p id="confirmMessage">คุณต้องการดำเนินการนี้หรือไม่</p>
+<div class="confirm-actions">
+<button class="button button-secondary" id="confirmCancelButton" type="button">
+ยกเลิก
+</button>
+<button class="button button-primary" id="confirmAcceptButton" type="button">
+ยืนยัน
+</button>
+</div>
+</div>
+</div>
+
+<!-- JSZip is used to create ZIP files in the browser. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+referrerpolicy="no-referrer"></script>
+
+<script>
+'use strict';
+
+/* ============================================================
+ActiGallery Public Frontend
+File: index.html
+
+Frontend:
+GitHub Pages / custom domain
+
+Backend:
+Google Apps Script Web App (Code.gs)
+
+Public API actions:
+getPublicAlbums
+getPublicAlbum
+getAlbumPhotos
+getPublicCategories
+
+IMPORTANT:
+Set API_URL to your deployed Apps Script /exec URL.
+============================================================ */
+
+const CONFIG = Object.freeze({
+APP_NAME: 'ActiGallery',
+
+/*
+* Replace this value with the deployed Apps Script Web App URL.
+* It normally ends in /exec.
+*/
+API_URL: 'https://script.google.com/macros/s/AKfycbz3TUr1cXgyjvn_6Yeex56GsXTvWTB_NTUliYrdlx1TJdV_TcMZdWYirThKOvrwItYD/exec',
+
+SITE_URL: 'https://anonmsg.online/',
+ALBUM_QUERY_PARAM: 'album',
+
+DEFAULT_PAGE_SIZE: 12,
+MAX_PAGE_SIZE: 100,
+
+/*
+* A request timeout helps prevent a page from remaining stuck
+* when the API does not respond.
+*/
+REQUEST_TIMEOUT_MS: 25000,
+
+/*
+* Downloads are performed in the visitor's browser.
+* A remote image server may block cross-origin downloads.
+* The app reports individual failures rather than claiming
+* that every image was downloaded successfully.
+*/
+DOWNLOAD_CONCURRENCY: 3,
+MAX_FILENAME_LENGTH: 120,
+
+/*
+* Public frontend only. Do not put administrator credentials,
+* private session tokens, or other secrets in this file.
+*/
+ENABLE_DOWNLOADS: true
+});
+
+const ICONS = Object.freeze({
+check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"></path></svg>',
+image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-5-5L5 21"></path></svg>',
+warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18.2A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>',
+error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m15 9-6 6M9 9l6 6"></path></svg>'
+});
+
+const state = {
+albums: [],
+categories: [],
+currentPage: 1,
+pageSize: CONFIG.DEFAULT_PAGE_SIZE,
+totalAlbums: 0,
+totalPages: 1,
+search: '',
+categoryId: '',
+viewMode: 'grid',
+loadingAlbums: false,
+albumListRequestId: 0,
+
+currentAlbum: null,
+currentPhotos: [],
+selectedPhotoIds: new Set(),
+loadingPhotos: false,
+photoRequestId: 0,
+
+lightboxIndex: 0,
+isDownloading: false,
+lastFocusedElement: null,
+
+confirmResolver: null
+};
+
+const $ = (id) => document.getElementById(id);
+
+function isConfiguredApiUrl() {
+return Boolean(
+CONFIG.API_URL &&
+CONFIG.API_URL !== 'PASTE_YOUR_DEPLOYED_APPS_SCRIPT_WEB_APP_URL_HERE' &&
+/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(CONFIG.API_URL)
+);
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function safeText(value, fallback = '') {
+if (value === null || value === undefined) {
+return fallback;
+}
+
+const text = String(value).trim();
+return text || fallback;
+}
+
+function toNumber(value, fallback = 0) {
+const number = Number(value);
+return Number.isFinite(number) ? number : fallback;
+}
+
+function getArray(value) {
+if (Array.isArray(value)) {
+return value;
+}
+
+if (value && Array.isArray(value.items)) {
+return value.items;
+}
+
+if (value && Array.isArray(value.results)) {
+return value.results;
+}
+
+if (value && Array.isArray(value.albums)) {
+return value.albums;
+}
+
+if (value && Array.isArray(value.photos)) {
+return value.photos;
+}
+
+if (value && Array.isArray(value.categories)) {
+return value.categories;
+}
+
+if (value && Array.isArray(value.data)) {
+return value.data;
+}
+
+return [];
+}
+
+function unwrapApiResponse(response) {
+if (response === null || response === undefined) {
+throw new Error('เซิร์ฟเวอร์ไม่ได้ส่งข้อมูลกลับมา');
+}
+
+if (typeof response === 'string') {
+const trimmed = response.trim();
+
+if (!trimmed) {
+throw new Error('เซิร์ฟเวอร์ส่งข้อมูลว่างกลับมา');
+}
+
+try {
+response = JSON.parse(trimmed);
+} catch (error) {
+throw new Error('รูปแบบข้อมูลจาก API ไม่ถูกต้อง');
+}
+}
+
+if (response.success === false || response.ok === false) {
+throw new Error(
+safeText(response.message || response.error, 'ไม่สามารถโหลดข้อมูลได้')
+);
+}
+
+if (Object.prototype.hasOwnProperty.call(response, 'data')) {
+return response.data;
+}
+
+return response;
+}
+
+async function apiRequest(action, params = {}) {
+  if (!isConfiguredApiUrl()) {
+    throw new Error(
+      'ยังไม่ได้ตั้งค่า API_URL กรุณาใส่ URL ของ Google Apps Script Web App ในไฟล์ index.html'
+    );
+  }
+
+  const controller = new AbortController();
+  const timeout = window.setTimeout(
+    () => controller.abort(),
+    CONFIG.REQUEST_TIMEOUT_MS
+  );
+
+  try {
+    const url = new URL(CONFIG.API_URL);
+    url.searchParams.set('action', action);
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(key, String(value));
+      }
+    });
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      redirect: 'follow',
+      cache: 'no-store',
+      signal: controller.signal
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        'การเชื่อมต่อ API ล้มเหลว (HTTP ' + response.status + ')'
+      );
+    }
+
+    const text = await response.text();
+
+    if (!text || !text.trim()) {
+      throw new Error('API ส่งข้อมูลว่างกลับมา');
+    }
+
+    let json;
+
+    try {
+      json = JSON.parse(text);
+    } catch (error) {
+      throw new Error(
+        'ไม่สามารถอ่านข้อมูลจาก API ได้ กรุณาตรวจสอบ URL และสิทธิ์การเข้าถึง Web App'
+      );
+    }
+
+    return unwrapApiResponse(json);
+  } catch (error) {
+    if (error && error.name === 'AbortError') {
+      throw new Error('การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่อีกครั้ง');
+    }
+
+    throw error;
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
+function normalizeAlbum(raw) {
+const album = raw || {};
+
+return {
+albumId: safeText(
+album.albumId || album.id || album.ID || album.album_id
+),
+slug: safeText(album.slug || album.albumSlug),
+title: safeText(
+album.title || album.albumTitle || album.name || album.albumName,
+'ไม่มีชื่ออัลบั้ม'
+),
+description: safeText(
+album.description || album.detail || album.albumDescription
+),
+coverUrl: normalizeImageUrl(
+album.coverUrl || album.coverURL || album.cover || album.coverImageUrl ||
+album.thumbnailUrl || album.thumbnail
+),
+photoCount: Math.max(
+0,
+toNumber(
+album.photoCount !== undefined ? album.photoCount :
+album.totalPhotos !== undefined ? album.totalPhotos :
+album.imageCount !== undefined ? album.imageCount :
+album.count,
+0
+)
+),
+categoryId: safeText(album.categoryId || album.category_id),
+categoryName: safeText(
+album.categoryName || album.category || album.categoryTitle,
+'กิจกรรม'
+),
+createdAt: safeText(
+album.createdAt || album.created_at || album.date || album.activityDate
+),
+status: safeText(album.status),
+publicUrl: safeText(album.publicUrl || album.shareUrl),
+raw: album
+};
+}
+
+function normalizePhoto(raw, index) {
+const photo = raw || {};
+
+return {
+photoId: safeText(
+photo.photoId || photo.id || photo.ID || photo.photo_id,
+'photo-' + index
+),
+imageUrl: normalizeImageUrl(
+photo.imageUrl || photo.imageURL || photo.url || photo.src ||
+photo.originalUrl || photo.downloadUrl
+),
+originalName: safeText(
+photo.originalName || photo.fileName || photo.filename ||
+photo.name || photo.title,
+'photo-' + String(index + 1).padStart(3, '0') + '.jpg'
+),
+mimeType: safeText(photo.mimeType || photo.type, 'image/jpeg'),
+fileSizeBytes: Math.max(
+0,
+toNumber(photo.fileSizeBytes || photo.sizeBytes || photo.size, 0)
+),
+sortOrder: toNumber(photo.sortOrder || photo.order, index),
+createdAt: safeText(photo.createdAt || photo.created_at),
+raw: photo
+};
+}
+
+function normalizeImageUrl(value) {
+const url = safeText(value);
+
+if (!url) {
+return '';
+}
+
+try {
+const parsed = new URL(url, window.location.href);
+
+if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+return '';
+}
+
+return parsed.href;
+} catch (error) {
+return '';
+}
+}
+
+function normalizeCategory(raw) {
+const category = raw || {};
+
+return {
+categoryId: safeText(
+category.categoryId || category.id || category.category_id
+),
+name: safeText(
+category.name || category.title || category.categoryName,
+'หมวดหมู่'
+)
+};
+}
+
+function formatNumber(value) {
+return new Intl.NumberFormat('th-TH').format(toNumber(value, 0));
+}
+
+function formatDate(value) {
+if (!value) {
+return 'ไม่ระบุวันที่';
+}
+
+const date = new Date(value);
+
+if (Number.isNaN(date.getTime())) {
+return String(value);
+}
+
+return new Intl.DateTimeFormat('th-TH', {
+day: 'numeric',
+month: 'short',
+year: 'numeric'
+}).format(date);
+}
+
+function formatFileSize(bytes) {
+const size = toNumber(bytes, 0);
+
+if (size < 1024) {
+return size + ' B';
+}
+
+if (size < 1024 * 1024) {
+return (size / 1024).toFixed(1) + ' KB';
+}
+
+if (size < 1024 * 1024 * 1024) {
+return (size / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+}
+
+function getCurrentOriginUrl() {
+return window.location.origin + window.location.pathname;
+}
+
+function getAlbumShareUrl(album) {
+if (!album) {
+return getCurrentOriginUrl();
+}
+
+const url = new URL(getCurrentOriginUrl());
+
+if (album.slug) {
+url.searchParams.set(CONFIG.ALBUM_QUERY_PARAM, album.slug);
+} else {
+url.searchParams.set(CONFIG.ALBUM_QUERY_PARAM, album.albumId);
+}
+
+return url.toString();
+}
+
+function getAlbumLookupValue() {
+const params = new URLSearchParams(window.location.search);
+return safeText(params.get(CONFIG.ALBUM_QUERY_PARAM));
+}
+
+function setAlbumUrl(album) {
+if (!album) {
+return;
+}
+
+const url = new URL(window.location.href);
+url.searchParams.set(
+CONFIG.ALBUM_QUERY_PARAM,
+album.slug || album.albumId
+);
+
+history.replaceState({ albumId: album.albumId }, '', url.toString());
+}
+
+function clearAlbumUrl() {
+const url = new URL(window.location.href);
+url.searchParams.delete(CONFIG.ALBUM_QUERY_PARAM);
+
+history.replaceState({}, '', url.toString());
+}
+
+function setMetaContent(selector, content) {
+const element = document.querySelector(selector);
+
+if (element) {
+element.setAttribute('content', content || '');
+}
+}
+
+function updatePageMetadata(album) {
+if (!album) {
+document.title = 'ActiGallery — คลังภาพกิจกรรม';
+setMetaContent('meta[name="description"]',
+'ActiGallery คลังภาพกิจกรรม รวบรวมภาพความทรงจำ ดาวน์โหลดและแบ่งปันอัลบั้มกิจกรรมได้ง่าย ๆ');
+setMetaContent('meta[property="og:title"]',
+'ActiGallery — คลังภาพกิจกรรม');
+setMetaContent('meta[property="og:description"]',
+'ค้นหา รับชม และดาวน์โหลดภาพกิจกรรมได้ในที่เดียว');
+setMetaContent('meta[property="og:image"]', '');
+return;
+}
+
+document.title = album.title + ' | ActiGallery';
+
+setMetaContent(
+'meta[name="description"]',
+album.description || 'รับชมรูปภาพกิจกรรม ' + album.title + ' บน ActiGallery'
+);
+
+setMetaContent('meta[property="og:title"]', album.title + ' | ActiGallery');
+
+setMetaContent(
+'meta[property="og:description"]',
+album.description || 'รับชมและดาวน์โหลดรูปภาพจากอัลบั้มกิจกรรมนี้'
+);
+
+setMetaContent('meta[property="og:image"]', album.coverUrl || '');
+}
+
+function toast(message, type = 'success', duration = 3500) {
+const container = $('toastContainer');
+const element = document.createElement('div');
+element.className = 'toast' + (type === 'success' ? '' : ' ' + type);
+
+const icon = document.createElement('span');
+icon.className = 'toast-icon';
+
+if (type === 'error') {
+icon.innerHTML = ICONS.error;
+} else if (type === 'warning') {
+icon.innerHTML = ICONS.warning;
+} else {
+icon.innerHTML = ICONS.check;
+}
+
+const text = document.createElement('div');
+text.textContent = String(message);
+
+element.appendChild(icon);
+element.appendChild(text);
+container.appendChild(element);
+
+window.setTimeout(() => {
+element.style.opacity = '0';
+element.style.transform = 'translateY(6px)';
+
+window.setTimeout(() => {
+element.remove();
+}, 220);
+}, duration);
+}
+
+function showConfirm(options = {}) {
+const overlay = $('confirmOverlay');
+
+$('confirmTitle').textContent = safeText(
+options.title,
+'ยืนยันการทำรายการ'
+);
+
+$('confirmMessage').textContent = safeText(
+options.message,
+'คุณต้องการดำเนินการนี้หรือไม่'
+);
+
+$('confirmAcceptButton').textContent = safeText(
+options.confirmText,
+'ยืนยัน'
+);
+
+$('confirmCancelButton').textContent = safeText(
+options.cancelText,
+'ยกเลิก'
+);
+
+$('confirmAcceptButton').className =
+'button ' + (options.danger ? 'button-danger' : 'button-primary');
+
+overlay.classList.remove('hidden');
+
+return new Promise((resolve) => {
+state.confirmResolver = resolve;
+});
+}
+
+function closeConfirm(result) {
+$('confirmOverlay').classList.add('hidden');
+
+if (typeof state.confirmResolver === 'function') {
+const resolver = state.confirmResolver;
+state.confirmResolver = null;
+resolver(Boolean(result));
+}
+}
+
+async function copyText(text) {
+const value = String(text || '');
+
+if (!value) {
+throw new Error('ไม่มีลิงก์ให้คัดลอก');
+}
+
+if (navigator.clipboard && window.isSecureContext) {
+await navigator.clipboard.writeText(value);
+return;
+}
+
+const textarea = document.createElement('textarea');
+textarea.value = value;
+textarea.setAttribute('readonly', '');
+textarea.style.position = 'fixed';
+textarea.style.opacity = '0';
+textarea.style.pointerEvents = 'none';
+
+document.body.appendChild(textarea);
+textarea.select();
+
+const copied = document.execCommand('copy');
+textarea.remove();
+
+if (!copied) {
+throw new Error('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตนเอง');
+}
+}
+
+async function shareUrl(url, title, text) {
+const shareData = {
+title: title || CONFIG.APP_NAME,
+text: text || 'เปิดชมอัลบั้มภาพบน ActiGallery',
+url: url
+};
+
+if (navigator.share) {
+try {
+await navigator.share(shareData);
+return;
+} catch (error) {
+if (error && error.name === 'AbortError') {
+return;
+}
+}
+}
+
+try {
+await copyText(url);
+toast('คัดลอกลิงก์เรียบร้อยแล้ว สามารถนำไปแชร์ได้');
+} catch (error) {
+toast(error.message || 'ไม่สามารถแชร์ลิงก์ได้', 'error');
+}
+}
+
+function getCategoryName(album) {
+if (!album) {
+return 'กิจกรรม';
+}
+
+const found = state.categories.find(
+(category) => category.categoryId === album.categoryId
+);
+
+return found ? found.name : album.categoryName || 'กิจกรรม';
+}
+
+function getCoverPlaceholder() {
+return '<div class="cover-placeholder" aria-label="ไม่มีภาพปก">' +
+ICONS.image +
+'</div>';
+}
+
+function renderSkeletons(count = 6) {
+const grid = $('albumGrid');
+grid.innerHTML = '';
+
+for (let i = 0; i < count; i += 1) {
+const card = document.createElement('div');
+card.className = 'skeleton-card';
+
+card.innerHTML =
+'<div class="skeleton skeleton-cover"></div>' +
+'<div class="skeleton-body">' +
+'<div class="skeleton skeleton-line short"></div>' +
+'<div class="skeleton skeleton-line medium"></div>' +
+'<div class="skeleton skeleton-line long"></div>' +
+'<div class="skeleton skeleton-line medium"></div>' +
+'</div>';
+
+grid.appendChild(card);
+}
+
+grid.classList.remove('hidden');
+$('albumsEmptyState').classList.add('hidden'); $('pagination').classList.add('hidden');
+}
+
+function renderAlbumCard(album) {
+const card = document.createElement('article');
+card.className = 'album-card';
+
+const cover = document.createElement('div');
+cover.className = 'album-cover';
+
+if (album.coverUrl) {
+const image = document.createElement('img');
+image.src = album.coverUrl;
+image.alt = album.title;
+image.loading = 'lazy';
+image.decoding = 'async';
+
+image.addEventListener('error', () => {
+cover.innerHTML = getCoverPlaceholder();
+}, { once: true });
+
+cover.appendChild(image);
+} else {
+cover.innerHTML = getCoverPlaceholder();
+}
+
+const shade = document.createElement('div');
+shade.className = 'cover-shade';
+cover.appendChild(shade);
+
+const countBadge = document.createElement('div');
+countBadge.className = 'photo-count-badge';
+countBadge.innerHTML =
+ICONS.image + '<span>' + escapeHtml(formatNumber(album.photoCount)) + ' รูป</span>';
+cover.appendChild(countBadge);
+
+const body = document.createElement('div');
+body.className = 'album-card-body';
+
+const category = document.createElement('div');
+category.className = 'album-category';
+category.textContent = getCategoryName(album);
+
+const title = document.createElement('h3');
+title.className = 'album-title';
+title.textContent = album.title;
+
+const description = document.createElement('p');
+description.className = 'album-description';
+description.textContent = album.description || 'ไม่มีรายละเอียดเพิ่มเติม';
+
+const footer = document.createElement('div');
+footer.className = 'album-card-footer';
+
+const date = document.createElement('span');
+date.className = 'album-date';
+date.innerHTML =
+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+'<rect x="3" y="5" width="18" height="16" rx="2"></rect>' +
+'<path d="M16 3v4M8 3v4M3 11h18"></path>' +
+'</svg>' +
+'<span>' + escapeHtml(formatDate(album.createdAt)) + '</span>';
+
+const openButton = document.createElement('button');
+openButton.className = 'button button-primary button-small';
+openButton.type = 'button';
+openButton.innerHTML =
+'<span>เปิดอัลบั้ม</span>' +
+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+'<path d="M5 12h14M13 6l6 6-6 6"></path>' +
+'</svg>';
+
+openButton.addEventListener('click', () => {
+openAlbum(album.albumId || album.slug);
+});
+
+footer.appendChild(date);
+footer.appendChild(openButton);
+
+body.appendChild(category);
+body.appendChild(title);
+body.appendChild(description);
+body.appendChild(footer);
+
+card.appendChild(cover);
+card.appendChild(body);
+
+card.addEventListener('dblclick', () => {
+openAlbum(album.albumId || album.slug);
+});
+
+return card;
+}
+
+function renderAlbums() {
+const grid = $('albumGrid');
+grid.innerHTML = '';
+
+grid.classList.toggle('list-view', state.viewMode === 'list');
+
+const albums = state.albums;
+
+if (!albums.length) {
+grid.classList.add('hidden');
+('pagination').classList.add('hidden');
+
+$('albumsEmptyTitle').textContent = state.search || state.categoryId
+? 'ไม่พบอัลบั้มที่ตรงกับการค้นหา'
+: 'ยังไม่มีอัลบั้มกิจกรรม';
+
+$('albumsEmptyDescription').textContent = state.search || state.categoryId
+? 'ลองเปลี่ยนคำค้นหาหรือเลือกหมวดหมู่อื่น'
+: 'เมื่อมีอัลบั้มที่เผยแพร่แล้ว อัลบั้มจะแสดงที่หน้านี้';
+
+$('resultsCount').textContent = 'ไม่พบอัลบั้ม';
+renderPagination();
+return;
+}
+
+grid.classList.remove('hidden');
+$('albumsEmptyState').classList.add('hidden');
+
+const fragment = document.createDocumentFragment();
+
+albums.forEach((album) => {
+fragment.appendChild(renderAlbumCard(album));
+});
+
+grid.appendChild(fragment);
+
+$('resultsCount').textContent =
+'แสดง ' + formatNumber(albums.length) + ' อัลบั้มในหน้านี้';
+
+renderPagination();
+}
+
+function renderPagination() {
+const container = $('pagination');
+container.innerHTML = '';
+
+const totalPages = Math.max(1, state.totalPages);
+
+if (totalPages <= 1) {
+container.classList.add('hidden');
+return;
+}
+
+container.classList.remove('hidden');
+
+const previous = document.createElement('button');
+previous.className = 'page-button';
+previous.type = 'button';
+previous.disabled = state.currentPage <= 1;
+previous.setAttribute('aria-label', 'หน้าก่อนหน้า');
+previous.innerHTML =
+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>';
+
+previous.addEventListener('click', () => {
+if (state.currentPage > 1) {
+loadAlbums(state.currentPage - 1);
+}
+});
+
+container.appendChild(previous);
+
+let start = Math.max(1, state.currentPage - 2);
+let end = Math.min(totalPages, state.currentPage + 2);
+
+if (state.currentPage <= 3) {
+end = Math.min(totalPages, 5);
+}
+
+if (state.currentPage >= totalPages - 2) {
+start = Math.max(1, totalPages - 4);
+}
+
+if (start > 1) {
+appendPageButton(container, 1);
+
+if (start > 2) {
+const dots = document.createElement('span');
+dots.className = 'page-info';
+dots.textContent = '…';
+container.appendChild(dots);
+}
+}
+
+for (let page = start; page <= end; page += 1) {
+appendPageButton(container, page);
+}
+
+if (end < totalPages) {
+if (end < totalPages - 1) {
+const dots = document.createElement('span');
+dots.className = 'page-info';
+dots.textContent = '…';
+container.appendChild(dots);
+}
+
+appendPageButton(container, totalPages);
+}
+
+const next = document.createElement('button');
+next.className = 'page-button';
+next.type = 'button';
+next.disabled = state.currentPage >= totalPages;
+next.setAttribute('aria-label', 'หน้าถัดไป');
+next.innerHTML =
+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>';
+
+next.addEventListener('click', () => {
+if (state.currentPage < totalPages) {
+loadAlbums(state.currentPage + 1);
+}
+});
+
+container.appendChild(next);
+}
+
+function appendPageButton(container, page) {
+const button = document.createElement('button');
+button.className = 'page-button' +
+(page === state.currentPage ? ' active' : '');
+button.type = 'button';
+button.textContent = String(page);
+button.setAttribute('aria-label', 'หน้า ' + page);
+button.setAttribute('aria-current', page === state.currentPage ? 'page' : 'false');
+
+button.addEventListener('click', () => {
+if (page !== state.currentPage) {
+loadAlbums(page);
+}
+});
+
+container.appendChild(button);
+}
+
+function updateStatistics() {
+const albumsCount = state.totalAlbums || state.albums.length;
+const photosCount = state.albums.reduce(
+(total, album) => total + album.photoCount,
+0
+);
+
+$('statAlbums').textContent = formatNumber(albumsCount);
+
+/*
+* The API may return only one page. Do not label a page-only
+* sum as the exact total number of photos across every album.
+*/
+$('statPhotos').textContent = state.totalPages > 1 && state.albums.length
+? formatNumber(photosCount) + '+'
+: formatNumber(photosCount);
+}
+
+function normalizeAlbumListResponse(result) {
+let items = [];
+let total = 0;
+let page = state.currentPage;
+let pageSize = state.pageSize;
+let totalPages = 1;
+
+if (Array.isArray(result)) {
+items = result;
+total = result.length;
+} else if (result && typeof result === 'object') {
+items = getArray(result);
+
+total = toNumber(
+result.total !== undefined ? result.total :
+result.totalAlbums !== undefined ? result.totalAlbums :
+result.totalCount !== undefined ? result.totalCount :
+result.count,
+items.length
+);
+
+page = toNumber(result.page, state.currentPage);
+pageSize = toNumber(
+result.pageSize || result.limit || result.perPage,
+state.pageSize
+);
+
+totalPages = toNumber(
+result.totalPages || result.pages,
+pageSize > 0 ? Math.ceil(total / pageSize) : 1
+);
+}
+
+return {
+items: items.map(normalizeAlbum),
+total: Math.max(0, total),
+page: Math.max(1, page),
+pageSize: Math.max(1, pageSize),
+totalPages: Math.max(1, totalPages)
+};
+}
+
+async function loadAlbums(page = 1) {
+if (state.loadingAlbums) {
+/*
+* A new search/filter can start while a previous request is
+* in flight. Request IDs ensure an old response cannot replace
+* newer results.
+*/
+}
+
+const requestId = ++state.albumListRequestId;
+state.loadingAlbums = true;
+state.currentPage = Math.max(1, page);
+
+renderSkeletons(6);
+
+$('resultsCount').textContent = 'กำลังโหลดอัลบั้ม...';
+
+const params = {
+page: state.currentPage,
+pageSize: state.pageSize
+};
+
+if (state.categoryId) {
+params.categoryId = state.categoryId;
+}
+
+if (state.search) {
+params.search = state.search;
+}
+
+try {
+const result = await apiRequest('getPublicAlbums', params);
+
+if (requestId !== state.albumListRequestId) {
+return;
+}
+
+const normalized = normalizeAlbumListResponse(result);
+
+state.albums = normalized.items;
+state.totalAlbums = normalized.total;
+state.currentPage = normalized.page;
+state.pageSize = Math.min(
+CONFIG.MAX_PAGE_SIZE,
+Math.max(1, normalized.pageSize)
+);
+state.totalPages = normalized.totalPages;
+
+/*
+* When an API returns all items but no pagination metadata,
+* calculate the number of pages locally.
+*/
+if (
+state.totalPages === 1 &&
+state.totalAlbums > state.pageSize &&
+state.albums.length <= state.pageSize
+) {
+state.totalPages = Math.ceil(state.totalAlbums / state.pageSize);
+}
+
+renderAlbums();
+updateStatistics();
+} catch (error) {
+if (requestId !== state.albumListRequestId) {
+return;
+}
+
+state.albums = [];
+state.totalAlbums = 0;
+state.totalPages = 1;
+
+$('albumGrid').classList.add('hidden'); $('albumsEmptyState').classList.remove('hidden');
+$('albumsEmptyTitle').textContent = 'ไม่สามารถโหลดอัลบั้มได้'; $('albumsEmptyDescription').textContent =
+error.message || 'กรุณาตรวจสอบการเชื่อมต่อแล้วลองใหม่';
+
+$('clearSearchButton').textContent = 'ลองโหลดอีกครั้ง'; $('resultsCount').textContent = 'เกิดข้อผิดพลาด';
+$('pagination').classList.add('hidden');
+
+('statPhotos').textContent = '—';
+
+toast(error.message || 'ไม่สามารถโหลดอัลบั้มได้', 'error', 6000);
+} finally {
+if (requestId === state.albumListRequestId) {
+state.loadingAlbums = false;
+}
+}
+}
+
+async function loadCategories() {
+try {
+const result = await apiRequest('getPublicCategories');
+
+let rawCategories = getArray(result);
+
+if (!Array.isArray(result) && result && typeof result === 'object') {
+if (Array.isArray(result.items)) {
+rawCategories = result.items;
+} else if (Array.isArray(result.categories)) {
+rawCategories = result.categories;
+}
+}
+
+state.categories = rawCategories
+.map(normalizeCategory)
+.filter((category) => category.categoryId || category.name);
+
+renderCategories();
+} catch (error) {
+/*
+* Category filtering is optional. Albums remain available
+* even if the category endpoint is not configured.
+*/
+state.categories = [];
+renderCategories();
+}
+}
+
+function renderCategories() {
+const select = $('categorySelect');
+const currentValue = state.categoryId;
+
+select.innerHTML = '<option value="">ทุกหมวดหมู่</option>';
+
+state.categories.forEach((category) => {
+const option = document.createElement('option');
+option.value = category.categoryId;
+option.textContent = category.name;
+select.appendChild(option);
+});
+
+if (
+currentValue &&
+state.categories.some((category) => category.categoryId === currentValue)
+) {
+select.value = currentValue;
+} else {
+select.value = '';
+state.categoryId = '';
+}
+}
+
+function debounce(callback, delay) {
+let timer = null;
+
+return function debounced(...args) {
+window.clearTimeout(timer);
+
+timer = window.setTimeout(() => {
+callback.apply(this, args);
+}, delay);
+};
+}
+
+function setViewMode(mode) {
+state.viewMode = mode === 'list' ? 'list' : 'grid';
+
+$('gridViewButton').classList.toggle('active', state.viewMode === 'grid'); $('listViewButton').classList.toggle('active', state.viewMode === 'list');
+
+$('gridViewButton').setAttribute(
+'aria-pressed',
+state.viewMode === 'grid' ? 'true' : 'false'
+);
+
+$('listViewButton').setAttribute(
+'aria-pressed',
+state.viewMode === 'list' ? 'true' : 'false'
+);
+
+$('albumGrid').classList.toggle('list-view', state.viewMode === 'list');
+}
+
+function showSharedAlbumBanner(album) {
+if (!album) {
+$('albumViewBanner').classList.add('hidden');
+return;
+}
+
+$('sharedAlbumBannerTitle').textContent = album.title; $('albumViewBanner').classList.remove('hidden');
+}
+
+async function openAlbum(lookupValue) {
+const key = safeText(lookupValue);
+
+if (!key) {
+toast('ไม่พบรหัสอัลบั้ม', 'error');
+return;
+}
+
+state.lastFocusedElement = document.activeElement;
+state.currentAlbum = null;
+state.currentPhotos = [];
+state.selectedPhotoIds = new Set();
+state.loadingPhotos = true;
+
+$('albumModal').classList.remove('hidden');
+document.body.classList.add('modal-open');
+
+('modalAlbumSubtitle').textContent = 'กรุณารอสักครู่';
+$('modalAlbumDescription').classList.add('hidden');
+
+$('galleryLoading').classList.remove('hidden'); $('galleryContent').scrollTop = 0;
+$('photoGrid').innerHTML = ''; $('photoGrid').classList.add('hidden');
+$('galleryEmptyState').classList.add('hidden');
+
+('selectedPhotoCount').textContent = 'เลือกแล้ว 0 รูป';
+$('downloadStatusText').textContent = 'กำลังโหลดข้อมูลอัลบั้ม...';
+
+$('downloadSelectedButton').disabled = true; $('downloadAllButton').disabled = true;
+
+const requestId = ++state.photoRequestId;
+
+try {
+const result = await apiRequest('getPublicAlbum', {
+albumId: key,
+slug: key
+});
+
+if (requestId !== state.photoRequestId) {
+return;
+}
+
+const rawAlbum = result && result.album ? result.album : result;
+const album = normalizeAlbum(rawAlbum);
+
+if (!album.albumId && !album.slug) {
+throw new Error('ไม่พบอัลบั้มนี้ หรืออัลบั้มอาจไม่ได้เผยแพร่แล้ว');
+}
+
+state.currentAlbum = album;
+
+$('modalAlbumTitle').textContent = album.title; $('modalAlbumSubtitle').textContent =
+getCategoryName(album) + ' · ' +
+formatDate(album.createdAt) + ' · ' +
+formatNumber(album.photoCount) + ' รูป';
+
+if (album.description) {
+$('modalAlbumDescription').textContent = album.description; $('modalAlbumDescription').classList.remove('hidden');
+} else {
+$('modalAlbumDescription').classList.add('hidden');
+}
+
+setAlbumUrl(album);
+updatePageMetadata(album);
+showSharedAlbumBanner(album);
+
+await loadAlbumPhotos(album, requestId);
+} catch (error) {
+if (requestId !== state.photoRequestId) {
+return;
+}
+
+state.loadingPhotos = false;
+
+('modalAlbumSubtitle').textContent = 'เกิดข้อผิดพลาด';
+('galleryEmptyState').classList.remove('hidden');
+('galleryEmptyDescription').textContent =
+error.message || 'อัลบั้มอาจถูกลบหรือยังไม่ได้เผยแพร่';
+
+('downloadStatusText').textContent = 'ไม่สามารถโหลดข้อมูลอัลบั้มได้';
+
+toast(error.message || 'ไม่สามารถเปิดอัลบั้มได้', 'error', 5500);
+}
+}
+
+function normalizePhotoListResponse(result) {
+let photos = [];
+
+if (Array.isArray(result)) {
+photos = result;
+} else if (result && typeof result === 'object') {
+photos = getArray(result);
+
+if (!photos.length && Array.isArray(result.items)) {
+photos = result.items;
+}
+
+if (!photos.length && Array.isArray(result.photos)) {
+photos = result.photos;
+}
+}
+
+return photos
+.map((photo, index) => normalizePhoto(photo, index))
+.filter((photo) => Boolean(photo.imageUrl))
+.sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+async function loadAlbumPhotos(album, requestId) {
+('photoGrid').classList.add('hidden');
+$('galleryEmptyState').classList.add('hidden');
+
+try {
+const result = await apiRequest('getAlbumPhotos', {
+albumId: album.albumId,
+slug: album.slug
+});
+
+if (requestId !== state.photoRequestId) {
+return;
+}
+
+state.currentPhotos = normalizePhotoListResponse(result);
+state.selectedPhotoIds = new Set();
+state.loadingPhotos = false;
+
+renderPhotos();
+
+$('galleryLoading').classList.add('hidden');
+
+if (state.currentPhotos.length) {
+('galleryPhotoCount').textContent =
+formatNumber(state.currentPhotos.length) + ' รูปภาพ';
+('downloadAllButton').disabled = !CONFIG.ENABLE_DOWNLOADS;
+} else {
+('galleryEmptyState').classList.remove('hidden');
+('galleryEmptyDescription').textContent =
+'อัลบั้มนี้ยังไม่มีรูปภาพที่สามารถแสดงได้';
+('downloadStatusText').textContent = 'ไม่มีรูปภาพให้ดาวน์โหลด';
+}
+
+updateSelectionUI();
+} catch (error) {
+if (requestId !== state.photoRequestId) {
+return;
+}
+
+state.loadingPhotos = false;
+('galleryEmptyState').classList.remove('hidden');
+('galleryEmptyDescription').textContent =
+error.message || 'กรุณาลองเปิดอัลบั้มอีกครั้ง';
+
+('downloadStatusText').textContent = 'ไม่สามารถโหลดรูปภาพได้';
+
+toast(error.message || 'ไม่สามารถโหลดรูปภาพได้', 'error', 5500);
+}
+}
+
+function renderPhotos() {
+const grid = $('photoGrid');
+grid.innerHTML = '';
+
+const fragment = document.createDocumentFragment();
+
+state.currentPhotos.forEach((photo, index) => {
+const card = document.createElement('article');
+card.className = 'photo-card';
+card.dataset.photoId = photo.photoId;
+
+if (state.selectedPhotoIds.has(photo.photoId)) {
+card.classList.add('selected');
+}
+
+const imageWrap = document.createElement('div');
+imageWrap.className = 'photo-image-wrap';
+
+const image = document.createElement('img');
+image.className = 'photo-image';
+image.src = photo.imageUrl;
+image.alt = photo.originalName;
+image.loading = 'lazy';
+image.decoding = 'async';
+
+image.addEventListener('click', () => {
+openLightbox(index);
+});
+
+image.addEventListener('error', () => {
+image.style.opacity = '0.25';
+image.alt = 'ไม่สามารถโหลดรูปภาพนี้ได้';
+}, { once: true });
+
+const selectButton = document.createElement('button');
+selectButton.className = 'photo-select';
+selectButton.type = 'button';
+selectButton.setAttribute(
+'aria-label',
+'เลือกรูปภาพ ' + photo.originalName
+);
+
+selectButton.innerHTML = state.selectedPhotoIds.has(photo.photoId)
+? ICONS.check
+: '';
+
+selectButton.addEventListener('click', () => {
+togglePhotoSelection(photo.photoId);
+});
+
+const number = document.createElement('span');
+number.className = 'photo-number';
+number.textContent = String(index + 1);
+
+imageWrap.appendChild(image);
+imageWrap.appendChild(selectButton);
+imageWrap.appendChild(number);
+
+const footer = document.createElement('div');
+footer.className = 'photo-card-footer';
+
+const filename = document.createElement('span');
+filename.className = 'photo-filename';
+filename.title = photo.originalName;
+filename.textContent = photo.originalName;
+
+footer.appendChild(filename);
+
+card.appendChild(imageWrap);
+card.appendChild(footer);
+
+fragment.appendChild(card);
+});
+
+grid.appendChild(fragment);
+}
+
+function togglePhotoSelection(photoId) {
+if (state.selectedPhotoIds.has(photoId)) {
+state.selectedPhotoIds.delete(photoId);
+} else {
+state.selectedPhotoIds.add(photoId);
+}
+
+const card = Array.from(
+$('photoGrid').querySelectorAll('.photo-card')
+).find((item) => item.dataset.photoId === photoId);
+
+if (card) {
+const selected = state.selectedPhotoIds.has(photoId);
+card.classList.toggle('selected', selected);
+
+const button = card.querySelector('.photo-select');
+
+if (button) {
+button.innerHTML = selected ? ICONS.check : '';
+}
+}
+
+updateSelectionUI();
+}
+
+function selectAllPhotos() {
+state.currentPhotos.forEach((photo) => {
+state.selectedPhotoIds.add(photo.photoId);
+});
+
+renderPhotos();
+updateSelectionUI();
+}
+
+function clearPhotoSelection() {
+state.selectedPhotoIds.clear();
+renderPhotos();
+updateSelectionUI();
+}
+
+function getSelectedPhotos() {
+return state.currentPhotos.filter(
+(photo) => state.selectedPhotoIds.has(photo.photoId)
+);
+}
+
+function updateSelectionUI() {
+const selectedCount = state.selectedPhotoIds.size;
+const totalCount = state.currentPhotos.length;
+
+$('selectedPhotoCount').textContent =
+'เลือกแล้ว ' + formatNumber(selectedCount) + ' รูป';
+
+$('selectAllButton').textContent =
+totalCount > 0 && selectedCount === totalCount
+? 'เลือกครบแล้ว'
+: 'เลือกทั้งหมด';
+
+$('clearSelectionButton').textContent = 'ยกเลิกการเลือก';
+
+$('downloadSelectedButton').disabled =
+!CONFIG.ENABLE_DOWNLOADS || selectedCount === 0 || state.isDownloading;
+
+$('downloadAllButton').disabled =
+!CONFIG.ENABLE_DOWNLOADS || totalCount === 0 || state.isDownloading;
+
+$('downloadStatusText').textContent = state.isDownloading
+? 'กำลังเตรียมไฟล์ดาวน์โหลด...'
+: selectedCount
+? 'เลือกแล้ว ' + formatNumber(selectedCount) + ' จาก ' +
+formatNumber(totalCount) + ' รูป'
+: 'เลือกภาพที่ต้องการ หรือดาวน์โหลดทั้งหมดเป็น ZIP';
+}
+
+function openAlbumModal() {
+$('albumModal').classList.remove('hidden');
+document.body.classList.add('modal-open');
+}
+
+function closeAlbumModal() {
+$('albumModal').classList.add('hidden');
+document.body.classList.remove('modal-open');
+
+closeLightbox();
+
+if (state.currentAlbum) {
+clearAlbumUrl();
+updatePageMetadata(null);
+showSharedAlbumBanner(null);
+}
+
+state.currentAlbum = null;
+state.currentPhotos = [];
+state.selectedPhotoIds.clear();
+
+if (
+state.lastFocusedElement &&
+typeof state.lastFocusedElement.focus === 'function'
+) {
+state.lastFocusedElement.focus();
+}
+}
+
+function closeAlbumAndGoHome() {
+closeAlbumModal();
+clearAlbumUrl();
+
+window.scrollTo({
+top: 0,
+behavior: 'smooth'
+});
+}
+
+function openLightbox(index) {
+if (!state.currentPhotos.length) {
+return;
+}
+
+state.lightboxIndex = Math.max(
+0,
+Math.min(index, state.currentPhotos.length - 1)
+);
+
+renderLightbox();
+$('lightbox').classList.remove('hidden');
+}
+
+function renderLightbox() {
+const photo = state.currentPhotos[state.lightboxIndex];
+
+if (!photo) {
+return;
+}
+
+$('lightboxImage').src = photo.imageUrl; $('lightboxImage').alt = photo.originalName;
+$('lightboxCaption').textContent = photo.originalName; $('lightboxCounter').textContent =
+formatNumber(state.lightboxIndex + 1) + ' / ' +
+formatNumber(state.currentPhotos.length);
+
+$('lightboxPrevButton').disabled = state.lightboxIndex <= 0; $('lightboxNextButton').disabled =
+state.lightboxIndex >= state.currentPhotos.length - 1;
+}
+
+function navigateLightbox(direction) {
+const nextIndex = state.lightboxIndex + direction;
+
+if (nextIndex < 0 || nextIndex >= state.currentPhotos.length) {
+return;
+}
+
+state.lightboxIndex = nextIndex;
+renderLightbox();
+}
+
+function closeLightbox() {
+$('lightbox').classList.add('hidden'); $('lightboxImage').src = '';
+}
+
+function safeFilename(value) {
+let filename = String(value || 'image')
+.replace(/[\/:*?"<>|]/g, '_')
+.replace(/[\u0000-\u001f]/g, '')
+.replace(/\s+/g, ' ')
+.trim();
+
+filename = filename.replace(/^\.+|\.+$/g, '');
+
+if (!filename) {
+filename = 'image';
+}
+
+if (filename.length > CONFIG.MAX_FILENAME_LENGTH) {
+const dotIndex = filename.lastIndexOf('.');
+const hasExtension = dotIndex > 0 && filename.length - dotIndex <= 10;
+
+if (hasExtension) {
+const extension = filename.slice(dotIndex);
+filename = filename.slice(
+0,
+CONFIG.MAX_FILENAME_LENGTH - extension.length
+) + extension;
+} else {
+filename = filename.slice(0, CONFIG.MAX_FILENAME_LENGTH);
+}
+}
+
+return filename;
+}
+
+function extensionFromMime(mimeType) {
+const type = String(mimeType || '').toLowerCase().split(';')[0].trim();
+
+const map = {
+'image/jpeg': 'jpg',
+'image/jpg': 'jpg',
+'image/png': 'png',
+'image/webp': 'webp',
+'image/gif': 'gif',
+'image/bmp': 'bmp',
+'image/avif': 'avif',
+'image/heic': 'heic',
+'image/heif': 'heif',
+'image/tiff': 'tiff',
+'image/svg+xml': 'svg'
+};
+
+return map[type] || '';
+}
+
+function filenameWithExtension(photo, index) {
+let name = safeFilename(photo.originalName);
+
+if (!/\.[a-z0-9]{2,8}$/i.test(name)) {
+const extension = extensionFromMime(photo.mimeType) ||
+extensionFromUrl(photo.imageUrl) || 'jpg';
+
+name += '.' + extension;
+}
+
+if (!name || name === '.') {
+name = 'photo-' + String(index + 1).padStart(3, '0') + '.jpg';
+}
+
+return name;
+}
+
+function extensionFromUrl(url) {
+try {
+const pathname = new URL(url).pathname;
+const match = pathname.match(/\.([a-z0-9]{2,8})$/i);
+return match ? match[1].toLowerCase() : '';
+} catch (error) {
+return '';
+}
+}
+
+function uniqueFilename(filename, usedNames) {
+const cleanName = safeFilename(filename);
+
+if (!usedNames.has(cleanName.toLowerCase())) {
+usedNames.add(cleanName.toLowerCase());
+return cleanName;
+}
+
+const dotIndex = cleanName.lastIndexOf('.');
+const base = dotIndex > 0 ? cleanName.slice(0, dotIndex) : cleanName;
+const extension = dotIndex > 0 ? cleanName.slice(dotIndex) : '';
+
+let counter = 2;
+let candidate = '';
+
+do {
+candidate = base + '-' + counter + extension;
+counter += 1;
+} while (usedNames.has(candidate.toLowerCase()));
+
+usedNames.add(candidate.toLowerCase());
+return candidate;
+}
+
+async function fetchImageBlob(photo) {
+const response = await fetch(photo.imageUrl, {
+method: 'GET',
+mode: 'cors',
+credentials: 'omit',
+cache: 'default'
+});
+
+if (!response.ok) {
+throw new Error(
+'ดาวน์โหลดรูปภาพไม่สำเร็จ (HTTP ' + response.status + ')'
+);
+}
+
+const blob = await response.blob();
+
+if (!blob || blob.size === 0) {
+throw new Error('ไฟล์รูปภาพว่างเปล่า');
+}
+
+if (blob.type && !blob.type.startsWith('image/')) {
+throw new Error('ไฟล์ที่ได้รับไม่ใช่รูปภาพ');
+}
+
+return blob;
+}
+
+async function mapWithConcurrency(items, concurrency, callback) {
+const results = new Array(items.length);
+let nextIndex = 0;
+
+const workerCount = Math.min(
+Math.max(1, concurrency),
+items.length
+);
+
+async function worker() {
+while (true) {
+const index = nextIndex;
+nextIndex += 1;
+
+if (index >= items.length) {
+return;
+}
+
+try {
+results[index] = {
+success: true,
+value: await callback(items[index], index)
+};
+} catch (error) {
+results[index] = {
+success: false,
+error: error
+};
+}
+}
+}
+
+await Promise.all(
+Array.from({ length: workerCount }, () => worker())
+);
+
+return results;
+}
+
+function triggerBrowserDownload(blob, filename) {
+const objectUrl = URL.createObjectURL(blob);
+const anchor = document.createElement('a');
+
+anchor.href = objectUrl;
+anchor.download = filename;
+anchor.style.display = 'none';
+
+document.body.appendChild(anchor);
+anchor.click();
+anchor.remove();
+
+window.setTimeout(() => {
+URL.revokeObjectURL(objectUrl);
+}, 30000);
+}
+
+function loadJsZip() {
+if (window.JSZip) {
+return Promise.resolve(window.JSZip);
+}
+
+return Promise.reject(
+new Error('ไม่สามารถโหลดไลบรารี ZIP ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต')
+);
+}
+
+async function downloadPhotos(photos, mode = 'selected') {
+if (!CONFIG.ENABLE_DOWNLOADS) {
+toast('การดาวน์โหลดถูกปิดใช้งาน', 'warning');
+return;
+}
+
+if (state.isDownloading) {
+toast('กำลังเตรียมไฟล์ดาวน์โหลดอยู่ กรุณารอสักครู่', 'warning');
+return;
+}
+
+const list = Array.isArray(photos) ? photos.slice() : [];
+
+if (!list.length) {
+toast('ไม่มีรูปภาพให้ดาวน์โหลด', 'warning');
+return;
+}
+
+if (!state.currentAlbum) {
+toast('ไม่พบข้อมูลอัลบั้ม', 'error');
+return;
+}
+
+if (list.length === 1) {
+await downloadSinglePhoto(list[0], 0);
+return;
+}
+
+state.isDownloading = true;
+updateSelectionUI();
+
+('downloadAllButton').disabled = true;
+$('downloadStatusText').textContent =
+'กำลังดาวน์โหลดรูปภาพ 0 / ' + formatNumber(list.length) + ' รูป';
+
+try {
+const JSZipClass = await loadJsZip();
+const zip = new JSZipClass();
+
+const folderName = safeFilename(state.currentAlbum.title || 'ActiGallery');
+const folder = zip.folder(folderName);
+const usedNames = new Set();
+
+let completed = 0;
+let successCount = 0;
+let failureCount = 0;
+
+const results = await mapWithConcurrency(
+list,
+CONFIG.DOWNLOAD_CONCURRENCY,
+async (photo, index) => {
+const blob = await fetchImageBlob(photo);
+const requestedName = filenameWithExtension(photo, index);
+const filename = uniqueFilename(requestedName, usedNames);
+
+folder.file(filename, blob);
+return filename;
+}
+);
+
+results.forEach((result) => {
+completed += 1;
+
+if (result && result.success) {
+successCount += 1;
+} else {
+failureCount += 1;
+}
+});
+
+$('downloadStatusText').textContent =
+'สร้าง ZIP สำเร็จ ' + formatNumber(successCount) +
+' รูป' + (failureCount ? ' · ข้าม ' + formatNumber(failureCount) + ' รูป' : '');
+
+if (successCount === 0) {
+throw new Error(
+'ดาวน์โหลดรูปภาพไม่ได้เลย โปรดตรวจสอบว่าเซิร์ฟเวอร์รูปภาพอนุญาตให้เว็บไซต์เข้าถึงไฟล์ (CORS)'
+);
+}
+
+const blob = await zip.generateAsync(
+{
+type: 'blob',
+compression: 'DEFLATE',
+compressionOptions: {
+level: 3
+}
+},
+(metadata) => {
+$('downloadStatusText').textContent =
+'กำลังสร้างไฟล์ ZIP ' + Math.round(metadata.percent) + '%';
+}
+);
+
+const suffix = mode === 'all' ? 'all-photos' : 'selected-photos';
+const filename = safeFilename(folderName + '-' + suffix) + '.zip';
+
+triggerBrowserDownload(blob, filename);
+
+if (failureCount > 0) {
+toast(
+'สร้าง ZIP แล้ว ' + successCount + ' รูป แต่มี ' +
+failureCount + ' รูปที่ดาวน์โหลดไม่ได้ เนื่องจากข้อจำกัดของเซิร์ฟเวอร์รูปภาพ',
+'warning',
+6500
+);
+} else {
+toast('สร้างไฟล์ ZIP เรียบร้อยแล้ว (' + successCount + ' รูป)');
+}
+} catch (error) {
+toast(error.message || 'ไม่สามารถสร้างไฟล์ ZIP ได้', 'error', 6500);
+} finally {
+state.isDownloading = false;
+updateSelectionUI();
+}
+}
+
+async function downloadSinglePhoto(photo, index) {
+if (!photo || !photo.imageUrl) {
+toast('ไม่พบ URL ของรูปภาพ', 'error');
+return;
+}
+
+try {
+const blob = await fetchImageBlob(photo);
+const filename = filenameWithExtension(photo, index);
+triggerBrowserDownload(blob, filename);
+toast('เริ่มดาวน์โหลดรูปภาพแล้ว');
+} catch (error) {
+/*
+* A cross-origin server may block fetch(). In that case,
+* open the original image in a new tab as a fallback.
+* This does not guarantee an automatic file download.
+*/
+const fallback = await showConfirm({
+title: 'ดาวน์โหลดรูปภาพไม่สำเร็จ',
+message:
+(error.message || 'เซิร์ฟเวอร์ไม่อนุญาตให้ดาวน์โหลดโดยตรง') +
+'\n\nต้องการเปิดรูปภาพต้นฉบับในแท็บใหม่หรือไม่',
+confirmText: 'เปิดรูปภาพ',
+cancelText: 'ยกเลิก'
+});
+
+if (fallback) {
+const newWindow = window.open(
+photo.imageUrl,
+'_blank',
+'noopener,noreferrer'
+);
+
+if (!newWindow) {
+toast('เบราว์เซอร์บล็อกหน้าต่างใหม่ กรุณาอนุญาตป๊อปอัป', 'warning');
+}
+}
+}
+}
+
+async function downloadCurrentLightboxPhoto() {
+const photo = state.currentPhotos[state.lightboxIndex];
+
+if (!photo) {
+return;
+}
+
+await downloadSinglePhoto(photo, state.lightboxIndex);
+}
+
+async function shareCurrentAlbum() {
+if (!state.currentAlbum) {
+toast('กรุณาเปิดอัลบั้มก่อนแชร์', 'warning');
+return;
+}
+
+const url = getAlbumShareUrl(state.currentAlbum);
+
+await shareUrl(
+url,
+state.currentAlbum.title + ' | ActiGallery',
+'รับชมรูปภาพจากอัลบั้ม ' + state.currentAlbum.title
+);
+}
+
+async function shareWebsite() {
+const url = getCurrentOriginUrl();
+
+await shareUrl(
+url,
+'ActiGallery — คลังภาพกิจกรรม',
+'ค้นหาและรับชมรูปภาพกิจกรรมบน ActiGallery'
+);
+}
+
+function closeModalIfBackdrop(event) {
+if (event.target === $('albumModal')) {
+closeAlbumModal();
+}
+}
+
+function handleKeyboard(event) {
+if (!$('lightbox').classList.contains('hidden')) {
+if (event.key === 'Escape') {
+closeLightbox();
+return;
+}
+
+if (event.key === 'ArrowLeft') {
+navigateLightbox(-1);
+return;
+}
+
+if (event.key === 'ArrowRight') {
+navigateLightbox(1);
+return;
+}
+}
+
+if (!$('albumModal').classList.contains('hidden')) { if (event.key === 'Escape') { if (!$('lightbox').classList.contains('hidden')) {
+closeLightbox();
+} else {
+closeAlbumModal();
+}
+}
+}
+
+if (!$('confirmOverlay').classList.contains('hidden')) {
+if (event.key === 'Escape') {
+closeConfirm(false);
+}
+
+if (event.key === 'Enter') {
+closeConfirm(true);
+}
+}
+}
+
+function handlePopState() {
+const albumKey = getAlbumLookupValue();
+
+if (albumKey) {
+openAlbum(albumKey);
+} else if (!$('albumModal').classList.contains('hidden')) {
+closeAlbumModal();
+} else {
+updatePageMetadata(null);
+showSharedAlbumBanner(null);
+}
+}
+
+function bindEvents() {
+$('brandHome').addEventListener('click', (event) => {
+event.preventDefault();
+closeAlbumAndGoHome();
+});
+
+$('headerHomeButton').addEventListener('click', () => {
+closeAlbumAndGoHome();
+});
+
+$('headerShareButton').addEventListener('click', shareWebsite);
+
+$('backToAlbumsButton').addEventListener('click', () => {
+closeAlbumAndGoHome();
+});
+
+$('searchInput').addEventListener('input', debounce((event) => {
+state.search = safeText(event.target.value);
+loadAlbums(1);
+}, 350));
+
+$('categorySelect').addEventListener('change', (event) => {
+state.categoryId = safeText(event.target.value);
+loadAlbums(1);
+});
+
+$('gridViewButton').addEventListener('click', () => {
+setViewMode('grid');
+});
+
+$('listViewButton').addEventListener('click', () => {
+setViewMode('list');
+});
+
+$('clearSearchButton').addEventListener('click', () => { if (!$('searchInput').value && !$('categorySelect').value) {
+loadAlbums(1);
+return;
+}
+
+$('categorySelect').value = '';
+state.search = '';
+state.categoryId = '';
+loadAlbums(1);
+});
+
+$('modalDoneButton').addEventListener('click', closeAlbumModal);
+$('albumModal').addEventListener('click', closeModalIfBackdrop);
+
+$('selectAllButton').addEventListener('click', () => {
+if (!state.currentPhotos.length) {
+return;
+}
+
+if (state.selectedPhotoIds.size === state.currentPhotos.length) {
+clearPhotoSelection();
+} else {
+selectAllPhotos();
+}
+});
+
+$('clearSelectionButton').addEventListener('click', clearPhotoSelection);
+
+$('downloadSelectedButton').addEventListener('click', () => {
+downloadPhotos(getSelectedPhotos(), 'selected');
+});
+
+$('downloadAllButton').addEventListener('click', () => {
+downloadPhotos(state.currentPhotos, 'all');
+});
+
+$('shareAlbumButton').addEventListener('click', shareCurrentAlbum);
+
+$('closeLightboxButton').addEventListener('click', closeLightbox);
+
+$('lightbox').addEventListener('click', (event) => { if (event.target === $('lightbox')) {
+closeLightbox();
+}
+});
+
+$('lightboxPrevButton').addEventListener('click', () => {
+navigateLightbox(-1);
+});
+
+$('lightboxNextButton').addEventListener('click', () => {
+navigateLightbox(1);
+});
+
+$('lightboxDownloadButton').addEventListener(
+'click',
+downloadCurrentLightboxPhoto
+);
+
+$('confirmCancelButton').addEventListener('click', () => {
+closeConfirm(false);
+});
+
+$('confirmAcceptButton').addEventListener('click', () => {
+closeConfirm(true);
+});
+
+$('confirmOverlay').addEventListener('click', (event) => {
+  if (event.target === $('confirmOverlay')) {
+closeConfirm(false);
+}
+});
+
+document.addEventListener('keydown', handleKeyboard);
+window.addEventListener('popstate', handlePopState);
+}
+
+async function initializeApp() {
+$('footerYear').textContent = String(new Date().getFullYear());
+
+bindEvents();
+setViewMode('grid');
+updatePageMetadata(null);
+
+if (!isConfiguredApiUrl()) {
+$('albumGrid').classList.add('hidden'); $('albumsEmptyState').classList.remove('hidden');
+$('albumsEmptyTitle').textContent = 'ยังไม่ได้เชื่อมต่อ API'; $('albumsEmptyDescription').textContent =
+'กรุณาตั้งค่า CONFIG.API_URL ในไฟล์ index.html ให้เป็น URL ของ Google Apps Script Web App ที่ลงท้ายด้วย /exec';
+
+$('resultsCount').textContent = 'รอตั้งค่า API'; $('statAlbums').textContent = '—';
+$('statPhotos').textContent = '—';
+
+$('clearSearchButton').textContent = 'ลองเชื่อมต่ออีกครั้ง';
+
+toast(
+'กรุณาตั้งค่า API_URL ก่อนนำเว็บไซต์ไปใช้งาน',
+'warning',
+7000
+);
+
+return;
+}
+
+/*
+* Categories are optional. Load them in parallel with the
+* first album page so the page can become usable sooner.
+*/
+await Promise.allSettled([
+loadCategories(),
+loadAlbums(1)
+ ]);
+
+/*
+* If the user opened a shared URL, open that album after the
+* public album listing has initialized.
+*/
+const albumKey = getAlbumLookupValue();
+
+if (albumKey) {
+await openAlbum(albumKey);
+}
+}
+
+document.addEventListener('DOMContentLoaded', initializeApp);
+</script>
+</body>
+</html>
