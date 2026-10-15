@@ -1,1 +1,6292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="ActiGallery ระบบจัดการคลังภาพกิจกรรมออนไลน์">
+  <title>เข้าสู่ระบบ | ActiGallery</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #2878e8;
+      --primary-dark: #155cc2;
+      --primary-light: #edf5ff;
+      --background: #f6f8fb;
+      --surface: #ffffff;
+      --text: #243044;
+      --muted: #728096;
+      --border: #e3e9f1;
+      --green: #16834a;
+      --red: #dc3545;
+      --orange: #bf7611;
+      --radius: 12px;
+      --shadow: 0 5px 20px rgba(24, 43, 70, .055);
+      --sidebar-width: 250px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: "TH Sarabun New", "TH SarabunPSK", "Sarabun", sans-serif;
+      font-size: 19px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 16px;
+    }
+
+    .danger-text {
+      color: var(--red);
+    }
+
+    .success-text {
+      color: var(--green);
+    }
+
+    .wrap-anywhere {
+      overflow-wrap: anywhere;
+    }
+
+    .btn {
+      min-height: 41px;
+      padding: 8px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-size: 18px;
+      font-weight: 600;
+      transition: background .15s ease, border-color .15s ease;
+    }
+
+    .btn:active {
+      transform: scale(.985);
+    }
+
+    .btn-primary {
+      color: #ffffff;
+      background: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      color: #344054;
+      background: #ffffff;
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #f5f8fc;
+    }
+
+    .btn-danger {
+      color: #ffffff;
+      background: var(--red);
+    }
+
+    .btn-danger:hover {
+      background: #bd2636;
+    }
+
+    .btn-success {
+      color: #ffffff;
+      background: var(--green);
+    }
+
+    .btn-sm {
+      min-height: 33px;
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: #526074;
+      background: #ffffff;
+    }
+
+    .btn-icon:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 15px;
+      min-width: 0;
+    }
+
+    .form-group > label {
+      color: #344054;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      min-width: 0;
+      min-height: 44px;
+      padding: 9px 12px;
+      border: 1px solid #d8e0eb;
+      border-radius: 8px;
+      outline: none;
+      color: var(--text);
+      background: #ffffff;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(40, 120, 232, .12);
+    }
+
+    .form-control:disabled,
+    .form-control[readonly] {
+      color: #667085;
+      background: #f0f2f5;
+      cursor: not-allowed;
+    }
+
+    textarea.form-control {
+      min-height: 105px;
+      resize: vertical;
+    }
+
+    .form-hint {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .field-action {
+      display: flex;
+      align-items: stretch;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .field-action .form-control {
+      flex: 1;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 2px 0 16px;
+      color: #475467;
+      font-size: 17px;
+    }
+
+    .checkbox-row input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--primary);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-blue {
+      color: #1d60ba;
+      background: #eaf3ff;
+    }
+
+    .badge-green {
+      color: #187344;
+      background: #e8f8ee;
+    }
+
+    .badge-red {
+      color: #b42318;
+      background: #feecec;
+    }
+
+    .badge-gray {
+      color: #596679;
+      background: #eff2f6;
+    }
+
+    .badge-orange {
+      color: #975a16;
+      background: #fff4df;
+    }
+
+    .card {
+      min-width: 0;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      min-width: 0;
+      padding: 16px 19px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-body {
+      padding: 19px;
+    }
+
+    .section-heading {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .section-description {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .page-heading {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .page-heading h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+
+    .page-heading p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .page-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .toolbar {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .toolbar .form-control {
+      width: auto;
+      min-width: 180px;
+    }
+
+    .toolbar .search-input {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .empty-state {
+      padding: 38px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .empty-state > i {
+      display: block;
+      margin-bottom: 12px;
+      color: #a9b5c5;
+      font-size: 31px;
+    }
+
+    .empty-state > strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #526074;
+      font-size: 20px;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      min-width: 570px;
+      border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf0f5;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    .data-table th {
+      color: #667085;
+      background: #fafbfd;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      font-size: 18px;
+    }
+
+    .data-table tbody tr:hover {
+      background: #fafcff;
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* Login */
+
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+    }
+
+    .login-topbar {
+      padding: 20px 25px;
+      border-bottom: 1px solid #edf0f4;
+    }
+
+    .login-brand {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 37px;
+      height: 37px;
+      flex: 0 0 37px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      color: #ffffff;
+      background: var(--primary);
+      font-size: 19px;
+    }
+
+    .login-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 18px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 410px;
+    }
+
+    .login-box h1 {
+      margin: 0 0 5px;
+      font-size: 32px;
+    }
+
+    .login-description {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .login-box .form-control {
+      min-height: 47px;
+    }
+
+    .login-submit {
+      width: 100%;
+      min-height: 46px;
+      margin-top: 3px;
+    }
+
+    .help-link {
+      display: block;
+      margin: 19px auto 0;
+      padding: 4px;
+      border: 0;
+      color: var(--primary);
+      background: none;
+      font-size: 17px;
+      text-align: center;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .login-footer {
+      padding: 18px;
+      border-top: 1px solid #edf0f4;
+      color: #8a94a4;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    /* Loading */
+
+    #startup-loading {
+      position: fixed;
+      z-index: 8000;
+      inset: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      background: rgba(255, 255, 255, .97);
+      text-align: center;
+    }
+
+    .loading-spinner {
+      width: 39px;
+      height: 39px;
+      margin-bottom: 15px;
+      border: 4px solid #e1ebfa;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Back-office layout */
+
+    #app-screen {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .sidebar {
+      position: fixed;
+      z-index: 500;
+      inset: 0 auto 0 0;
+      width: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border-right: 1px solid var(--border);
+      transition: transform .2s ease;
+    }
+
+    .sidebar-brand {
+      min-height: 76px;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-brand-name {
+      min-width: 0;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .sidebar-brand-sub {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      padding: 14px 11px;
+      overflow-y: auto;
+    }
+
+    .menu-label {
+      padding: 11px 11px 7px;
+      color: #a1aab8;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    .nav-link {
+      width: 100%;
+      min-height: 44px;
+      margin-bottom: 4px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 0;
+      border-radius: 9px;
+      color: #667085;
+      background: transparent;
+      text-align: left;
+      font-size: 18px;
+    }
+
+    .nav-link i {
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+      background: #f3f7fd;
+    }
+
+    .nav-link.active {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 700;
+    }
+
+    .sidebar-bottom {
+      padding: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    .sidebar-user {
+      min-width: 0;
+      padding: 7px;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: var(--primary);
+      background: var(--primary-light);
+      font-size: 21px;
+    }
+
+    .sidebar-user-info {
+      min-width: 0;
+    }
+
+    .sidebar-user-info strong,
+    .sidebar-user-info span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sidebar-user-info strong {
+      font-size: 17px;
+    }
+
+    .sidebar-user-info span {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .sidebar-logout {
+      width: 100%;
+      justify-content: flex-start;
+      color: #6b7280;
+    }
+
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      margin-left: var(--sidebar-width);
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 300;
+      top: 0;
+      min-height: 76px;
+      padding: 13px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      background: rgba(255,255,255,.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar-left,
+    .topbar-right {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-title {
+      min-width: 0;
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .topbar-user {
+      min-width: 0;
+      padding-left: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 1px solid var(--border);
+    }
+
+    .topbar-user-info {
+      min-width: 0;
+      text-align: right;
+    }
+
+    .topbar-user-info strong,
+    .topbar-user-info span {
+      display: block;
+      max-width: 210px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .topbar-user-info strong {
+      font-size: 17px;
+    }
+
+    .topbar-user-info span {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .main-content {
+      width: 100%;
+      max-width: 1700px;
+      padding: 25px;
+      margin: 0 auto;
+    }
+
+    .mobile-menu-button {
+      display: none;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      z-index: 400;
+      inset: 0;
+      background: rgba(15, 23, 42, .38);
+    }
+
+    /* Dashboard cards */
+
+    .stat-grid {
+      margin-bottom: 22px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .stat-card {
+      min-width: 0;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      color: var(--primary);
+      background: var(--primary-light);
+      font-size: 22px;
+    }
+
+    .stat-info {
+      min-width: 0;
+    }
+
+    .stat-label {
+      display: block;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .stat-value {
+      display: block;
+      margin-top: 1px;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-subtitle {
+      display: block;
+      margin-top: 3px;
+      color: #98a2b3;
+      font-size: 15px;
+    }
+
+    /* Albums */
+
+    .album-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .album-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #ffffff;
+      transition: box-shadow .15s ease, transform .15s ease;
+    }
+
+    .album-card:hover {
+      box-shadow: 0 8px 22px rgba(35, 65, 100, .09);
+      transform: translateY(-2px);
+    }
+
+    .album-cover {
+      height: 175px;
+      position: relative;
+      overflow: hidden;
+      background: #edf2f7;
+    }
+
+    .album-cover img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .album-cover-placeholder {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a6b2c2;
+      font-size: 36px;
+    }
+
+    .album-card-body {
+      padding: 14px;
+    }
+
+    .album-card-title {
+      margin: 0 0 4px;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .album-card-meta {
+      color: var(--muted);
+      font-size: 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .album-card-actions {
+      margin-top: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    /* Image editor */
+
+    .editor-image-grid {
+      margin-top: 13px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .editor-photo {
+      position: relative;
+      min-width: 0;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      background: #eef2f7;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: pan-y;
+    }
+
+    .editor-photo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .editor-photo.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(40,120,232,.1);
+    }
+
+    .editor-photo.dragging {
+      opacity: .45;
+      border-color: var(--primary);
+    }
+
+    .photo-select-dot {
+      position: absolute;
+      z-index: 3;
+      top: 7px;
+      right: 7px;
+      width: 25px;
+      height: 25px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      color: transparent;
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 1px 5px rgba(0,0,0,.15);
+    }
+
+    .selection-mode .photo-select-dot {
+      display: flex;
+    }
+
+    .editor-photo.selected .photo-select-dot {
+      color: #ffffff;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .photo-order {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      color: #ffffff;
+      background: rgba(15,23,42,.65);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .photo-pending-label {
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      left: 5px;
+      padding: 3px 5px;
+      overflow: hidden;
+      border-radius: 5px;
+      color: #ffffff;
+      background: rgba(21,128,61,.9);
+      font-size: 14px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .floating-photo-toolbar {
+      position: sticky;
+      z-index: 50;
+      bottom: 12px;
+      width: max-content;
+      max-width: 100%;
+      margin: 18px auto 0;
+      padding: 9px;
+      display: flex;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid #dce5f0;
+      border-radius: 13px;
+      background: rgba(255,255,255,.97);
+      box-shadow: 0 10px 30px rgba(15,23,42,.16);
+    }
+
+    .upload-dropzone {
+      position: relative;
+      min-height: 120px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1.5px dashed #b9c9df;
+      border-radius: 11px;
+      color: #65748a;
+      background: #f9fbff;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .upload-dropzone:hover {
+      border-color: var(--primary);
+      background: #f0f6ff;
+    }
+
+    .upload-dropzone > i {
+      color: var(--primary);
+      font-size: 28px;
+    }
+
+    .upload-dropzone input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .progress-wrap {
+      padding: 13px;
+      margin-top: 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #f8fafc;
+    }
+
+    .progress-header {
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 17px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #e7edf5;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--primary);
+      transition: width .15s ease;
+    }
+
+    .progress-bar.complete {
+      background: var(--green);
+    }
+
+    /* Security */
+
+    .security-meter {
+      margin: 7px 0;
+      display: flex;
+      gap: 4px;
+    }
+
+    .security-meter span {
+      height: 6px;
+      flex: 1;
+      border-radius: 5px;
+      background: #e5e7eb;
+    }
+
+    .security-meter span.filled {
+      background: #dc2626;
+    }
+
+    .security-meter.level-medium span.filled {
+      background: #e7a329;
+    }
+
+    .security-meter.level-strong span.filled {
+      background: #16a34a;
+    }
+
+    .security-tips {
+      margin: 7px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* Center modal */
+
+    #modal-root {
+      position: relative;
+      z-index: 10000;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 10000;
+      inset: 0;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(17,24,39,.55);
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 560px;
+      max-height: min(90vh, 900px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 14px;
+      color: var(--text);
+      background: #ffffff;
+      box-shadow: 0 24px 80px rgba(0,0,0,.22);
+      animation: modal-enter .16s ease-out;
+    }
+
+    .modal-dialog.modal-wide {
+      max-width: 920px;
+    }
+
+    .modal-dialog.modal-image-viewer {
+      max-width: 1100px;
+      color: #ffffff;
+      background: #101828;
+      border-color: #101828;
+    }
+
+    @keyframes modal-enter {
+      from { opacity: 0; transform: translateY(9px) scale(.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 35px;
+      height: 35px;
+      border: 0;
+      border-radius: 8px;
+      color: #667085;
+      background: #f2f4f7;
+      font-size: 17px;
+    }
+
+    .modal-close:hover {
+      color: #111827;
+      background: #e9edf3;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 13px 20px;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      background: #fbfcfe;
+    }
+
+    .modal-image-stage {
+      min-height: 250px;
+      max-height: 72vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #101828;
+    }
+
+    .modal-image-stage img {
+      max-width: 100%;
+      max-height: 72vh;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Toast */
+
+    #toast-container {
+      position: fixed;
+      z-index: 12000;
+      top: 18px;
+      right: 18px;
+      width: min(390px, calc(100vw - 36px));
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 13px 15px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 8px 30px rgba(15,23,42,.13);
+      pointer-events: auto;
+      animation: toast-enter .18s ease-out;
+    }
+
+    .toast > i {
+      margin-top: 4px;
+    }
+
+    .toast.success > i { color: var(--green); }
+    .toast.error > i { color: var(--red); }
+    .toast.info > i { color: var(--primary); }
+
+    .toast-text {
+      flex: 1;
+      overflow-wrap: anywhere;
+    }
+
+    @keyframes toast-enter {
+      from { opacity: 0; transform: translateX(8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .contact-list {
+      margin-top: 17px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .contact-button {
+      min-height: 46px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: #344054;
+      background: #ffffff;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .contact-button:hover {
+      background: #f8fafc;
+      border-color: #c9d5e6;
+    }
+
+    .organization-logo {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #ffffff;
+    }
+
+    .logo-preview {
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px dashed #c8d2e0;
+      border-radius: 10px;
+      color: #9aa6b7;
+      background: #f9fbfd;
+    }
+
+    .logo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .pagination {
+      padding: 13px 17px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-note {
+      padding: 12px;
+      border-radius: 8px;
+      color: #53657c;
+      background: #f4f7fb;
+      font-size: 17px;
+    }
+
+    .inline-alert {
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      border: 1px solid #f4d7a1;
+      border-radius: 8px;
+      color: #8a5a13;
+      background: #fff9e9;
+    }
+
+    .profile-section {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-section .avatar {
+      width: 46px;
+      height: 46px;
+      flex-basis: 46px;
+      font-size: 23px;
+    }
+
+    @media (max-width: 1200px) {
+      .stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .album-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .sidebar {
+        transform: translateX(-105%);
+      }
+
+      body.sidebar-open .sidebar {
+        transform: translateX(0);
+      }
+
+      body.sidebar-open .sidebar-overlay {
+        display: block;
+      }
+
+      .main-area {
+        margin-left: 0;
+      }
+
+      .mobile-menu-button {
+        display: inline-flex;
+      }
+
+      .topbar {
+        min-height: 66px;
+        padding: 12px 15px;
+      }
+
+      .topbar-title {
+        font-size: 21px;
+      }
+
+      .topbar-user-info {
+        display: none;
+      }
+
+      .topbar-user {
+        padding-left: 0;
+        border-left: 0;
+      }
+
+      .main-content {
+        padding: 17px;
+      }
+
+      .editor-image-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 580px) {
+      body {
+        font-size: 18px;
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 14px;
+        gap: 10px;
+      }
+
+      .stat-icon {
+        width: 39px;
+        height: 39px;
+        flex-basis: 39px;
+        font-size: 18px;
+      }
+
+      .stat-value {
+        font-size: 25px;
+      }
+
+      .stat-label {
+        font-size: 16px;
+      }
+
+      .album-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .album-cover {
+        height: 190px;
+      }
+
+      .form-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+      }
+
+      .page-heading h1 {
+        font-size: 26px;
+      }
+
+      .page-heading {
+        align-items: stretch;
+      }
+
+      .page-actions {
+        width: 100%;
+      }
+
+      .page-actions .btn {
+        flex: 1;
+      }
+
+      .toolbar {
+        align-items: stretch;
+      }
+
+      .toolbar .form-control,
+      .toolbar .search-input {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .editor-image-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .modal-backdrop {
+        padding: 10px;
+      }
+
+      .modal-dialog {
+        max-height: 94vh;
+        border-radius: 12px;
+      }
+
+      .modal-header {
+        padding: 13px 15px;
+      }
+
+      .modal-body {
+        padding: 15px;
+      }
+
+      .modal-footer {
+        padding: 11px 15px;
+      }
+
+      .contact-list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .login-topbar {
+        padding: 16px;
+      }
+
+      .login-main {
+        align-items: flex-start;
+        padding-top: 58px;
+      }
+
+      .login-box h1 {
+        font-size: 29px;
+      }
+
+      .floating-photo-toolbar {
+        width: 100%;
+        gap: 5px;
+        padding: 7px;
+      }
+
+      .floating-photo-toolbar .btn {
+        flex: 1;
+        padding: 7px 10px;
+        font-size: 16px;
+      }
+
+      .data-table {
+        min-width: 520px;
+      }
+
+      .topbar-right > #copy-current-page {
+        width: 38px;
+        padding: 0;
+      }
+
+      .copy-page-label {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- หน้าล็อกอิน -->
+  <section id="login-screen">
+    <header class="login-topbar">
+      <div class="login-brand">
+        <span class="brand-mark"><i class="fa-solid fa-images"></i></span>
+        <span>ActiGallery</span>
+      </div>
+    </header>
+
+    <main class="login-main">
+      <div class="login-box">
+        <h1>เข้าสู่ระบบ</h1>
+        <p class="login-description">ระบบจัดการคลังภาพกิจกรรมออนไลน์</p>
+
+        <form id="login-form" autocomplete="on">
+          <div class="form-group">
+            <label for="login-username">ชื่อผู้ใช้</label>
+            <input
+              class="form-control"
+              id="login-username"
+              name="username"
+              type="text"
+              autocomplete="username"
+              required
+              maxlength="100"
+              placeholder="กรอกชื่อผู้ใช้"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">รหัสผ่าน</label>
+            <div class="field-action">
+              <input
+                class="form-control"
+                id="login-password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+                placeholder="กรอกรหัสผ่าน"
+              >
+              <button
+                class="btn-icon"
+                type="button"
+                id="toggle-login-password"
+                aria-label="แสดงหรือซ่อนรหัสผ่าน"
+                title="แสดงหรือซ่อนรหัสผ่าน"
+              >
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <label class="checkbox-row">
+            <input id="remember-me" type="checkbox">
+            <span>จดจำการเข้าสู่ระบบ</span>
+          </label>
+
+          <button class="btn btn-primary login-submit" type="submit" id="login-submit">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>เข้าสู่ระบบ</span>
+          </button>
+        </form>
+
+        <button type="button" class="help-link" id="open-login-help">
+          ฉันจะทราบอีเมลและรหัสผ่านได้อย่างไร
+        </button>
+      </div>
+    </main>
+
+    <footer class="login-footer">
+      ActiGallery · ระบบคลังภาพกิจกรรมออนไลน์
+    </footer>
+  </section>
+
+  <!-- ตรวจสอบ Session ก่อนเปิดหน้าแอป -->
+  <div id="startup-loading" class="hidden" role="status" aria-live="polite">
+    <div class="loading-spinner"></div>
+    <strong id="startup-loading-title">กำลังโหลดข้อมูลการใช้งาน</strong>
+    <div
+      id="startup-loading-subtitle"
+      class="muted small"
+      style="margin-top:6px"
+    >
+      กำลังตรวจสอบสถานะการเข้าสู่ระบบ
+    </div>
+  </div>
+
+  <!-- ระบบหลังบ้าน -->
+  <div id="app-screen" class="hidden">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-mark"><i class="fa-solid fa-images"></i></span>
+        <div class="sidebar-brand-name">
+          ActiGallery
+          <span class="sidebar-brand-sub">คลังภาพกิจกรรมออนไลน์</span>
+        </div>
+      </div>
+
+      <nav id="sidebar-menu" class="sidebar-menu" aria-label="เมนูหลัก"></nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div class="sidebar-user-info">
+            <strong id="sidebar-user-name">ผู้ใช้งาน</strong>
+            <span id="sidebar-user-org">หน่วยงาน</span>
+          </div>
+        </div>
+
+        <button class="btn sidebar-logout" id="sidebar-logout" type="button">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          ออกจากระบบ
+        </button>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button
+            class="btn-icon mobile-menu-button"
+            id="mobile-menu-button"
+            type="button"
+            aria-label="เปิดเมนู"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="topbar-title" id="topbar-title">แดชบอร์ด</div>
+        </div>
+
+        <div class="topbar-right">
+          <button
+            class="btn btn-secondary btn-sm"
+            type="button"
+            id="copy-current-page"
+            title="คัดลอกลิงก์หน้านี้"
+          >
+            <i class="fa-regular fa-copy"></i>
+            <span class="copy-page-label">คัดลอกลิงก์หน้านี้</span>
+          </button>
+
+          <div class="topbar-user">
+            <div class="topbar-user-info">
+              <strong id="topbar-user-name">ผู้ใช้งาน</strong>
+              <span id="topbar-user-org">หน่วยงาน</span>
+            </div>
+            <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content" id="main-content"></main>
+    </div>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <script>
+    'use strict';
+
+    /* =========================================================
+       1. CONFIGURATION
+       ========================================================= */
+
+    const CONFIG = Object.freeze({
+      API_URL: 'https://script.google.com/macros/s/AKfycbwbTJBCd8ROe0yrAGBVz7PXuIHCoUB4DI5F-Nhljzy38RG7Dzw6fDIFZNO430E7_HdPjw/exec',
+      HOME_URL: 'https://anonmsg.online/',
+      SESSION_STORAGE_KEY: 'actigallery_session_token',
+      REMEMBER_STORAGE_KEY: 'actigallery_remember_token',
+      USER_CACHE_KEY: 'actigallery_user_cache',
+      REQUEST_POLL_INTERVAL_MS: 650,
+      REQUEST_MAX_POLLS: 55,
+      MAX_IMAGE_BYTES: 18 * 1024 * 1024,
+      MAX_BATCH_FILES: 500,
+      PAGE_SIZE: 50
+    });
+
+    const state = {
+      token: '',
+      user: null,
+      route: 'dashboard',
+      organizations: [],
+      categories: [],
+      albums: [],
+      users: [],
+      logs: [],
+      logOffset: 0,
+      logTotal: 0,
+      logFilter: '',
+      albumSearch: '',
+      userSearch: '',
+      organizationSearch: '',
+      categorySearch: '',
+      editor: null
+    };
+
+    const PAGE_TITLES = {
+      dashboard: 'แดชบอร์ด',
+      users: 'จัดการผู้ใช้งาน',
+      organizations: 'จัดการหน่วยงานและองค์กร',
+      albums: 'จัดการอัลบั้ม',
+      categories: 'จัดการหมวดหมู่',
+      security: 'ความปลอดภัย',
+      logs: 'ประวัติการใช้งาน'
+    };
+
+    const ROLE_LABELS = {
+      admin: 'ผู้ดูแลระบบ',
+      album_manager: 'ผู้จัดการอัลบั้ม'
+    };
+
+    /* =========================================================
+       2. GENERAL UTILITIES
+       ========================================================= */
+
+    const $ = (selector, root) =>
+      (root || document).querySelector(selector);
+
+    const $$ = (selector, root) =>
+      Array.from((root || document).querySelectorAll(selector));
+
+    function esc(value) {
+      return String(value === undefined || value === null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function isAdmin() {
+      return Boolean(state.user && state.user.role === 'admin');
+    }
+
+    function isAlbumManager() {
+      return Boolean(state.user && state.user.role === 'album_manager');
+    }
+
+    function formatDate(value, includeTime) {
+      if (!value) return '—';
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return String(value);
+      }
+
+      const options = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      };
+
+      if (includeTime) {
+        options.hour = '2-digit';
+        options.minute = '2-digit';
+      }
+
+      return new Intl.DateTimeFormat('th-TH', options).format(date);
+    }
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat('th-TH').format(Number(value || 0));
+    }
+
+    function makeRandomHex(bytes) {
+      const data = new Uint8Array(bytes || 24);
+
+      if (window.crypto && window.crypto.getRandomValues) {
+        window.crypto.getRandomValues(data);
+      } else {
+        for (let i = 0; i < data.length; i++) {
+          data[i] = Math.floor(Math.random() * 256);
+        }
+      }
+
+      return Array.from(data)
+        .map(byte => byte.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    /*
+     * ชื่อผู้ใช้และรหัสผ่านในหน้าสร้างบัญชีจะเป็นตัวอย่างระหว่างกรอก
+     * ค่าที่ใช้จริงจะเป็น credentials ซึ่งเซิร์ฟเวอร์ส่งกลับหลังสร้างบัญชี
+     */
+    function makeTemporaryUsername() {
+      const data = new Uint32Array(1);
+
+      if (window.crypto && window.crypto.getRandomValues) {
+        window.crypto.getRandomValues(data);
+      } else {
+        data[0] = Math.floor(Math.random() * 4294967295);
+      }
+
+      return 'AGL' + String(data[0] % 1000000).padStart(6, '0');
+    }
+
+    function makeTemporaryPassword() {
+      const randomValue = Math.floor(Math.random() * 10000000);
+      return 'GF' + String(randomValue).padStart(7, '0');
+    }
+
+    function roleBadge(role) {
+      if (role === 'admin') {
+        return '<span class="badge badge-blue"><i class="fa-solid fa-shield-halved"></i> ผู้ดูแลระบบ</span>';
+      }
+
+      return '<span class="badge badge-gray"><i class="fa-solid fa-images"></i> ผู้จัดการอัลบั้ม</span>';
+    }
+
+    function statusBadge(active) {
+      return active
+        ? '<span class="badge badge-green">เปิดใช้งาน</span>'
+        : '<span class="badge badge-red">ปิดใช้งาน</span>';
+    }
+
+    function publishedBadge(value) {
+      return value
+        ? '<span class="badge badge-green">เผยแพร่</span>'
+        : '<span class="badge badge-orange">ฉบับร่าง</span>';
+    }
+
+    function getRouteFromHash() {
+      const raw = window.location.hash.replace(/^#/, '').trim();
+      const route = raw.split('?')[0];
+
+      return PAGE_TITLES[route] ? route : 'dashboard';
+    }
+
+    function setBusy(button, busy, busyText) {
+      if (!button) return;
+
+      if (busy) {
+        if (!button.dataset.originalHtml) {
+          button.dataset.originalHtml = button.innerHTML;
+        }
+
+        button.disabled = true;
+        button.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin"></i> ' +
+          esc(busyText || 'กำลังดำเนินการ');
+      } else {
+        button.disabled = false;
+
+        if (button.dataset.originalHtml) {
+          button.innerHTML = button.dataset.originalHtml;
+          delete button.dataset.originalHtml;
+        }
+      }
+    }
+
+    function showStartupLoading(title, subtitle) {
+      $('#startup-loading-title').textContent =
+        title || 'กำลังโหลดข้อมูลการใช้งาน';
+
+      $('#startup-loading-subtitle').textContent =
+        subtitle || 'กำลังตรวจสอบสถานะการเข้าสู่ระบบ';
+
+      $('#startup-loading').classList.remove('hidden');
+    }
+
+    function hideStartupLoading() {
+      $('#startup-loading').classList.add('hidden');
+    }
+
+    function showToast(message, type) {
+      const container = $('#toast-container');
+      const toast = document.createElement('div');
+
+      toast.className = 'toast ' + (
+        type === 'error'
+          ? 'error'
+          : type === 'success'
+            ? 'success'
+            : 'info'
+      );
+
+      const icon = type === 'error'
+        ? 'fa-circle-exclamation'
+        : type === 'success'
+          ? 'fa-circle-check'
+          : 'fa-circle-info';
+
+      toast.innerHTML =
+        '<i class="fa-solid ' + icon + '"></i>' +
+        '<div class="toast-text">' + esc(message) + '</div>' +
+        '<button type="button" class="btn-icon toast-close" aria-label="ปิดข้อความ">' +
+          '<i class="fa-solid fa-xmark"></i>' +
+        '</button>';
+
+      $('.toast-close', toast).addEventListener('click', function () {
+        toast.remove();
+      });
+
+      container.appendChild(toast);
+
+      setTimeout(function () {
+        if (toast.isConnected) toast.remove();
+      }, 4500);
+    }
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const textarea = document.createElement('textarea');
+
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+
+          const success = document.execCommand('copy');
+          textarea.remove();
+
+          if (!success) {
+            throw new Error('ไม่สามารถคัดลอกได้');
+          }
+        }
+
+        showToast('คัดลอกเรียบร้อยแล้ว', 'success');
+      } catch (error) {
+        showToast(
+          'ไม่สามารถคัดลอกได้ กรุณาคัดลอกลิงก์ด้วยตนเอง',
+          'error'
+        );
+      }
+    }
+
+    function currentPageUrl(route) {
+      const url = new URL(window.location.href);
+      url.hash = route || state.route;
+      url.search = '';
+      return url.toString();
+    }
+
+    function getOrganizationName(organizationId) {
+      const organization = state.organizations.find(item =>
+        String(item.organizationId) === String(organizationId)
+      );
+
+      return organization ? organization.name : 'ไม่มีหน่วยงาน';
+    }
+
+    /* =========================================================
+       3. API COMMUNICATION
+       ========================================================= */
+
+    /*
+     * GET อ่านข้อมูลผ่าน JSONP เพื่อให้ทำงานจาก GitHub Pages
+     * โดยไม่ต้องอ่าน Response ข้าม Origin โดยตรง
+     */
+    function apiGet(params) {
+      return new Promise(function (resolve, reject) {
+        const callbackName = '__actigallery_jsonp_' + makeRandomHex(8);
+        const query = new URLSearchParams();
+
+        Object.keys(params || {}).forEach(function (key) {
+          const value = params[key];
+
+          if (value === undefined || value === null) return;
+
+          query.set(
+            key,
+            typeof value === 'object'
+              ? JSON.stringify(value)
+              : String(value)
+          );
+        });
+
+        query.set('callback', callbackName);
+
+        const script = document.createElement('script');
+        let finished = false;
+        let timeout = null;
+
+        function cleanup() {
+          if (finished) return;
+
+          finished = true;
+          clearTimeout(timeout);
+
+          try {
+            delete window[callbackName];
+          } catch (error) {
+            window[callbackName] = undefined;
+          }
+
+          script.remove();
+        }
+
+        timeout = setTimeout(function () {
+          cleanup();
+          reject(new Error('หมดเวลารอ API กรุณาตรวจสอบการเชื่อมต่อ'));
+        }, 25000);
+
+        window[callbackName] = function (result) {
+          cleanup();
+          resolve(result);
+        };
+
+        script.onerror = function () {
+          cleanup();
+          reject(new Error('ไม่สามารถเชื่อมต่อ API ได้'));
+        };
+
+        script.async = true;
+        script.src = CONFIG.API_URL + '?' + query.toString();
+        document.head.appendChild(script);
+      });
+    }
+
+    /*
+     * POST ส่งการทำรายการไปยัง Code.gs
+     * และอ่านผลลัพธ์กลับผ่าน action=apiResult
+     * ตามรูปแบบ Request Cache ของ Code.gs ที่ใช้อยู่
+     */
+    async function apiPost(params) {
+      const requestId = makeRandomHex(20);
+      const requestSecret = makeRandomHex(32);
+
+      const payload = Object.assign({}, params, {
+        requestId: requestId,
+        requestSecret: requestSecret
+      });
+
+      let postError = null;
+
+      try {
+        await fetch(CONFIG.API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          redirect: 'follow',
+          headers: {
+            'Content-Type': 'text/plain;charset=UTF-8'
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        postError = error;
+      }
+
+      for (
+        let attempt = 0;
+        attempt < CONFIG.REQUEST_MAX_POLLS;
+        attempt++
+      ) {
+        try {
+          const result = await apiGet({
+            action: 'apiResult',
+            requestId: requestId,
+            requestSecret: requestSecret
+          });
+
+          if (result && result.pending) {
+            await sleep(CONFIG.REQUEST_POLL_INTERVAL_MS);
+            continue;
+          }
+
+          if (result && result.success === false) {
+            throw new Error(
+              result.message || 'ทำรายการไม่สำเร็จ'
+            );
+          }
+
+          if (result && result.success === true) {
+            return result;
+          }
+
+          if (result && typeof result === 'object') {
+            return result;
+          }
+
+          await sleep(CONFIG.REQUEST_POLL_INTERVAL_MS);
+        } catch (error) {
+          if (
+            error &&
+            error.message &&
+            error.message.indexOf('หมดเวลารอ API') === -1
+          ) {
+            throw error;
+          }
+
+          await sleep(CONFIG.REQUEST_POLL_INTERVAL_MS);
+        }
+      }
+
+      if (postError) {
+        throw new Error(
+          'ส่งข้อมูลไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตและลองใหม่'
+        );
+      }
+
+      throw new Error(
+        'ไม่ได้รับผลลัพธ์จากเซิร์ฟเวอร์ภายในเวลาที่กำหนด'
+      );
+    }
+
+    async function callGet(action, params) {
+      const result = await apiGet(
+        Object.assign({}, params || {}, {
+          action: action
+        })
+      );
+
+      if (!result || result.success !== true) {
+        throw new Error(
+          result && result.message
+            ? result.message
+            : 'ไม่สามารถโหลดข้อมูลได้'
+        );
+      }
+
+      return result;
+    }
+
+    async function callPost(action, params) {
+      const result = await apiPost(
+        Object.assign({}, params || {}, {
+          action: action,
+          token: state.token
+        })
+      );
+
+      if (!result || result.success !== true) {
+        throw new Error(
+          result && result.message
+            ? result.message
+            : 'ทำรายการไม่สำเร็จ'
+        );
+      }
+
+      return result;
+    }
+
+    /* =========================================================
+       4. LOGIN, SESSION AND LOGOUT
+       ========================================================= */
+
+    function getSavedToken() {
+      try {
+        const remembered = localStorage.getItem(
+          CONFIG.REMEMBER_STORAGE_KEY
+        );
+
+        if (remembered) return remembered;
+
+        const temporary = sessionStorage.getItem(
+          CONFIG.SESSION_STORAGE_KEY
+        );
+
+        if (temporary) return temporary;
+      } catch (error) {
+        console.warn('Browser storage is unavailable.');
+      }
+
+      return '';
+    }
+
+    function saveToken(token, rememberMe) {
+      clearSavedToken();
+
+      state.token = token;
+
+      try {
+        if (rememberMe) {
+          localStorage.setItem(
+            CONFIG.REMEMBER_STORAGE_KEY,
+            token
+          );
+        } else {
+          sessionStorage.setItem(
+            CONFIG.SESSION_STORAGE_KEY,
+            token
+          );
+        }
+      } catch (error) {
+        showToast(
+          'เบราว์เซอร์ไม่อนุญาตให้จดจำการเข้าสู่ระบบ',
+          'error'
+        );
+      }
+    }
+
+    function clearSavedToken() {
+      try {
+        localStorage.removeItem(CONFIG.REMEMBER_STORAGE_KEY);
+        sessionStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
+        localStorage.removeItem(CONFIG.USER_CACHE_KEY);
+      } catch (error) {
+        /* เบราว์เซอร์อาจปิดการใช้งาน Storage */
+      }
+
+      state.token = '';
+      state.user = null;
+    }
+
+    async function login(username, password, rememberMe) {
+      const result = await apiPost({
+        action: 'login',
+        username: username,
+        password: password,
+        rememberMe: rememberMe,
+        userAgent: navigator.userAgent
+      });
+
+      if (!result || result.success !== true || !result.token) {
+        throw new Error(
+          result && result.message
+            ? result.message
+            : 'เข้าสู่ระบบไม่สำเร็จ'
+        );
+      }
+
+      saveToken(result.token, rememberMe);
+      state.user = result.user;
+
+      try {
+        localStorage.setItem(
+          CONFIG.USER_CACHE_KEY,
+          JSON.stringify(result.user)
+        );
+      } catch (error) {
+        /* ไม่จำเป็นต้องบันทึกข้อมูลที่แคชไว้ */
+      }
+
+      return result;
+    }
+
+    async function validateExistingSession() {
+      const token = getSavedToken();
+
+      if (!token) {
+        showLoginScreen();
+        return;
+      }
+
+      state.token = token;
+
+      try {
+        const result = await callGet('me', {
+          token: token
+        });
+
+        state.user = result.user;
+
+        try {
+          localStorage.setItem(
+            CONFIG.USER_CACHE_KEY,
+            JSON.stringify(result.user)
+          );
+        } catch (error) {
+          /* ไม่จำเป็นต้องบันทึกข้อมูลที่แคชไว้ */
+        }
+
+        showAppScreen();
+        await initializeAppData();
+        navigate(getRouteFromHash(), false);
+      } catch (error) {
+        clearSavedToken();
+        showLoginScreen();
+
+        if (window.location.hash) {
+          history.replaceState(
+            null,
+            '',
+            window.location.pathname + window.location.search
+          );
+        }
+      } finally {
+        hideStartupLoading();
+      }
+    }
+
+    function showLoginScreen() {
+      $('#login-screen').classList.remove('hidden');
+      $('#app-screen').classList.add('hidden');
+      hideStartupLoading();
+    }
+
+    function showAppScreen() {
+      $('#login-screen').classList.add('hidden');
+      $('#app-screen').classList.remove('hidden');
+      renderUserProfile();
+      renderNavigation();
+    }
+
+    function renderUserProfile() {
+      if (!state.user) return;
+
+      const name = state.user.fullName ||
+        state.user.username ||
+        'ผู้ใช้งาน';
+
+      const organization = state.user.organizationName ||
+        ROLE_LABELS[state.user.role] ||
+        'ผู้ใช้งาน';
+
+      $('#sidebar-user-name').textContent = name;
+      $('#sidebar-user-org').textContent = organization;
+      $('#topbar-user-name').textContent = name;
+      $('#topbar-user-org').textContent = organization;
+    }
+
+    async function performLogout() {
+      const accepted = await askConfirm(
+        'ออกจากระบบ',
+        'ต้องการออกจากระบบ ActiGallery ใช่หรือไม่',
+        'ออกจากระบบ',
+        'btn-danger'
+      );
+
+      if (!accepted) return;
+
+      try {
+        if (state.token) {
+          await callPost('logout', {});
+        }
+      } catch (error) {
+        /* ล้าง Token ในเบราว์เซอร์ต่อไป */
+      }
+
+      clearSavedToken();
+      closeSidebarMobile();
+      closeModal();
+      showLoginScreen();
+
+      $('#login-password').value = '';
+      $('#login-username').focus();
+
+      history.replaceState(
+        null,
+        '',
+        window.location.pathname + window.location.search
+      );
+
+      showToast('ออกจากระบบเรียบร้อยแล้ว', 'success');
+    }
+
+    /* =========================================================
+       5. CENTER MODALS AND HELP
+       ========================================================= */
+
+    function openModal(options) {
+      closeModal();
+
+      const title = options.title || '';
+      const wide = options.wide ? 'modal-wide' : '';
+      const imageViewer = options.imageViewer
+        ? 'modal-image-viewer'
+        : '';
+
+      $('#modal-root').innerHTML =
+        '<div class="modal-backdrop" data-modal-backdrop>' +
+          '<section class="modal-dialog ' + wide + ' ' + imageViewer +
+            '" role="dialog" aria-modal="true" aria-label="' + esc(title) + '">' +
+            '<header class="modal-header">' +
+              '<h2>' + esc(title) + '</h2>' +
+              '<button class="modal-close" type="button" data-modal-close aria-label="ปิด">' +
+                '<i class="fa-solid fa-xmark"></i>' +
+              '</button>' +
+            '</header>' +
+            '<div class="modal-body">' + (options.body || '') + '</div>' +
+            (options.footer
+              ? '<footer class="modal-footer">' + options.footer + '</footer>'
+              : '') +
+          '</section>' +
+        '</div>';
+
+      const root = $('#modal-root');
+
+      $('[data-modal-close]', root).addEventListener(
+        'click',
+        closeModal
+      );
+
+      const backdrop = $('[data-modal-backdrop]', root);
+
+      backdrop.addEventListener('click', function (event) {
+        if (event.target === backdrop) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', modalEscapeHandler);
+
+      const firstInput = $(
+        'input, button, select, textarea',
+        $('.modal-dialog', root)
+      );
+
+      if (firstInput) {
+        setTimeout(function () {
+          try {
+            firstInput.focus();
+          } catch (error) {
+            /* ข้ามกรณีที่ Focus ไม่สำเร็จ */
+          }
+        }, 20);
+      }
+    }
+
+    function modalEscapeHandler(event) {
+      if (event.key === 'Escape') closeModal();
+    }
+
+    function closeModal() {
+      $('#modal-root').innerHTML = '';
+      document.removeEventListener('keydown', modalEscapeHandler);
+    }
+
+    function askConfirm(title, message, confirmText, confirmClass) {
+      return new Promise(function (resolve) {
+        let completed = false;
+
+        function finish(value) {
+          if (completed) return;
+
+          completed = true;
+          closeModal();
+          resolve(value);
+        }
+
+        openModal({
+          title: title,
+          body:
+            '<div style="display:flex;align-items:flex-start;gap:13px">' +
+              '<div style="width:43px;height:43px;flex:0 0 43px;border-radius:11px;background:#fff2e8;color:#d97706;display:flex;align-items:center;justify-content:center;font-size:21px">' +
+                '<i class="fa-solid fa-circle-exclamation"></i>' +
+              '</div>' +
+              '<div>' +
+                '<div style="font-size:20px;font-weight:600;margin-bottom:5px">' +
+                  esc(message) +
+                '</div>' +
+                '<div class="muted small">โปรดตรวจสอบก่อนยืนยันการทำรายการ</div>' +
+              '</div>' +
+            '</div>',
+          footer:
+            '<button type="button" class="btn btn-secondary" id="confirm-cancel">ยกเลิก</button>' +
+            '<button type="button" class="btn ' +
+              (confirmClass || 'btn-danger') +
+              '" id="confirm-yes">' +
+              esc(confirmText || 'ยืนยัน') +
+            '</button>'
+        });
+
+        $('#confirm-cancel').addEventListener(
+          'click',
+          () => finish(false)
+        );
+
+        $('#confirm-yes').addEventListener(
+          'click',
+          () => finish(true)
+        );
+      });
+    }
+
+    function openHelpModal() {
+      openModal({
+        title: 'ฉันจะทราบอีเมลและรหัสผ่านได้อย่างไร',
+        body:
+          '<p style="margin:0;font-size:19px">' +
+            'กดปุ่มด้านล่างเพื่อติดต่อผู้ดูแลระบบเพื่อรับอีเมลและรหัสผ่าน' +
+          '</p>' +
+          '<div class="contact-list">' +
+            '<a class="contact-button" href="https://www.instagram.com/pbx._xtx?vrfl=aTNkOXh6c2psYnUz" target="_blank" rel="noopener noreferrer">' +
+              '<i class="fa-brands fa-instagram" style="color:#c13584"></i> Instagram' +
+            '</a>' +
+            '<a class="contact-button" href="https://www.facebook.com/share/19KmqHCsau/" target="_blank" rel="noopener noreferrer">' +
+              '<i class="fa-brands fa-facebook" style="color:#1877f2"></i> Facebook' +
+            '</a>' +
+            '<a class="contact-button" href="https://line.me/ti/p/3s-wr765kK" target="_blank" rel="noopener noreferrer">' +
+              '<i class="fa-brands fa-line" style="color:#06c755"></i> LINE' +
+            '</a>' +
+            '<a class="contact-button" href="tel:0624098141">' +
+              '<i class="fa-solid fa-phone" style="color:#16803c"></i> โทร 0624098141' +
+            '</a>' +
+            '<a class="contact-button" href="mailto:ponlabat.for.work.1@gmail.com">' +
+              '<i class="fa-solid fa-envelope" style="color:#2878e8"></i> E-mail' +
+            '</a>' +
+          '</div>',
+        footer:
+          '<button type="button" class="btn btn-secondary" id="close-help-modal">ปิด</button>'
+      });
+
+      $('#close-help-modal').addEventListener('click', closeModal);
+    }
+
+    /* =========================================================
+       6. ROLE-BASED NAVIGATION
+       ========================================================= */
+
+    function getNavigationItems() {
+      if (isAdmin()) {
+        return [
+          {
+            group: 'ภาพรวม',
+            items: [
+              {
+                id: 'dashboard',
+                label: 'แดชบอร์ด',
+                icon: 'fa-chart-pie'
+              }
+            ]
+          },
+          {
+            group: 'จัดการระบบ',
+            items: [
+              {
+                id: 'users',
+                label: 'จัดการผู้ใช้งาน',
+                icon: 'fa-users'
+              },
+              {
+                id: 'organizations',
+                label: 'จัดการหน่วยงานและองค์กร',
+                icon: 'fa-building'
+              },
+              {
+                id: 'albums',
+                label: 'จัดการอัลบั้ม',
+                icon: 'fa-images'
+              },
+              {
+                id: 'categories',
+                label: 'จัดการหมวดหมู่',
+                icon: 'fa-tags'
+              }
+            ]
+          },
+          {
+            group: 'บัญชีและความปลอดภัย',
+            items: [
+              {
+                id: 'security',
+                label: 'ความปลอดภัย',
+                icon: 'fa-shield-halved'
+              },
+              {
+                id: 'logs',
+                label: 'ประวัติการใช้งาน',
+                icon: 'fa-clock-rotate-left'
+              }
+            ]
+          }
+        ];
+      }
+
+      return [
+        {
+          group: 'ภาพรวม',
+          items: [
+            {
+              id: 'dashboard',
+              label: 'แดชบอร์ด',
+              icon: 'fa-chart-pie'
+            }
+          ]
+        },
+        {
+          group: 'จัดการคลังภาพ',
+          items: [
+            {
+              id: 'albums',
+              label: 'จัดการอัลบั้ม',
+              icon: 'fa-images'
+            }
+          ]
+        },
+        {
+          group: 'บัญชีและความปลอดภัย',
+          items: [
+            {
+              id: 'security',
+              label: 'ความปลอดภัย',
+              icon: 'fa-shield-halved'
+            },
+            {
+              id: 'logs',
+              label: 'ประวัติการใช้งาน',
+              icon: 'fa-clock-rotate-left'
+            }
+          ]
+        }
+      ];
+    }
+
+    function renderNavigation() {
+      const menu = $('#sidebar-menu');
+
+      menu.innerHTML = getNavigationItems().map(function (group) {
+        return (
+          '<div class="menu-label">' + esc(group.group) + '</div>' +
+          group.items.map(function (item) {
+            return (
+              '<button class="nav-link" type="button" data-route="' +
+                esc(item.id) + '">' +
+                '<i class="fa-solid ' + esc(item.icon) + '"></i>' +
+                '<span>' + esc(item.label) + '</span>' +
+              '</button>'
+            );
+          }).join('')
+        );
+      }).join('');
+
+      $$('[data-route]', menu).forEach(function (button) {
+        button.addEventListener('click', function () {
+          navigate(button.dataset.route, true);
+          closeSidebarMobile();
+        });
+      });
+    }
+
+    function navigate(route, updateHash) {
+      if (!PAGE_TITLES[route]) route = 'dashboard';
+
+      if (!state.user) {
+        showLoginScreen();
+        return;
+      }
+
+      if (
+        !isAdmin() &&
+        ['users', 'organizations', 'categories'].includes(route)
+      ) {
+        route = 'dashboard';
+      }
+
+      state.route = route;
+
+      if (updateHash !== false) {
+        const hash = '#' + route;
+
+        if (window.location.hash !== hash) {
+          history.pushState(
+            { route: route },
+            '',
+            window.location.pathname + window.location.search + hash
+          );
+        }
+      }
+
+      $('#topbar-title').textContent = PAGE_TITLES[route];
+
+      $$('[data-route]', $('#sidebar-menu')).forEach(function (button) {
+        button.classList.toggle(
+          'active',
+          button.dataset.route === route
+        );
+      });
+
+      closeSidebarMobile();
+      renderRoute();
+    }
+
+    async function renderRoute() {
+      const content = $('#main-content');
+
+      content.innerHTML =
+        '<div class="card"><div class="empty-state">' +
+          '<div class="loading-spinner" style="margin-left:auto;margin-right:auto"></div>' +
+          '<strong>กำลังโหลดข้อมูล</strong>' +
+        '</div></div>';
+
+      try {
+        switch (state.route) {
+          case 'dashboard':
+            await renderDashboard();
+            break;
+          case 'users':
+            await renderUsersPage();
+            break;
+          case 'organizations':
+            await renderOrganizationsPage();
+            break;
+          case 'albums':
+            await renderAlbumsPage();
+            break;
+          case 'categories':
+            await renderCategoriesPage();
+            break;
+          case 'security':
+            renderSecurityPage();
+            break;
+          case 'logs':
+            await renderLogsPage();
+            break;
+          default:
+            await renderDashboard();
+            break;
+        }
+      } catch (error) {
+        content.innerHTML =
+          '<div class="card"><div class="empty-state">' +
+            '<i class="fa-solid fa-triangle-exclamation" style="color:#dc2626"></i>' +
+            '<strong>ไม่สามารถโหลดข้อมูลได้</strong>' +
+            '<div>' + esc(error.message || 'เกิดข้อผิดพลาด') + '</div>' +
+            '<button type="button" class="btn btn-secondary" id="retry-current-page" style="margin-top:15px">' +
+              '<i class="fa-solid fa-rotate-right"></i> ลองอีกครั้ง' +
+            '</button>' +
+          '</div></div>';
+
+        $('#retry-current-page').addEventListener(
+          'click',
+          renderRoute
+        );
+      }
+    }
+
+    function closeSidebarMobile() {
+      document.body.classList.remove('sidebar-open');
+    }
+
+    /* =========================================================
+       7. DATA LOADERS
+       ========================================================= */
+
+    async function initializeAppData() {
+      if (!state.user) return;
+
+      if (isAdmin()) {
+        await Promise.allSettled([
+          loadOrganizations(),
+          loadCategories()
+        ]);
+      }
+    }
+
+    async function loadOrganizations() {
+      const result = await callGet('listOrganizations', {
+        token: state.token
+      });
+
+      state.organizations = result.organizations || [];
+      return state.organizations;
+    }
+
+    async function loadCategories() {
+      const result = await callGet('listCategories', {
+        token: state.token
+      });
+
+      state.categories = result.categories || [];
+      return state.categories;
+    }
+
+    async function loadAlbums() {
+      const result = await callGet('listAlbums', {
+        token: state.token,
+        includeDeleted: false
+      });
+
+      state.albums = result.albums || [];
+      return state.albums;
+    }
+
+    async function loadUsers() {
+      const result = await callGet('listUsers', {
+        token: state.token
+      });
+
+      state.users = result.users || [];
+      return state.users;
+    }
+
+    async function loadLogs(offset) {
+      const result = await callGet('listLogs', {
+        token: state.token,
+        limit: CONFIG.PAGE_SIZE,
+        offset: Math.max(0, Number(offset || 0)),
+        actionFilter: state.logFilter || ''
+      });
+
+      state.logs = result.logs || [];
+      state.logTotal = Number(result.total || 0);
+      state.logOffset = Number(result.offset || 0);
+      return state.logs;
+    }
+
+    function buildOrganizationOptions(selectedId) {
+      const organizations = state.organizations.filter(function (item) {
+        return item.isActive && !item.isDeleted;
+      });
+
+      if (!organizations.length) {
+        return '<option value="">ยังไม่มีหน่วยงาน กรุณาเพิ่มหน่วยงานก่อน</option>';
+      }
+
+      return (
+        '<option value="">เลือกหน่วยงานหรือองค์กร</option>' +
+        organizations.map(function (organization) {
+          return (
+            '<option value="' + esc(organization.organizationId) + '"' +
+              (String(organization.organizationId) === String(selectedId)
+                ? ' selected'
+                : '') +
+            '>' + esc(organization.name) + '</option>'
+          );
+        }).join('')
+      );
+    }
+
+    /* =========================================================
+       8. DASHBOARD
+       ========================================================= */
+
+    async function renderDashboard() {
+      const result = await callGet('dashboardStats', {
+        token: state.token
+      });
+
+      const stats = result.stats || {};
+      const content = $('#main-content');
+
+      let cards;
+
+      if (isAdmin()) {
+        cards = [
+          {
+            label: 'รูปภาพทั้งหมด',
+            value: stats.totalPhotos,
+            icon: 'fa-images',
+            sub: 'จำนวนภาพที่อยู่ในระบบ'
+          },
+          {
+            label: 'หน่วยงานทั้งหมด',
+            value: stats.totalOrganizations,
+            icon: 'fa-building',
+            sub: 'หน่วยงานที่เปิดใช้งาน'
+          },
+          {
+            label: 'ผู้ใช้งานทั้งหมด',
+            value: stats.totalUsers,
+            icon: 'fa-users',
+            sub: 'บัญชีที่เปิดใช้งาน'
+          },
+          {
+            label: 'อัลบั้มทั้งหมด',
+            value: stats.totalAlbums,
+            icon: 'fa-photo-film',
+            sub: 'อัลบั้มที่อยู่ในระบบ'
+          }
+        ];
+      } else {
+        cards = [
+          {
+            label: 'รูปภาพที่อัปโหลด',
+            value: stats.totalPhotos,
+            icon: 'fa-images',
+            sub: 'รูปภาพในหน่วยงานของคุณ'
+          },
+          {
+            label: 'อัลบั้มทั้งหมด',
+            value: stats.totalAlbums,
+            icon: 'fa-photo-film',
+            sub: 'อัลบั้มในหน่วยงานของคุณ'
+          }
+        ];
+      }
+
+      content.innerHTML =
+        '<div class="page-heading">' +
+          '<div>' +
+            '<h1>สวัสดี, ' +
+              esc(state.user.fullName || state.user.username) +
+            '</h1>' +
+            '<p>ยินดีต้อนรับเข้าสู่ระบบคลังภาพกิจกรรมออนไลน์</p>' +
+          '</div>' +
+          '<div class="page-actions">' +
+            '<button class="btn btn-secondary" type="button" id="dashboard-refresh">' +
+              '<i class="fa-solid fa-rotate-right"></i> รีเฟรชข้อมูล' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="stat-grid">' +
+          cards.map(function (item) {
+            return (
+              '<section class="card stat-card">' +
+                '<div class="stat-icon">' +
+                  '<i class="fa-solid ' + esc(item.icon) + '"></i>' +
+                '</div>' +
+                '<div class="stat-info">' +
+                  '<span class="stat-label">' + esc(item.label) + '</span>' +
+                  '<strong class="stat-value">' +
+                    formatNumber(item.value) +
+                  '</strong>' +
+                  '<span class="stat-subtitle">' +
+                    esc(item.sub) +
+                  '</span>' +
+                '</div>' +
+              '</section>'
+            );
+          }).join('') +
+        '</div>' +
+
+        '<div class="card">' +
+          '<div class="card-header">' +
+            '<div>' +
+              '<h2 class="section-heading">เมนูด่วน</h2>' +
+              '<p class="section-description">เลือกเมนูเพื่อเริ่มจัดการข้อมูล</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="card-body">' +
+            '<div id="dashboard-quick-links" class="stat-grid" style="margin-bottom:0"></div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="card" style="margin-top:18px">' +
+          '<div class="card-header">' +
+            '<div>' +
+              '<h2 class="section-heading">อัลบั้มล่าสุด</h2>' +
+              '<p class="section-description">รายการอัลบั้มที่อัปเดตล่าสุด</p>' +
+            '</div>' +
+            '<button type="button" class="btn btn-secondary btn-sm" id="dashboard-view-albums">' +
+              'ดูอัลบั้มทั้งหมด <i class="fa-solid fa-arrow-right"></i>' +
+            '</button>' +
+          '</div>' +
+          '<div id="dashboard-recent-albums" class="card-body">' +
+            '<div class="empty-state">' +
+              '<i class="fa-solid fa-spinner fa-spin"></i>กำลังโหลดอัลบั้ม' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      $('#dashboard-refresh').addEventListener(
+        'click',
+        renderDashboard
+      );
+
+      $('#dashboard-view-albums').addEventListener(
+        'click',
+        () => navigate('albums', true)
+      );
+
+      const quickLinks = [];
+
+      if (isAdmin()) {
+        quickLinks.push(
+          {
+            id: 'users',
+            icon: 'fa-user-plus',
+            label: 'เพิ่มผู้ใช้งาน',
+            description: 'สร้างบัญชีผู้จัดการอัลบั้ม'
+          },
+          {
+            id: 'organizations',
+            icon: 'fa-building',
+            label: 'จัดการหน่วยงาน',
+            description: 'เพิ่มและแก้ไขหน่วยงาน'
+          },
+          {
+            id: 'categories',
+            icon: 'fa-tags',
+            label: 'จัดการหมวดหมู่',
+            description: 'กำหนดประเภทกิจกรรม'
+          }
+        );
+      }
+
+      quickLinks.push(
+        {
+          id: 'albums',
+          icon: 'fa-images',
+          label: 'จัดการอัลบั้ม',
+          description: 'เพิ่มและแก้ไขรูปภาพกิจกรรม'
+        },
+        {
+          id: 'security',
+          icon: 'fa-shield-halved',
+          label: 'ความปลอดภัย',
+          description: 'ตั้งค่ารหัสผ่านบัญชี'
+        },
+        {
+          id: 'logs',
+          icon: 'fa-clock-rotate-left',
+          label: 'ประวัติการใช้งาน',
+          description: 'ตรวจสอบรายการย้อนหลัง'
+        }
+      );
+
+      $('#dashboard-quick-links').innerHTML =
+        quickLinks.map(function (item) {
+          return (
+            '<button type="button" class="card" data-quick-route="' +
+              esc(item.id) +
+              '" style="box-shadow:none;text-align:left;padding:15px;border:1px solid var(--border)">' +
+              '<div style="display:flex;align-items:center;gap:12px">' +
+                '<div class="stat-icon" style="width:40px;height:40px;flex-basis:40px;font-size:18px">' +
+                  '<i class="fa-solid ' + esc(item.icon) + '"></i>' +
+                '</div>' +
+                '<div>' +
+                  '<strong style="display:block;font-size:20px">' +
+                    esc(item.label) +
+                  '</strong>' +
+                  '<span class="muted small">' +
+                    esc(item.description) +
+                  '</span>' +
+                '</div>' +
+              '</div>' +
+            '</button>'
+          );
+        }).join('');
+
+      $$('[data-quick-route]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          navigate(button.dataset.quickRoute, true);
+        });
+      });
+
+      try {
+        await loadAlbums();
+
+        const recent = state.albums.slice(0, 4);
+
+        if (!recent.length) {
+          $('#dashboard-recent-albums').innerHTML =
+            '<div class="empty-state">' +
+              '<i class="fa-regular fa-images"></i>' +
+              '<strong>ยังไม่มีอัลบั้ม</strong>' +
+              '<div>เริ่มต้นด้วยการสร้างอัลบั้มกิจกรรมใหม่</div>' +
+              '<button type="button" class="btn btn-primary" id="dashboard-create-first-album" style="margin-top:13px">' +
+                '<i class="fa-solid fa-plus"></i> สร้างอัลบั้ม' +
+              '</button>' +
+            '</div>';
+
+          $('#dashboard-create-first-album').addEventListener('click', function () {
+            navigate('albums', true);
+            setTimeout(() => openAlbumEditor(null), 100);
+          });
+        } else {
+          $('#dashboard-recent-albums').innerHTML =
+            '<div class="album-grid">' +
+              recent.map(renderAlbumCard).join('') +
+            '</div>';
+
+          bindAlbumCardActions();
+        }
+      } catch (error) {
+        $('#dashboard-recent-albums').innerHTML =
+          '<div class="empty-state">' +
+            '<i class="fa-solid fa-triangle-exclamation"></i>' +
+            '<strong>โหลดอัลบั้มไม่สำเร็จ</strong>' +
+            '<div>' + esc(error.message) + '</div>' +
+          '</div>';
+      }
+    }
+
+    /* =========================================================
+       9. USER MANAGEMENT
+       ========================================================= */
+
+    async function renderUsersPage() {
+      if (!isAdmin()) {
+        navigate('dashboard', true);
+        return;
+      }
+
+      await Promise.all([
+        loadUsers(),
+        loadOrganizations()
+      ]);
+
+      $('#main-content').innerHTML =
+        '<div class="page-heading">' +
+          '<div>' +
+            '<h1>จัดการผู้ใช้งาน</h1>' +
+            '<p>เพิ่ม แก้ไข และกำหนดสถานะบัญชีผู้จัดการอัลบั้ม</p>' +
+          '</div>' +
+          '<div class="page-actions">' +
+            '<button class="btn btn-primary" id="add-user-button" type="button">' +
+              '<i class="fa-solid fa-user-plus"></i> เพิ่มผู้ใช้งาน' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="toolbar">' +
+          '<input class="form-control search-input" id="user-search-input" type="search" placeholder="ค้นหาชื่อ ชื่อผู้ใช้ หรือหน่วยงาน">' +
+          '<button class="btn btn-secondary" type="button" id="refresh-users-button">' +
+            '<i class="fa-solid fa-rotate-right"></i> รีเฟรช' +
+          '</button>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<div class="card-header">' +
+            '<div>' +
+              '<h2 class="section-heading">รายชื่อผู้ใช้งาน</h2>' +
+              '<p class="section-description">บัญชีในระบบตามสิทธิ์ของผู้ดูแล</p>' +
+            '</div>' +
+            '<span class="badge badge-blue" id="user-total-badge">' +
+              formatNumber(state.users.length) + ' บัญชี' +
+            '</span>' +
+          '</div>' +
+          '<div id="users-table-area"></div>' +
+        '</div>';
+
+      $('#add-user-button').addEventListener(
+        'click',
+        openCreateUserModal
+      );
+
+      $('#refresh-users-button').addEventListener('click', async function () {
+        try {
+          await loadUsers();
+          renderUsersTable();
+          showToast('โหลดข้อมูลผู้ใช้งานแล้ว', 'success');
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+
+      $('#user-search-input').addEventListener('input', function () {
+        state.userSearch = this.value;
+        renderUsersTable();
+      });
+
+      renderUsersTable();
+    }
+
+    function renderUsersTable() {
+      const area = $('#users-table-area');
+      if (!area) return;
+
+      const query = String(state.userSearch || '').trim().toLowerCase();
+
+      const users = state.users.filter(function (user) {
+        return [
+          user.fullName,
+          user.username,
+          getOrganizationName(user.organizationId),
+          user.role
+        ].some(function (value) {
+          return String(value || '').toLowerCase().includes(query);
+        });
+      });
+
+      $('#user-total-badge').textContent =
+        formatNumber(users.length) + ' บัญชี';
+
+      if (!users.length) {
+        area.innerHTML =
+          '<div class="empty-state">' +
+            '<i class="fa-solid fa-users"></i>' +
+            '<strong>ไม่พบผู้ใช้งาน</strong>' +
+            '<div>ลองเปลี่ยนคำค้นหา หรือเพิ่มผู้ใช้งานใหม่</div>' +
+          '</div>';
+        return;
+      }
+
+      area.innerHTML =
+        '<div class="table-wrap">' +
+          '<table class="data-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th>ชื่อ-สกุล</th>' +
+                '<th>ชื่อผู้ใช้</th>' +
+                '<th>หน่วยงาน / สิทธิ์</th>' +
+                '<th>สถานะ</th>' +
+                '<th>เข้าสู่ระบบล่าสุด</th>' +
+                '<th>จัดการ</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              users.map(function (user) {
+                return (
+                  '<tr>' +
+                    '<td>' +
+                      '<strong>' + esc(user.fullName || 'ไม่ระบุชื่อ') + '</strong>' +
+                      (user.mustChangePassword
+                        ? '<div class="small" style="color:#b7791f">รอเปลี่ยนรหัสผ่าน</div>'
+                        : '') +
+                    '</td>' +
+                    '<td><code>' + esc(user.username) + '</code></td>' +
+                    '<td>' +
+                      '<div>' + esc(getOrganizationName(user.organizationId)) + '</div>' +
+                      '<div style="margin-top:4px">' + roleBadge(user.role) + '</div>' +
+                    '</td>' +
+                    '<td>' + statusBadge(user.isActive) + '</td>' +
+                    '<td>' + esc(formatDate(user.lastLoginAt, true)) + '</td>' +
+                    '<td>' +
+                      '<div class="table-actions">' +
+                        '<button class="btn-icon" type="button" data-edit-user="' +
+                          esc(user.userId) + '" title="แก้ไขผู้ใช้งาน" aria-label="แก้ไขผู้ใช้งาน">' +
+                          '<i class="fa-solid fa-pen"></i>' +
+                        '</button>' +
+                        '<button class="btn-icon" type="button" data-reset-user="' +
+                          esc(user.userId) + '" title="รีเซ็ตรหัสผ่าน" aria-label="รีเซ็ตรหัสผ่าน">' +
+                          '<i class="fa-solid fa-key"></i>' +
+                        '</button>' +
+                        (user.role !== 'admin'
+                          ? '<button class="btn-icon" type="button" data-toggle-user="' +
+                              esc(user.userId) + '" title="' +
+                              (user.isActive ? 'ปิดใช้งาน' : 'เปิดใช้งาน') +
+                              '" aria-label="' +
+                              (user.isActive ? 'ปิดใช้งาน' : 'เปิดใช้งาน') + '">' +
+                              '<i class="fa-solid ' +
+                                (user.isActive ? 'fa-user-slash' : 'fa-user-check') +
+                              '"></i>' +
+                            '</button>'
+                          : '') +
+                      '</div>' +
+                    '</td>' +
+                  '</tr>'
+                );
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      $$('[data-edit-user]', area).forEach(function (button) {
+        button.addEventListener('click', function () {
+          openEditUserModal(button.dataset.editUser);
+        });
+      });
+
+      $$('[data-reset-user]', area).forEach(function (button) {
+        button.addEventListener('click', function () {
+          resetUserPassword(button.dataset.resetUser);
+        });
+      });
+
+      $$('[data-toggle-user]', area).forEach(function (button) {
+        button.addEventListener('click', function () {
+          toggleUserStatus(button.dataset.toggleUser);
+        });
+      });
+    }
+
+    function openCreateUserModal() {
+      if (!state.organizations.some(item => item.isActive && !item.isDeleted)) {
+        openModal({
+          title: 'ยังไม่มีหน่วยงาน',
+          body: '<p>ต้องเพิ่มหน่วยงานหรือองค์กรก่อน จึงจะสร้างบัญชีผู้จัดการอัลบั้มได้</p>',
+          footer:
+            '<button type="button" class="btn btn-secondary" id="cancel-create-user-empty">ปิด</button>' +
+            '<button type="button" class="btn btn-primary" id="go-add-organization"><i class="fa-solid fa-plus"></i> เพิ่มหน่วยงาน</button>'
+        });
+
+        $('#cancel-create-user-empty').addEventListener('click', closeModal);
+
+        $('#go-add-organization').addEventListener('click', function () {
+          closeModal();
+          navigate('organizations', true);
+          setTimeout(openCreateOrganizationModal, 100);
+        });
+
+        return;
+      }
+
+      openModal({
+        title: 'เพิ่มผู้ใช้งาน',
+        body:
+          '<form id="create-user-form">' +
+            '<div class="form-group">' +
+              '<label for="new-user-fullname">ชื่อ-สกุล <span class="danger-text">*</span></label>' +
+              '<input class="form-control" id="new-user-fullname" name="fullName" required maxlength="200" placeholder="กรอกชื่อและนามสกุล">' +
+            '</div>' +
+
+            '<div class="form-group">' +
+              '<label for="new-user-username">ชื่อผู้ใช้</label>' +
+              '<div class="field-action">' +
+                '<input class="form-control" id="new-user-username" readonly placeholder="กดปุ่มสร้างชื่อผู้ใช้">' +
+                '<button class="btn btn-secondary" type="button" id="generate-username-button" title="สร้างชื่อผู้ใช้">' +
+                  '<i class="fa-solid fa-wand-magic-sparkles"></i> สร้าง' +
+                '</button>' +
+              '</div>' +
+              '<div class="form-hint">รูปแบบ AGL ตามด้วยตัวเลข 6 หลัก ตัวอย่างที่แสดงจะถูกแทนด้วยชื่อผู้ใช้จริงเมื่อสร้างบัญชีสำเร็จ</div>' +
+            '</div>' +
+
+            '<div class="form-group">' +
+              '<label for="new-user-password">รหัสผ่านเริ่มต้น</label>' +
+              '<div class="field-action">' +
+                '<input class="form-control" id="new-user-password" readonly placeholder="กดปุ่มสร้างรหัสผ่าน">' +
+                '<button class="btn btn-secondary" type="button" id="generate-password-button" title="สร้างรหัสผ่าน">' +
+                  '<i class="fa-solid fa-key"></i> สร้าง' +
+                '</button>' +
+              '</div>' +
+              '<div class="form-hint">รูปแบบ GF ตามด้วยตัวเลข 7 หลัก รหัสผ่านจริงจะปรากฏหลังสร้างบัญชีสำเร็จ</div>' +
+            '</div>' +
+
+            '<div class="form-group">' +
+              '<label for="new-user-organization">หน่วยงานหรือองค์กร <span class="danger-text">*</span></label>' +
+              '<select class="form-control" id="new-user-organization" name="organizationId" required>' +
+                buildOrganizationOptions('') +
+              '</select>' +
+            '</div>' +
+
+            '<div class="modal-note">' +
+              '<i class="fa-solid fa-circle-info"></i> ' +
+              'เมื่อสร้างสำเร็จ ระบบจะแสดงชื่อผู้ใช้และรหัสผ่านจริงให้คัดลอกเก็บไว้' +
+            '</div>' +
+          '</form>',
+        footer:
+          '<button type="button" class="btn btn-secondary" id="cancel-create-user">ยกเลิก</button>' +
+          '<button type="button" class="btn btn-primary" id="submit-create-user">' +
+            '<i class="fa-solid fa-user-plus"></i> เพิ่มผู้ใช้งาน' +
+          '</button>'
+      });
+
+      $('#cancel-create-user').addEventListener('click', closeModal);
+
+      $('#generate-username-button').addEventListener('click', function () {
+        $('#new-user-username').value = makeTemporaryUsername();
+      });
+
+      $('#generate-password-button').addEventListener('click', function () {
+        $('#new-user-password').value = makeTemporaryPassword();
+      });
+
+      $('#submit-create-user').addEventListener('click', submitCreateUser);
+
+      $('#create-user-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitCreateUser();
+      });
+    }
+
+    async function submitCreateUser() {
+      const button = $('#submit-create-user');
+      const fullName = $('#new-user-fullname').value.trim();
+      const organizationId = $('#new-user-organization').value;
+
+      if (!fullName) {
+        showToast('กรุณากรอกชื่อ-สกุล', 'error');
+        $('#new-user-fullname').focus();
+        return;
+      }
+
+      if (!organizationId) {
+        showToast('กรุณาเลือกหน่วยงานหรือองค์กร', 'error');
+        $('#new-user-organization').focus();
+        return;
+      }
+
+      setBusy(button, true, 'กำลังสร้างผู้ใช้งาน');
+
+      try {
+        const result = await callPost('createUser', {
+          fullName: fullName,
+          organizationId: organizationId
+        });
+
+        showCreatedCredentials(
+          result.credentials.username,
+          result.credentials.password,
+          result.user
+        );
+      } catch (error) {
+        showToast(error.message, 'error');
+      } finally {
+        const current = $('#submit-create-user');
+        if (current) setBusy(current, false);
+      }
+    }
+
+    function showCreatedCredentials(username, password, user) {
+      closeModal();
+
+      openModal({
+        title: 'สร้างผู้ใช้งานเรียบร้อยแล้ว',
+        body:
+          '<div style="text-align:center;margin-bottom:17px">' +
+            '<div style="width:60px;height:60px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#e8f8ee;color:#15803d;font-size:27px">' +
+              '<i class="fa-solid fa-check"></i>' +
+            '</div>' +
+            '<strong style="font-size:22px">บัญชีพร้อมใช้งาน</strong>' +
+            '<p class="muted" style="margin:4px 0">โปรดเก็บข้อมูลการเข้าสู่ระบบไว้ให้เรียบร้อย</p>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>ชื่อ-สกุล</label>' +
+            '<input class="form-control" readonly value="' + esc(user.fullName || '') + '">' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>ชื่อผู้ใช้</label>' +
+            '<div class="field-action">' +
+              '<input class="form-control" id="created-username" readonly value="' + esc(username || '') + '">' +
+              '<button class="btn-icon" type="button" id="copy-created-username" title="คัดลอกชื่อผู้ใช้">' +
+                '<i class="fa-regular fa-copy"></i>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>รหัสผ่านเริ่มต้น</label>' +
+            '<div class="field-action">' +
+              '<input class="form-control" id="created-password" readonly value="' + esc(password || '') + '">' +
+              '<button class="btn-icon" type="button" id="copy-created-password" title="คัดลอกรหัสผ่าน">' +
+                '<i class="fa-regular fa-copy"></i>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="modal-note">' +
+            '<i class="fa-solid fa-shield-halved"></i> ' +
+            'แนะนำให้ผู้ใช้งานเปลี่ยนรหัสผ่านเมื่อเข้าสู่ระบบครั้งแรก' +
+          '</div>',
+        footer:
+          '<button type="button" class="btn btn-secondary" id="copy-all-created-credentials">' +
+            '<i class="fa-regular fa-copy"></i> คัดลอกข้อมูลทั้งหมด' +
+          '</button>' +
+          '<button type="button" class="btn btn-primary" id="finish-created-user">เสร็จสิ้น</button>'
+      });
+
+      $('#copy-created-username').addEventListener(
+        'click',
+        () => copyText(username)
+      );
+
+      $('#copy-created-password').addEventListener(
+        'click',
+        () => copyText(password)
+      );
+
+      $('#copy-all-created-credentials').addEventListener('click', function () {
+        copyText(
+          'ชื่อ-สกุล: ' + (user.fullName || '') +
+          '\nชื่อผู้ใช้: ' + username +
+          '\nรหัสผ่านเริ่มต้น: ' + password
+        );
+      });
+
+      $('#finish-created-user').addEventListener('click', async function () {
+        closeModal();
+        navigate('users', false);
+
+        try {
+          await loadUsers();
+          renderUsersTable();
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+    }
+
+    function openEditUserModal(userId) {
+      const user = state.users.find(item =>
+        String(item.userId) === String(userId)
+      );
+
+      if (!user) {
+        showToast('ไม่พบข้อมูลผู้ใช้งาน', 'error');
+        return;
+      }
+
+      openModal({
+        title: 'แก้ไขข้อมูลผู้ใช้งาน',
+        body:
+          '<form id="edit-user-form">' +
+            '<div class="form-group">' +
+              '<label for="edit-user-fullname">ชื่อ-สกุล</label>' +
+              '<input class="form-control" id="edit-user-fullname" maxlength="200" required value="' + esc(user.fullName || '') + '">' +
+            '</div>' +
+
+            '<div class="form-group">' +
+              '<label>ชื่อผู้ใช้</label>' +
+              '<input class="form-control" readonly value="' + esc(user.username || '') + '">' +
+            '</div>' +
+
+            '<div class="form-group">' +
+              '<label>สิทธิ์</label>' +
+              '<input class="form-control" readonly value="' + esc(ROLE_LABELS[user.role] || user.role || '') + '">' +
+            '</div>' +
+
+            (user.role !== 'admin'
+              ? '<div class="form-group"><label for="edit-user-organization">หน่วยงานหรือองค์กร</label><select class="form-control" id="edit-user-organization" required>' +
+                  buildOrganizationOptions(user.organizationId) +
+                '</select></div>'
+              : '') +
+          '</form>',
+        footer:
+          '<button type="button" class="btn btn-secondary" id="cancel-edit-user">ยกเลิก</button>' +
+          '<button type="button" class="btn btn-primary" id="save-edit-user">' +
+            '<i class="fa-solid fa-floppy-disk"></i> บันทึกการแก้ไข' +
+          '</button>'
+      });
+
+      $('#cancel-edit-user').addEventListener('click', closeModal);
+
+      $('#save-edit-user').addEventListener('click', async function () {
+        const button = this;
+        const fullName = $('#edit-user-fullname').value.trim();
+
+        if (!fullName) {
+          showToast('กรุณากรอกชื่อ-สกุล', 'error');
+          return;
+        }
+
+        const params = {
+          userId: user.userId,
+          fullName: fullName
+        };
+
+        if (user.role !== 'admin') {
+          params.organizationId = $('#edit-user-organization').value;
+
+          if (!params.organizationId) {
+            showToast('กรุณาเลือกหน่วยงาน', 'error');
+            return;
+          }
+        }
+
+        setBusy(button, true, 'กำลังบันทึก');
+
+        try {
+          await callPost('updateUser', params);
+          closeModal();
+          await loadUsers();
+          renderUsersTable();
+          showToast('แก้ไขผู้ใช้งานเรียบร้อยแล้ว', 'success');
+        } catch (error) {
+          showToast(error.message, 'error');
+        } finally {
+          const current = $('#save-edit-user');
+          if (current) setBusy(current, false);
+        }
+      });
+    }
+
+    async function toggleUserStatus(userId) {
+      const user = state.users.find(item =>
+        String(item.userId) === String(userId)
+      );
+
+      if (!user) return;
+
+      const enable = !user.isActive;
+
+      const accepted = await askConfirm(
+        enable ? 'เปิดใช้งานบัญชี' : 'ปิดใช้งานบัญชี',
+        'ต้องการ' + (enable ? 'เปิดใช้งาน' : 'ปิดใช้งาน') +
+          'บัญชี ' + user.username + ' ใช่หรือไม่',
+        enable ? 'เปิดใช้งาน' : 'ปิดใช้งาน',
+        enable ? 'btn-primary' : 'btn-danger'
+      );
+
+      if (!accepted) return;
+
+      try {
+        await callPost('updateUser', {
+          userId: user.userId,
+          isActive: enable
+        });
+
+        await loadUsers();
+        renderUsersTable();
+
+        showToast(
+          enable ? 'เปิดใช้งานบัญชีแล้ว' : 'ปิดใช้งานบัญชีแล้ว',
+          'success'
+        );
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    async function resetUserPassword(userId) {
+      const user = state.users.find(item =>
+        String(item.userId) === String(userId)
+      );
+
+      if (!user) return;
+
+      const accepted = await askConfirm(
+        'รีเซ็ตรหัสผ่าน',
+        'ต้องการสร้างรหัสผ่านใหม่ให้ ' + user.username + ' ใช่หรือไม่',
+        'รีเซ็ตรหัสผ่าน',
+        'btn-danger'
+      );
+
+      if (!accepted) return;
+
+      try {
+        const result = await callPost('resetUserPassword', {
+          userId: user.userId
+        });
+
+        showResetCredentials(
+          result.credentials.username,
+          result.credentials.password,
+          user
+        );
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    function showResetCredentials(username, password, user) {
+      openModal({
+        title: 'รีเซ็ตรหัสผ่านแล้ว',
+        body:
+          '<div class="modal-note" style="margin-bottom:15px">' +
+            '<i class="fa-solid fa-circle-info"></i> ' +
+            'ผู้ใช้งานจะต้องตั้งรหัสผ่านใหม่หลังเข้าสู่ระบบ' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>ชื่อ-สกุล</label>' +
+            '<input class="form-control" readonly value="' + esc(user.fullName || '') + '">' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>ชื่อผู้ใช้</label>' +
+            '<div class="field-action">' +
+              '<input class="form-control" readonly value="' + esc(username) + '">' +
+              '<button type="button" class="btn-icon" id="copy-reset-username"><i class="fa-regular fa-copy"></i></button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>รหัสผ่านใหม่</label>' +
+            '<div class="field-action">' +
+              '<input class="form-control" readonly value="' + esc(password) + '">' +
+              '<button type="button" class="btn-icon" id="copy-reset-password"><i class="fa-regular fa-copy"></i></button>' +
+            '</div>' +
+          '</div>',
+        footer:
+          '<button type="button" class="btn btn-secondary" id="copy-reset-all">' +
+            '<i class="fa-regular fa-copy"></i> คัดลอกทั้งหมด' +
+          '</button>' +
+          '<button type="button" class="btn btn-primary" id="close-reset-credentials">ปิด</button>'
+      });
+
+      $('#copy-reset-username').addEventListener('click', () => copyText(username));
+      $('#copy-reset-password').addEventListener('click', () => copyText(password));
+
+      $('#copy-reset-all').addEventListener('click', function () {
+        copyText('ชื่อผู้ใช้: ' + username + '\nรหัสผ่านใหม่: ' + password);
+      });
+
+      $('#close-reset-credentials').addEventListener('click', closeModal);
+    }
+
+    /* =========================================================
+       10. ORGANIZATION MANAGEMENT
+       ========================================================= */
+
+    async function renderOrganizationsPage() {
+      if (!isAdmin()) {
+        navigate('dashboard', true);
+        return;
+      }
+
+      await loadOrganizations();
+
+      $('#main-content').innerHTML =
+        '<div class="page-heading">' +
+          '<div><h1>จัดการหน่วยงานและองค์กร</h1><p>เพิ่มโลโก้ กำหนดชื่อ และดูแลรายการหน่วยงาน</p></div>' +
+          '<div class="page-actions"><button class="btn btn-primary" type="button" id="add-organization-button"><i class="fa-solid fa-plus"></i> เพิ่มหน่วยงาน</button></div>' +
+        '</div>' +
+
+        '<div class="toolbar">' +
+          '<input class="form-control search-input" id="organization-search-input" type="search" placeholder="ค้นหาหน่วยงานหรือองค์กร">' +
+          '<button class="btn btn-secondary" type="button" id="refresh-organizations-button"><i class="fa-solid fa-rotate-right"></i> รีเฟรช</button>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<div class="card-header">' +
+            '<div><h2 class="section-heading">รายการหน่วยงาน</h2><p class="section-description">หน่วยงานที่เพิ่มในระบบ</p></div>' +
+            '<span class="badge badge-blue" id="organization-count">' +
+              formatNumber(state.organizations.length) + ' หน่วยงาน' +
+            '</span>' +
+          '</div>' +
+          '<div id="organizations-table-area"></div>' +
+        '</div>';
+
+      $('#add-organization-button').addEventListener(
+        'click',
+        openCreateOrganizationModal
+      );
+
+      $('#organization-search-input').addEventListener('input', function () {
+        state.organizationSearch = this.value;
+        renderOrganizationsTable();
+      });
+
+      $('#refresh-organizations-button').addEventListener('click', async function () {
+        try {
+          await loadOrganizations();
+          renderOrganizationsTable();
+          showToast('โหลดรายการหน่วยงานแล้ว', 'success');
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+
+      renderOrganizationsTable();
+    }
+
+    function renderOrganizationsTable() {
+      const area = $('#organizations-table-area');
+      if (!area) return;
+
+      const query = String(state.organizationSearch || '').trim().toLowerCase();
+
+      const organizations = state.organizations.filter(item =>
+        String(item.name || '').toLowerCase().includes(query)
+      );
+
+      $('#organization-count').textContent =
+        formatNumber(organizations.length) + ' หน่วยงาน';
+
+      if (!organizations.length) {
+        area.innerHTML =
+          '<div class="empty-state">' +
+            '<i class="fa-solid fa-building"></i>' +
+            '<strong>ยังไม่มีหน่วยงาน</strong>' +
+            '<div>เพิ่มหน่วยงานหรือองค์กรเพื่อเริ่มต้นใช้งาน</div>' +
+          '</div>';
+        return;
+      }
+
+      area.innerHTML =
+        '<div class="table-wrap">' +
+          '<table class="data-table" style="min-width:510px">' +
+            '<thead><tr><th>โลโก้</th><th>ชื่อหน่วยงานหรือองค์กร</th><th>สถานะ</th><th>จัดการ</th></tr></thead>' +
+            '<tbody>' +
+              organizations.map(function (organization) {
+                const logo = organization.logoUrl
+                  ? '<img class="organization-logo" loading="lazy" src="' +
+                      esc(organization.logoUrl) + '" alt="โลโก้หน่วยงาน">'
+                  : '<div class="organization-logo" style="display:flex;align-items:center;justify-content:center;color:#9aa6b7"><i class="fa-solid fa-building"></i></div>';
+
+                return (
+                  '<tr>' +
+                    '<td>' + logo + '</td>' +
+                    '<td><strong>' + esc(organization.name) + '</strong></td>' +
+                    '<td>' + statusBadge(
+                      organization.isActive && !organization.isDeleted
+                    ) + '</td>' +
+                    '<td><div class="table-actions">' +
+                      '<button class="btn-icon" type="button" data-edit-organization="' +
+                        esc(organization.organizationId) + '" title="แก้ไข">' +
+                        '<i class="fa-solid fa-pen"></i></button>' +
+                      '<button class="btn-icon" type="button" data-delete-organization="' +
+                        esc(organization.organizationId) + '" title="ลบ">' +
+                        '<i class="fa-solid fa-trash"></i></button>' +
+                    '</div></td>' +
+                  '</tr>'
+                );
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      $$('[data-edit-organization]', area).forEach(button => {
+        button.addEventListener('click', function () {
+          openEditOrganizationModal(button.dataset.editOrganization);
+        });
+      });
+
+      $$('[data-delete-organization]', area).forEach(button => {
+        button.addEventListener('click', function () {
+          deleteOrganization(button.dataset.deleteOrganization);
+        });
+      });
+    }
+
+    function organizationFormBody(organization) {
+      organization = organization || {};
+
+      return (
+        '<form id="organization-form">' +
+          '<div class="form-group">' +
+            '<label for="organization-name">ชื่อหน่วยงานหรือองค์กร <span class="danger-text">*</span></label>' +
+            '<input class="form-control" id="organization-name" maxlength="200" required value="' +
+              esc(organization.name || '') + '" placeholder="กรอกชื่อหน่วยงาน">' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>โลโก้หน่วยงานหรือองค์กร</label>' +
+            '<label class="upload-dropzone" id="organization-logo-dropzone" tabindex="0">' +
+              '<i class="fa-solid fa-cloud-arrow-up"></i>' +
+              '<strong>เลือกรูปโลโก้จากอุปกรณ์</strong>' +
+              '<span class="small">รองรับไฟล์รูปภาพ</span>' +
+              '<input id="organization-logo-file" type="file" accept="image/*">' +
+            '</label>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label>ตัวอย่างโลโก้</label>' +
+            '<div class="logo-preview" id="organization-logo-preview">' +
+              (organization.logoUrl
+                ? '<img src="' + esc(organization.logoUrl) + '" alt="ตัวอย่างโลโก้">'
+                : '<i class="fa-solid fa-image"></i>') +
+            '</div>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label class="checkbox-row" style="margin:0">' +
+              '<input id="organization-active" type="checkbox" ' +
+                (organization.isActive === false ? '' : 'checked') + '>' +
+              '<span>เปิดใช้งานหน่วยงาน</span>' +
+            '</label>' +
+          '</div>' +
+        '</form>'
+      );
+    }
+
+    function bindLogoPicker() {
+      let selectedFile = null;
+      let previewObjectUrl = '';
+
+      const fileInput = $('#organization-logo-file');
+      const dropzone = $('#organization-logo-dropzone');
+      const preview = $('#organization-logo-preview');
+
+      dropzone.addEventListener('click', function () {
+        fileInput.click();
+      });
+
+      dropzone.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          fileInput.click();
+        }
+      });
+
+      fileInput.addEventListener('change', function () {
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+          showToast('กรุณาเลือกไฟล์รูปภาพ', 'error');
+          fileInput.value = '';
+          return;
+        }
+
+        if (file.size > CONFIG.MAX_IMAGE_BYTES) {
+          showToast('ไฟล์โลโก้มีขนาดใหญ่เกินไป', 'error');
+          fileInput.value = '';
+          return;
+        }
+
+        selectedFile = file;
+
+        if (previewObjectUrl) {
+          URL.revokeObjectURL(previewObjectUrl);
+        }
+
+        previewObjectUrl = URL.createObjectURL(file);
+
+        preview.innerHTML =
+          '<img src="' + esc(previewObjectUrl) + '" alt="ตัวอย่างโลโก้">';
+
+        const oldName = $('[data-logo-name]', dropzone);
+        if (oldName) oldName.remove();
+
+        dropzone.insertAdjacentHTML(
+          'beforeend',
+          '<span data-logo-name class="small">' + esc(file.name) + '</span>'
+        );
+      });
+
+      return {
+        getFile: () => selectedFile,
+        cleanup: () => {
+          if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+        }
+      };
+    }
+
+    async function saveOrganization(organizationId) {
+      const button = $('#save-organization');
+      const name = $('#organization-name').value.trim();
+      const active = $('#organization-active').checked;
+
+      if (!name) {
+        showToast('กรุณากรอกชื่อหน่วยงานหรือองค์กร', 'error');
+        return;
+      }
+
+      const picker = window.actiGalleryLogoPicker;
+      setBusy(button, true, 'กำลังบันทึก');
+
+      try {
+        let logoUrl = '';
+
+        if (organizationId) {
+          const current = state.organizations.find(item =>
+            String(item.organizationId) === String(organizationId)
+          );
+
+          logoUrl = current ? current.logoUrl || '' : '';
+
+          if (picker && picker.getFile()) {
+            logoUrl = await uploadImageFile(picker.getFile());
+          }
+
+          await callPost('updateOrganization', {
+            organizationId: organizationId,
+            name: name,
+            logoUrl: logoUrl,
+            isActive: active
+          });
+        } else {
+          if (picker && picker.getFile()) {
+            logoUrl = await uploadImageFile(picker.getFile());
+          }
+
+          const result = await callPost('createOrganization', {
+            name: name,
+            logoUrl: logoUrl
+          });
+
+          if (!active && result.organization) {
+            await callPost('updateOrganization', {
+              organizationId: result.organization.organizationId,
+              isActive: false
+            });
+          }
+        }
+
+        if (picker) picker.cleanup();
+
+        closeModal();
+        await loadOrganizations();
+        await renderOrganizationsPage();
+
+        showToast(
+          organizationId
+            ? 'แก้ไขหน่วยงานเรียบร้อยแล้ว'
+            : 'เพิ่มหน่วยงานเรียบร้อยแล้ว',
+          'success'
+        );
+      } catch (error) {
+        showToast(error.message, 'error');
+      } finally {
+        const current = $('#save-organization');
+        if (current) setBusy(current, false);
+      }
+    }
+
+    function openCreateOrganizationModal() {
+      openModal({
+        title: 'เพิ่มหน่วยงานหรือองค์กร',
+        body: organizationFormBody({}),
+        footer:
+          '<button type="button" class="btn btn-secondary" id="cancel-organization">ยกเลิก</button>' +
+          '<button type="button" class="btn btn-primary" id="save-organization">' +
+            '<i class="fa-solid fa-floppy-disk"></i> เพิ่มหน่วยงาน' +
+          '</button>'
+      });
+
+      window.actiGalleryLogoPicker = bindLogoPicker();
+
+      $('#cancel-organization').addEventListener('click', function () {
+        window.actiGalleryLogoPicker.cleanup();
+        closeModal();
+      });
+
+      $('#save-organization').addEventListener('click', function () {
+        saveOrganization('');
+      });
+    }
+
+    function openEditOrganizationModal(organizationId) {
+      const organization = state.organizations.find(item =>
+        String(item.organizationId) === String(organizationId)
+      );
+
+      if (!organization) {
+        showToast('ไม่พบข้อมูลหน่วยงาน', 'error');
+        return;
+      }
+
+      openModal({
+        title: 'แก้ไขหน่วยงาน',
+        body: organizationFormBody(organization),
+        footer:
+          '<button type="button" class="btn btn-secondary" id="cancel-organization">ยกเลิก</button>' +
+          '<button type="button" class="btn btn-primary" id="save-organization">' +
+            '<i class="fa-solid fa-floppy-disk"></i> บันทึกการแก้ไข' +
+          '</button>'
+      });
+
+      window.actiGalleryLogoPicker = bindLogoPicker();
+
+      $('#cancel-organization').addEventListener('click', function () {
+        window.actiGalleryLogoPicker.cleanup();
+        closeModal();
+      });
+
+      $('#save-organization').addEventListener('click', function () {
+        saveOrganization(organization.organizationId);
+      });
+    }
+
+    async function deleteOrganization(organizationId) {
+      const organization = state.organizations.find(item =>
+        String(item.organizationId) === String(organizationId)
+      );
+
+      if (!organization) return;
+
+      const accepted = await askConfirm(
+        'ลบหน่วยงาน',
+        'ต้องการลบหน่วยงาน "' + organization.name + '" ใช่หรือไม่',
+        'ลบหน่วยงาน',
+        'btn-danger'
+      );
+
+      if (!accepted) return;
+
+      try {
+        await callPost('deleteOrganization', {
+          organizationId: organization.organizationId
+        });
+
+        await loadOrganizations();
+        await renderOrganizationsPage();
+
+        showToast('ลบหน่วยงานเรียบร้อยแล้ว', 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    /* =========================================================
+       11. CATEGORY MANAGEMENT
+       ========================================================= */
+
+    async function renderCategoriesPage() {
+      if (!isAdmin()) {
+        navigate('dashboard', true);
+        return;
+      }
+
+      await loadCategories();
+
+      $('#main-content').innerHTML =
+        '<div class="page-heading">' +
+          '<div><h1>จัดการหมวดหมู่</h1><p>เพิ่ม แก้ไข และจัดระเบียบประเภทกิจกรรม</p></div>' +
+          '<div class="page-actions">' +
+            '<button type="button" class="btn btn-primary" id="add-category-button">' +
+              '<i class="fa-solid fa-plus"></i> เพิ่มหมวดหมู่' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="toolbar">' +
+          '<input class="form-control search-input" id="category-search-input" type="search" placeholder="ค้นหาหมวดหมู่">' +
+          '<button class="btn btn-secondary" id="refresh-categories-button" type="button">' +
+            '<i class="fa-solid fa-rotate-right"></i> รีเฟรช' +
+          '</button>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<div class="card-header">' +
+            '<div><h2 class="section-heading">รายการหมวดหมู่</h2><p class="section-description">หมวดหมู่ที่สามารถนำไปใช้กับอัลบั้มได้</p></div>' +
+            '<span class="badge badge-blue" id="category-count">' +
+              formatNumber(state.categories.length) + ' หมวดหมู่' +
+            '</span>' +
+          '</div>' +
+          '<div id="categories-table-area"></div>' +
+        '</div>';
+
+      $('#add-category-button').addEventListener(
+        'click',
+        () => openCategoryModal('')
+      );
+
+      $('#category-search-input').addEventListener('input', function () {
+        state.categorySearch = this.value;
+        renderCategoriesTable();
+      });
+
+      $('#refresh-categories-button').addEventListener('click', async function () {
+        try {
+          await loadCategories();
+          renderCategoriesTable();
+          showToast('โหลดหมวดหมู่แล้ว', 'success');
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+
+      renderCategoriesTable();
+    }
+
+    function renderCategoriesTable() {
+      const area = $('#categories-table-area');
+      if (!area) return;
+
+      const query = String(state.categorySearch || '').trim().toLowerCase();
+
+      const categories = state.categories.filter(category =>
+        String(category.name || '').toLowerCase().includes(query) ||
+        String(category.description || '').toLowerCase().includes(query)
+      );
+
+      $('#category-count').textContent =
+        formatNumber(categories.length) + ' หมวดหมู่';
+
+      if (!categories.length) {
+        area.innerHTML =
+          '<div class="empty-state">' +
+            '<i class="fa-solid fa-tags"></i>' +
+            '<strong>ยังไม่มีหมวดหมู่</strong>' +
+            '<div>เพิ่มหมวดหมู่เพื่อให้ผู้จัดการเลือกใช้ในอัลบั้ม</div>' +
+          '</div>';
+        return;
+      }
+
+      area.innerHTML =
+        '<div class="table-wrap">' +
+          '<table class="data-table">' +
+            '<thead><tr><th>ชื่อหมวดหมู่</th><th>รายละเอียด</th><th>สถานะ</th><th>จัดการ</th></tr></thead>' +
+            '<tbody>' +
+              categories.map(function (category) {
+                return (
+                  '<tr>' +
+                    '<td><strong>' + esc(category.name) + '</strong></td>' +
+                    '<td style="min-width:240px">' +
+                      esc(category.description || 'ไม่มีข้อมูลรายละเอียด') +
+                    '</td>' +
+                    '<td>' + statusBadge(
+                      category.isActive && !category.isDeleted
+                    ) + '</td>' +
+                    '<td><div class="table-actions">' +
+                      '<button class="btn-icon" type="button" data-edit-category="' +
+                        esc(category.categoryId) + '" title="แก้ไข">' +
+                        '<i class="fa-solid fa-pen"></i></button>' +
+                      '<button class="btn-icon" type="button" data-delete-category="' +
+                        esc(category.categoryId) + '" title="ลบ">' +
+                        '<i class="fa-solid fa-trash"></i></button>' +
+                    '</div></td>' +
+                  '</tr>'
+                );
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      $$('[data-edit-category]', area).forEach(button => {
+        button.addEventListener('click', function () {
+          openCategoryModal(button.dataset.editCategory);
+        });
+      });
+
+      $$('[data-delete-category]', area).forEach(button => {
+        button.addEventListener('click', function () {
+          deleteCategory(button.dataset.deleteCategory);
+        });
+      });
+    }
+
+    function openCategoryModal(categoryId) {
+      const category = categoryId
+        ? state.categories.find(item =>
+            String(item.categoryId) === String(categoryId)
+          )
+        : null;
+
+      if (categoryId && !category) {
+        showToast('ไม่พบหมวดหมู่', 'error');
+        return;
+      }
+
+      openModal({
+        title: category ? 'แก้ไขหมวดหมู่' : 'เพิ่มหมวดหมู่',
+        body:
+          '<form id="category-form">' +
+            '<div class="form-group">' +
+              '<label for="category-name">ชื่อหมวดหมู่ <span class="danger-text">*</span></label>' +
+              '<input class="form-control" id="category-name" maxlength="200" required value="' +
+                esc(category ? category.name : '') +
+                '" placeholder="เช่น กิจกรรมกีฬา">' +
+            '</div>' +
+            '<div class="form-group">' +
+              '<label for="category-description">รายละเอียดหมวดหมู่</label>' +
+              '<textarea class="form-control" id="category-description" maxlength="10000" placeholder="รายละเอียดเพิ่มเติม (ไม่บังคับ)">' +
+                esc(category ? category.description : '') +
+              '</textarea>' +
+            '</div>' +
+            (category
+              ? '<label class="checkbox-row" style="margin:0 0 10px"><input id="category-active" type="checkbox" ' +
+                  (category.isActive ? 'checked' : '') +
+                  '><span>เปิดใช้งานหมวดหมู่</span></label>'
+              : '') +
+          '</form>',
+        footer:
+          '<button type="button" class="btn btn-secondary" id="cancel-category">ยกเลิก</button>' +
+          '<button type="button" class="btn btn-primary" id="save-category">' +
+            '<i class="fa-solid fa-floppy-disk"></i> บันทึก' +
+          '</button>'
+      });
+
+      $('#cancel-category').addEventListener('click', closeModal);
+
+      $('#save-category').addEventListener('click', async function () {
+        const button = this;
+        const name = $('#category-name').value.trim();
+        const description = $('#category-description').value.trim();
+
+        if (!name) {
+          showToast('กรุณากรอกชื่อหมวดหมู่', 'error');
+          return;
+        }
+
+        setBusy(button, true, 'กำลังบันทึก');
+
+        try {
+          if (category) {
+            await callPost('updateCategory', {
+              categoryId: category.categoryId,
+              name: name,
+              description: description,
+              isActive: $('#category-active').checked
+            });
+          } else {
+            await callPost('createCategory', {
+              name: name,
+              description: description
+            });
+          }
+
+          closeModal();
+          await loadCategories();
+          await renderCategoriesPage();
+
+          showToast(
+            category
+              ? 'แก้ไขหมวดหมู่เรียบร้อยแล้ว'
+              : 'เพิ่มหมวดหมู่เรียบร้อยแล้ว',
+            'success'
+          );
+        } catch (error) {
+          showToast(error.message, 'error');
+        } finally {
+          const current = $('#save-category');
+          if (current) setBusy(current, false);
+        }
+      });
+    }
+
+    async function deleteCategory(categoryId) {
+      const category = state.categories.find(item =>
+        String(item.categoryId) === String(categoryId)
+      );
+
+      if (!category) return;
+
+      const accepted = await askConfirm(
+        'ลบหมวดหมู่',
+        'ต้องการลบหมวดหมู่ "' + category.name + '" ใช่หรือไม่',
+        'ลบหมวดหมู่',
+        'btn-danger'
+      );
+
+      if (!accepted) return;
+
+      try {
+        await callPost('deleteCategory', {
+          categoryId: category.categoryId
+        });
+
+        await loadCategories();
+        await renderCategoriesPage();
+
+        showToast('ลบหมวดหมู่เรียบร้อยแล้ว', 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    /* =========================================================
+       12. ALBUM MANAGEMENT
+       ========================================================= */
+
+    async function renderAlbumsPage() {
+      if (isAdmin()) {
+        await Promise.all([
+          loadAlbums(),
+          loadOrganizations(),
+          loadCategories()
+        ]);
+      } else {
+        await Promise.all([
+          loadAlbums(),
+          loadCategories()
+        ]);
+      }
+
+      $('#main-content').innerHTML =
+        '<div class="page-heading">' +
+          '<div><h1>จัดการอัลบั้ม</h1><p>' +
+            (isAdmin()
+              ? 'จัดการอัลบั้มและรูปภาพจากทุกหน่วยงาน'
+              : 'จัดการอัลบั้มและรูปภาพในหน่วยงานของคุณ') +
+          '</p></div>' +
+          '<div class="page-actions">' +
+            '<button class="btn btn-primary" type="button" id="add-album-button">' +
+              '<i class="fa-solid fa-plus"></i> เพิ่มอัลบั้ม' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="toolbar">' +
+          '<input class="form-control search-input" type="search" id="album-search-input" placeholder="ค้นหาชื่ออัลบั้ม หมวดหมู่ หรือหน่วยงาน">' +
+          '<button class="btn btn-secondary" type="button" id="refresh-albums-button">' +
+            '<i class="fa-solid fa-rotate-right"></i> รีเฟรช' +
+          '</button>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<div class="card-header">' +
+            '<div><h2 class="section-heading">อัลบั้มกิจกรรม</h2><p class="section-description">เปิดดู แก้ไข แชร์ หรือจัดการรูปภาพในอัลบั้ม</p></div>' +
+            '<span class="badge badge-blue" id="album-count">' +
+              formatNumber(state.albums.length) + ' อัลบั้ม' +
+            '</span>' +
+          '</div>' +
+          '<div class="card-body"><div id="albums-grid-area"></div></div>' +
+        '</div>';
+
+      $('#add-album-button').addEventListener(
+        'click',
+        () => openAlbumEditor(null)
+      );
+
+      $('#album-search-input').addEventListener('input', function () {
+        state.albumSearch = this.value;
+        renderAlbumsGrid();
+      });
+
+      $('#refresh-albums-button').addEventListener('click', async function () {
+        try {
+          await loadAlbums();
+          renderAlbumsGrid();
+          showToast('โหลดอัลบั้มเรียบร้อยแล้ว', 'success');
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+
+      renderAlbumsGrid();
+    }
+
+    function renderAlbumCard(album) {
+      const cover = album.coverUrl
+        ? '<img loading="lazy" src="' +
+            esc(album.coverUrl) + '" alt="' + esc(album.title) + '">'
+        : '<div class="album-cover-placeholder"><i class="fa-regular fa-images"></i></div>';
+
+      const organization = album.organizationName
+        ? '<div><i class="fa-solid fa-building"></i> ' +
+            esc(album.organizationName) + '</div>'
+        : '';
+
+      return (
+        '<article class="album-card" data-album-card="' + esc(album.albumId) + '">' +
+          '<div class="album-cover">' +
+            cover +
+            '<div style="position:absolute;top:9px;left:9px">' +
+              publishedBadge(album.isPublished) +
+            '</div>' +
+          '</div>' +
+          '<div class="album-card-body">' +
+            '<h3 class="album-card-title">' + esc(album.title) + '</h3>' +
+            '<div class="album-card-meta">' +
+              '<div><i class="fa-regular fa-images"></i> ' +
+                formatNumber(album.photoCount) + ' รูปภาพ</div>' +
+              (album.categoryName
+                ? '<div><i class="fa-solid fa-tag"></i> ' +
+                    esc(album.categoryName) + '</div>'
+                : '') +
+              organization +
+              '<div><i class="fa-regular fa-clock"></i> ' +
+                esc(formatDate(album.updatedAt, true)) + '</div>' +
+            '</div>' +
+            '<div class="album-card-actions">' +
+              '<button class="btn btn-primary btn-sm" type="button" data-edit-album="' +
+                esc(album.albumId) + '">' +
+                '<i class="fa-solid fa-pen"></i> แก้ไข</button>' +
+              '<button class="btn btn-secondary btn-sm" type="button" data-share-album="' +
+                esc(album.albumId) + '">' +
+                '<i class="fa-solid fa-share-nodes"></i> แชร์</button>' +
+              '<button class="btn-icon" type="button" data-copy-album="' +
+                esc(album.albumId) + '" title="คัดลอกลิงก์อัลบั้ม" aria-label="คัดลอกลิงก์อัลบั้ม">' +
+                '<i class="fa-regular fa-copy"></i></button>' +
+              '<button class="btn-icon" type="button" data-delete-album="' +
+                esc(album.albumId) + '" title="ลบอัลบั้ม" aria-label="ลบอัลบั้ม">' +
+                '<i class="fa-solid fa-trash"></i></button>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
+    }
+
+    function renderAlbumsGrid() {
+      const area = $('#albums-grid-area');
+      if (!area) return;
+
+      const query = String(state.albumSearch || '').trim().toLowerCase();
+
+      const albums = state.albums.filter(album =>
+        [
+          album.title,
+          album.description,
+          album.organizationName,
+          album.categoryName
+        ].some(value =>
+          String(value || '').toLowerCase().includes(query)
+        )
+      );
+
+      $('#album-count').textContent =
+        formatNumber(albums.length) + ' อัลบั้ม';
+
+      if (!albums.length) {
+        area.innerHTML =
+          '<div class="empty-state">' +
+            '<i class="fa-regular fa-images"></i>' +
+            '<strong>ยังไม่มีอัลบั้ม</strong>' +
+            '<div>สร้างอัลบั้มแรกเพื่อรวบรวมภาพกิจกรรมของคุณ</div>' +
+            '<button class="btn btn-primary" type="button" id="create-first-album" style="margin-top:13px">' +
+              '<i class="fa-solid fa-plus"></i> สร้างอัลบั้ม' +
+            '</button>' +
+          '</div>';
+
+        $('#create-first-album').addEventListener(
+          'click',
+          () => openAlbumEditor(null)
+        );
+
+        return;
+      }
+
+      area.innerHTML =
+        '<div class="album-grid">' +
+          albums.map(renderAlbumCard).join('') +
+        '</div>';
+
+      bindAlbumCardActions();
+    }
+
+    function bindAlbumCardActions() {
+      $$('[data-edit-album]').forEach(button => {
+        button.addEventListener('click', function () {
+          openAlbumEditor(button.dataset.editAlbum);
+        });
+      });
+
+      $$('[data-share-album]').forEach(button => {
+        button.addEventListener('click', function () {
+          const album = state.albums.find(item =>
+            String(item.albumId) === String(button.dataset.shareAlbum)
+          );
+
+          if (album) shareAlbum(album);
+        });
+      });
+
+      $$('[data-copy-album]').forEach(button => {
+        button.addEventListener('click', function () {
+          const album = state.albums.find(item =>
+            String(item.albumId) === String(button.dataset.copyAlbum)
+          );
+
+          if (album) copyText(getAlbumShareUrl(album));
+        });
+      });
+
+      $$('[data-delete-album]').forEach(button => {
+        button.addEventListener('click', function () {
+          deleteAlbum(button.dataset.deleteAlbum);
+        });
+      });
+    }
+
+    function getAlbumShareUrl(album) {
+      const id = typeof album === 'string'
+        ? album
+        : album.albumId;
+
+      return CONFIG.HOME_URL.replace(/\/+$/, '') +
+        '/?album=' + encodeURIComponent(String(id));
+    }
+
+    async function shareAlbum(album) {
+      const url = getAlbumShareUrl(album);
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: album.title || 'ActiGallery',
+            text: 'ชมภาพกิจกรรม ' + (album.title || ''),
+            url: url
+          });
+          return;
+        } catch (error) {
+          if (error && error.name === 'AbortError') return;
+        }
+      }
+
+      copyText(url);
+    }
+
+    async function deleteAlbum(albumId) {
+      const album = state.albums.find(item =>
+        String(item.albumId) === String(albumId)
+      );
+
+      if (!album) {
+        showToast('ไม่พบอัลบั้มที่ต้องการลบ', 'error');
+        return;
+      }
+
+      const accepted = await askConfirm(
+        'ลบอัลบั้ม',
+        'ต้องการลบอัลบั้ม "' + album.title +
+          '" พร้อมรูปภาพในอัลบั้มนี้ใช่หรือไม่',
+        'ลบอัลบั้ม',
+        'btn-danger'
+      );
+
+      if (!accepted) return;
+
+      try {
+        await callPost('deleteAlbum', {
+          albumId: album.albumId
+        });
+
+        await loadAlbums();
+        renderAlbumsGrid();
+
+        showToast('ลบอัลบั้มเรียบร้อยแล้ว', 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    /* =========================================================
+       13. ALBUM EDITOR
+       ========================================================= */
+
+    async function openAlbumEditor(albumId) {
+      let album = null;
+      let photos = [];
+
+      try {
+        if (isAdmin()) {
+          await Promise.all([
+            loadOrganizations(),
+            loadCategories()
+          ]);
+        } else {
+          await loadCategories();
+        }
+
+        if (albumId) {
+          const result = await callGet('getAlbum', {
+            token: state.token,
+            albumId: albumId
+          });
+
+          album = result.album;
+
+          photos = (result.photos || []).map(photo => Object.assign({}, photo, {
+            clientId: makeRandomHex(8),
+            pendingFile: null,
+            previewUrl: photo.imageUrl,
+            isNew: false
+          }));
+        }
+      } catch (error) {
+        showToast(error.message, 'error');
+        return;
+      }
+
+      if (!album) {
+        album = {
+          albumId: '',
+          title: '',
+          description: '',
+          organizationId: isAdmin() ? '' : state.user.organizationId,
+          categoryId: '',
+          coverUrl: '',
+          isPublished: true
+        };
+      }
+
+      state.editor = {
+        albumId: album.albumId || '',
+        originalAlbum: album,
+        photos: photos,
+        objectUrls: [],
+        selectionMode: false,
+        selectedPhotoIds: new Set(),
+        draggedPhotoKey: '',
+        isSaving: false
+      };
+
+      openModal({
+        title: album.albumId ? 'แก้ไขอัลบั้ม' : 'สร้างอัลบั้มใหม่',
+        wide: true,
+        body: buildAlbumEditorBody(album),
+        footer:
+          '<button type="button" class="btn btn-secondary" id="cancel-album-editor">ยกเลิก</button>' +
+          '<button type="button" class="btn btn-primary" id="save-album-editor">' +
+            '<i class="fa-solid fa-cloud-arrow-up"></i> ' +
+            (album.albumId ? 'บันทึกการแก้ไข' : 'อัปโหลดอัลบั้ม') +
+          '</button>'
+      });
+
+      bindAlbumEditorEvents();
+      renderEditorPhotos();
+      updateCategoryDetails();
+    }
+
+    function buildCategoryOptions(selectedId) {
+      const categories = state.categories.filter(item =>
+        item.isActive && !item.isDeleted
+      );
+
+      return (
+        '<option value="">ไม่ระบุหมวดหมู่</option>' +
+        categories.map(function (category) {
+          const selected =
+            String(category.categoryId) === String(selectedId)
+              ? ' selected'
+              : '';
+
+          const suffix = category.description
+            ? ' — ' + category.description
+            : ' — ไม่มีข้อมูลรายละเอียด';
+
+          return (
+            '<option value="' + esc(category.categoryId) + '"' +
+              selected + '>' +
+              esc(category.name + suffix) +
+            '</option>'
+          );
+        }).join('')
+      );
+    }
+
+    function buildAlbumEditorBody(album) {
+      const organizationField = isAdmin()
+        ? (
+          '<div class="form-group">' +
+            '<label for="editor-organization">หน่วยงานหรือองค์กร <span class="danger-text">*</span></label>' +
+            '<select class="form-control" id="editor-organization" required>' +
+              buildOrganizationOptions(album.organizationId) +
+            '</select>' +
+          '</div>'
+        )
+        : (
+          '<div class="form-group">' +
+            '<label>หน่วยงานหรือองค์กร</label>' +
+            '<input class="form-control" readonly value="' +
+              esc(state.user.organizationName || 'หน่วยงานของฉัน') + '">' +
+          '</div>'
+        );
+
+      return (
+        '<form id="album-editor-form">' +
+          '<div class="form-row">' +
+            '<div class="form-group">' +
+              '<label for="editor-album-title">ชื่ออัลบั้ม <span class="danger-text">*</span></label>' +
+              '<input class="form-control" id="editor-album-title" required maxlength="250" value="' +
+                esc(album.title || '') +
+                '" placeholder="กรอกชื่ออัลบั้มกิจกรรม">' +
+            '</div>' +
+            organizationField +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label for="editor-album-description">รายละเอียดอัลบั้ม</label>' +
+            '<textarea class="form-control" id="editor-album-description" maxlength="10000" placeholder="รายละเอียดหรือข้อมูลเกี่ยวกับกิจกรรม">' +
+              esc(album.description || '') +
+            '</textarea>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label for="editor-album-category">หมวดหมู่อัลบั้ม</label>' +
+            '<select class="form-control" id="editor-album-category">' +
+              buildCategoryOptions(album.categoryId) +
+            '</select>' +
+            '<div class="form-hint" id="editor-category-description">เลือกหมวดหมู่เพื่อดูรายละเอียด</div>' +
+          '</div>' +
+
+          '<div class="form-group">' +
+            '<label class="checkbox-row" style="margin:0">' +
+              '<input type="checkbox" id="editor-album-published" ' +
+                (album.isPublished === false ? '' : 'checked') + '>' +
+              '<span>เผยแพร่อัลบั้มให้ผู้เข้าชมทั่วไปเห็น</span>' +
+            '</label>' +
+          '</div>' +
+
+          '<div style="border-top:1px solid var(--border);padding-top:16px;margin-top:13px">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">' +
+              '<div>' +
+                '<h3 style="margin:0;font-size:22px">รูปภาพในอัลบั้ม</h3>' +
+                '<p class="muted small" style="margin:2px 0 0">แตะรูปเพื่อขยายภาพ เลือกหลายรูปเพื่อทำซ้ำหรือลบ กดค้างแล้วลากเพื่อเรียงลำดับ</p>' +
+              '</div>' +
+              '<button type="button" class="btn btn-secondary" id="editor-toggle-selection">' +
+                '<i class="fa-regular fa-square-check"></i> เลือกรูปภาพ' +
+              '</button>' +
+            '</div>' +
+
+            '<label class="upload-dropzone" id="editor-file-dropzone">' +
+              '<i class="fa-solid fa-cloud-arrow-up"></i>' +
+              '<strong>เลือกภาพจากอุปกรณ์</strong>' +
+              '<span class="small">เลือกได้หลายไฟล์ในครั้งเดียว</span>' +
+              '<input id="editor-photo-files" type="file" accept="image/*" multiple>' +
+            '</label>' +
+
+            '<div class="small muted" id="editor-photo-counter" style="margin-top:9px">0 รูปภาพ</div>' +
+            '<div id="editor-image-grid" class="editor-image-grid"></div>' +
+
+            '<div id="editor-photo-empty" class="empty-state">' +
+              '<i class="fa-regular fa-images"></i>' +
+              '<strong>ยังไม่มีรูปภาพ</strong>' +
+              '<div>เลือกภาพจากอุปกรณ์เพื่อเพิ่มลงในอัลบั้ม</div>' +
+            '</div>' +
+
+            '<div id="editor-photo-toolbar" class="floating-photo-toolbar hidden">' +
+              '<span class="badge badge-blue" id="editor-selected-count">0 รูป</span>' +
+              '<button type="button" class="btn btn-secondary btn-sm" id="editor-duplicate-selected">' +
+                '<i class="fa-regular fa-copy"></i> ทำซ้ำ' +
+              '</button>' +
+              '<button type="button" class="btn btn-danger btn-sm" id="editor-delete-selected">' +
+                '<i class="fa-solid fa-trash"></i> ลบ' +
+              '</button>' +
+              '<button type="button" class="btn btn-secondary btn-sm" id="editor-finish-selection">' +
+                'เสร็จสิ้น' +
+              '</button>' +
+            '</div>' +
+
+            '<div id="editor-upload-progress" class="progress-wrap hidden">' +
+              '<div class="progress-header">' +
+                '<span id="editor-upload-status">กำลังเตรียมอัปโหลด</span>' +
+                '<strong id="editor-upload-percent">0%</strong>' +
+              '</div>' +
+              '<div class="progress-track">' +
+                '<div id="editor-upload-bar" class="progress-bar"></div>' +
+              '</div>' +
+              '<div id="editor-upload-detail" class="form-hint" style="margin-top:7px"></div>' +
+            '</div>' +
+          '</div>' +
+        '</form>'
+      );
+    }
+
+    function editorPhotoKey(photo) {
+      return photo.photoId
+        ? String(photo.photoId)
+        : String(photo.clientId);
+    }
+
+    function bindAlbumEditorEvents() {
+      const editor = state.editor;
+      if (!editor) return;
+
+      $('#cancel-album-editor').addEventListener(
+        'click',
+        closeAlbumEditor
+      );
+
+      $('#save-album-editor').addEventListener(
+        'click',
+        saveAlbumEditor
+      );
+
+      $('#album-editor-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        saveAlbumEditor();
+      });
+
+      $('#editor-album-category').addEventListener(
+        'change',
+        updateCategoryDetails
+      );
+
+      const fileInput = $('#editor-photo-files');
+      const dropzone = $('#editor-file-dropzone');
+
+      fileInput.addEventListener('change', function () {
+        addFilesToAlbumEditor(Array.from(fileInput.files || []));
+        fileInput.value = '';
+      });
+
+      dropzone.addEventListener('dragover', function (event) {
+        event.preventDefault();
+        dropzone.style.borderColor = 'var(--primary)';
+      });
+
+      dropzone.addEventListener('dragleave', function () {
+        dropzone.style.borderColor = '';
+      });
+
+      dropzone.addEventListener('drop', function (event) {
+        event.preventDefault();
+        dropzone.style.borderColor = '';
+
+        addFilesToAlbumEditor(
+          Array.from(event.dataTransfer.files || [])
+            .filter(file => file.type.startsWith('image/'))
+        );
+      });
+
+      $('#editor-toggle-selection').addEventListener('click', function () {
+        editor.selectionMode = !editor.selectionMode;
+
+        if (!editor.selectionMode) {
+          editor.selectedPhotoIds.clear();
+        }
+
+        renderEditorPhotos();
+      });
+
+      $('#editor-finish-selection').addEventListener('click', function () {
+        editor.selectionMode = false;
+        editor.selectedPhotoIds.clear();
+        renderEditorPhotos();
+      });
+
+      $('#editor-duplicate-selected').addEventListener(
+        'click',
+        duplicateSelectedEditorPhotos
+      );
+
+      $('#editor-delete-selected').addEventListener(
+        'click',
+        deleteSelectedEditorPhotos
+      );
+    }
+
+    function updateCategoryDetails() {
+      const element = $('#editor-category-description');
+      if (!element) return;
+
+      const categoryId = $('#editor-album-category').value;
+
+      if (!categoryId) {
+        element.textContent = 'ไม่ได้กำหนดหมวดหมู่';
+        return;
+      }
+
+      const category = state.categories.find(item =>
+        String(item.categoryId) === String(categoryId)
+      );
+
+      element.textContent = category
+        ? (category.description || 'ไม่มีข้อมูลรายละเอียด')
+        : 'ไม่มีข้อมูลรายละเอียด';
+    }
+
+    function addFilesToAlbumEditor(files) {
+      const editor = state.editor;
+      if (!editor || !files || !files.length) return;
+
+      const validFiles = [];
+
+      for (const file of files) {
+        if (!file.type || !file.type.startsWith('image/')) {
+          showToast('ข้ามไฟล์ที่ไม่ใช่รูปภาพ: ' + file.name, 'error');
+          continue;
+        }
+
+        if (file.size > CONFIG.MAX_IMAGE_BYTES) {
+          showToast(
+            'ไฟล์ ' + file.name + ' มีขนาดใหญ่เกินขีดจำกัด',
+            'error'
+          );
+          continue;
+        }
+
+        validFiles.push(file);
+      }
+
+      if (!validFiles.length) return;
+
+      if (
+        editor.photos.length + validFiles.length >
+        CONFIG.MAX_BATCH_FILES
+      ) {
+        showToast('ชุดอัปโหลดนี้มีจำนวนรูปภาพมากเกินไป', 'error');
+        return;
+      }
+
+      validFiles.forEach(function (file) {
+        const previewUrl = URL.createObjectURL(file);
+        editor.objectUrls.push(previewUrl);
+
+        editor.photos.push({
+          photoId: '',
+          clientId: makeRandomHex(10),
+          albumId: editor.albumId,
+          imageUrl: previewUrl,
+          thumbnailUrl: previewUrl,
+          previewUrl: previewUrl,
+          deleteUrl: '',
+          caption: '',
+          sortOrder: editor.photos.length + 1,
+          duplicateOfPhotoId: '',
+          pendingFile: file,
+          isNew: true
+        });
+      });
+
+      renderEditorPhotos();
+
+      showToast(
+        'เพิ่มรูปภาพ ' + validFiles.length + ' รูปลงในรายการแล้ว',
+        'success'
+      );
+    }
+
+    function renderEditorPhotos() {
+      const editor = state.editor;
+      if (!editor) return;
+
+      const grid = $('#editor-image-grid');
+      if (!grid) return;
+
+      grid.classList.toggle(
+        'selection-mode',
+        Boolean(editor.selectionMode)
+      );
+
+      $('#editor-toggle-selection').innerHTML = editor.selectionMode
+        ? '<i class="fa-solid fa-xmark"></i> ยกเลิกการเลือก'
+        : '<i class="fa-regular fa-square-check"></i> เลือกรูปภาพ';
+
+      $('#editor-photo-counter').textContent =
+        formatNumber(editor.photos.length) + ' รูปภาพ';
+
+      $('#editor-photo-empty').classList.toggle(
+        'hidden',
+        editor.photos.length > 0
+      );
+
+      if (!editor.photos.length) {
+        grid.innerHTML = '';
+      } else {
+        grid.innerHTML = editor.photos.map(function (photo, index) {
+          const key = editorPhotoKey(photo);
+          const selected = editor.selectedPhotoIds.has(key);
+          const imageSrc = photo.previewUrl ||
+            photo.thumbnailUrl ||
+            photo.imageUrl;
+
+          return (
+            '<div class="editor-photo ' +
+              (selected ? 'selected' : '') +
+              '" data-editor-photo="' + esc(key) +
+              '" draggable="true" tabindex="0" role="button" aria-label="รูปภาพลำดับที่ ' +
+              (index + 1) + '">' +
+              '<img src="' + esc(imageSrc) +
+                '" alt="รูปภาพลำดับที่ ' + (index + 1) +
+                '" loading="lazy">' +
+              '<span class="photo-select-dot"><i class="fa-solid fa-check"></i></span>' +
+              '<span class="photo-order">' + (index + 1) + '</span>' +
+              (photo.pendingFile
+                ? '<span class="photo-pending-label">รออัปโหลด</span>'
+                : '') +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      const count = editor.selectedPhotoIds.size;
+
+      $('#editor-selected-count').textContent =
+        formatNumber(count) + ' รูป';
+
+      $('#editor-photo-toolbar').classList.toggle(
+        'hidden',
+        !editor.selectionMode || count === 0
+      );
+
+      bindEditorPhotoEvents();
+    }
+
+    function bindEditorPhotoEvents() {
+      const editor = state.editor;
+      if (!editor) return;
+
+      $$('[data-editor-photo]').forEach(function (tile) {
+        const key = tile.dataset.editorPhoto;
+
+        tile.addEventListener('click', function () {
+          if (!state.editor) return;
+
+          if (state.editor.selectionMode) {
+            if (state.editor.selectedPhotoIds.has(key)) {
+              state.editor.selectedPhotoIds.delete(key);
+            } else {
+              state.editor.selectedPhotoIds.add(key);
+            }
+
+            renderEditorPhotos();
+            return;
+          }
+
+          const photo = state.editor.photos.find(item =>
+            editorPhotoKey(item) === key
+          );
+
+          if (photo) {
+            openImageViewer(
+              photo.previewUrl || photo.imageUrl || photo.thumbnailUrl,
+              photo.caption || ''
+            );
+          }
+        });
+
+        tile.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            tile.click();
+          }
+        });
+
+        tile.addEventListener('dragstart', function (event) {
+          if (!state.editor) return;
+
+          state.editor.draggedPhotoKey = key;
+          tile.classList.add('dragging');
+
+          if (event.dataTransfer) {
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', key);
+          }
+        });
+
+        tile.addEventListener('dragend', function () {
+          tile.classList.remove('dragging');
+
+          if (state.editor) {
+            state.editor.draggedPhotoKey = '';
+          }
+
+          $$('.editor-photo').forEach(item => {
+            item.classList.remove('dragging');
+          });
+        });
+
+        tile.addEventListener('dragover', function (event) {
+          event.preventDefault();
+        });
+
+        tile.addEventListener('drop', function (event) {
+          event.preventDefault();
+
+          if (!state.editor) return;
+
+          const sourceKey =
+            state.editor.draggedPhotoKey ||
+            (event.dataTransfer
+              ? event.dataTransfer.getData('text/plain')
+              : '');
+
+          if (sourceKey && sourceKey !== key) {
+            moveEditorPhoto(sourceKey, key);
+          }
+        });
+
+        /*
+         * การจัดเรียงด้วยการกดค้างแล้วลากบนอุปกรณ์สัมผัส
+         */
+        let longPressTimer = null;
+        let touchDragActive = false;
+        let targetKey = key;
+
+        tile.addEventListener('pointerdown', function (event) {
+          if (event.pointerType !== 'touch') return;
+
+          touchDragActive = false;
+          targetKey = key;
+
+          longPressTimer = setTimeout(function () {
+            touchDragActive = true;
+
+            if (state.editor) {
+              state.editor.draggedPhotoKey = key;
+            }
+
+            tile.classList.add('dragging');
+          }, 500);
+        });
+
+        tile.addEventListener('pointermove', function (event) {
+          if (event.pointerType !== 'touch') return;
+
+          if (!touchDragActive) {
+            if (longPressTimer && Math.abs(event.movementY) > 8) {
+              clearTimeout(longPressTimer);
+              longPressTimer = null;
+            }
+
+            return;
+          }
+
+          event.preventDefault();
+
+          const under = document.elementFromPoint(
+            event.clientX,
+            event.clientY
+          );
+
+          const target = under && under.closest('[data-editor-photo]');
+
+          if (target && target.dataset.editorPhoto) {
+            targetKey = target.dataset.editorPhoto;
+          }
+        }, { passive: false });
+
+        const finishPointer = function () {
+          if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+          }
+
+          if (touchDragActive && state.editor) {
+            const source = state.editor.draggedPhotoKey;
+
+            if (source && targetKey && source !== targetKey) {
+              moveEditorPhoto(source, targetKey);
+            }
+
+            state.editor.draggedPhotoKey = '';
+          }
+
+          touchDragActive = false;
+          tile.classList.remove('dragging');
+        };
+
+        tile.addEventListener('pointerup', finishPointer);
+        tile.addEventListener('pointercancel', finishPointer);
+      });
+    }
+
+    function moveEditorPhoto(sourceKey, targetKey) {
+      const editor = state.editor;
+      if (!editor) return;
+
+      const sourceIndex = editor.photos.findIndex(photo =>
+        editorPhotoKey(photo) === sourceKey
+      );
+
+      const targetIndex = editor.photos.findIndex(photo =>
+        editorPhotoKey(photo) === targetKey
+      );
+
+      if (
+        sourceIndex < 0 ||
+        targetIndex < 0 ||
+        sourceIndex === targetIndex
+      ) {
+        return;
+      }
+
+      const moved = editor.photos.splice(sourceIndex, 1)[0];
+      editor.photos.splice(targetIndex, 0, moved);
+
+      editor.photos.forEach((photo, index) => {
+        photo.sortOrder = index + 1;
+      });
+
+      renderEditorPhotos();
+    }
+
+    function getSelectedEditorPhotos() {
+      const editor = state.editor;
+      if (!editor) return [];
+
+      return editor.photos.filter(photo =>
+        editor.selectedPhotoIds.has(editorPhotoKey(photo))
+      );
+    }
+
+    function duplicateSelectedEditorPhotos() {
+      const editor = state.editor;
+      if (!editor) return;
+
+      const selected = getSelectedEditorPhotos();
+      if (!selected.length) return;
+
+      const insertions = selected.map(function (photo) {
+        return {
+          index: editor.photos.indexOf(photo),
+          duplicate: Object.assign({}, photo, {
+            photoId: '',
+            clientId: makeRandomHex(10),
+            duplicateOfPhotoId: photo.photoId || '',
+            isNew: true,
+            sortOrder: 0
+          })
+        };
+      }).sort((a, b) => b.index - a.index);
+
+      insertions.forEach(function (item) {
+        if (item.index >= 0) {
+          editor.photos.splice(item.index + 1, 0, item.duplicate);
+        }
+      });
+
+      editor.photos.forEach((photo, index) => {
+        photo.sortOrder = index + 1;
+      });
+
+      editor.selectedPhotoIds.clear();
+
+      insertions.forEach(function (item) {
+        editor.selectedPhotoIds.add(editorPhotoKey(item.duplicate));
+      });
+
+      renderEditorPhotos();
+
+      showToast(
+        'ทำซ้ำรูปภาพ ' + selected.length + ' รูปแล้ว',
+        'success'
+      );
+    }
+
+    async function deleteSelectedEditorPhotos() {
+      const editor = state.editor;
+      if (!editor) return;
+
+      const selected = getSelectedEditorPhotos();
+      if (!selected.length) return;
+
+      const accepted = await askConfirm(
+        'ลบรูปภาพ',
+        'ต้องการลบรูปภาพที่เลือกจำนวน ' + selected.length + ' รูปใช่หรือไม่',
+        'ลบรูปภาพ',
+        'btn-danger'
+      );
+
+      if (!accepted || !state.editor) return;
+
+      const keys = new Set(selected.map(editorPhotoKey));
+
+      editor.photos = editor.photos.filter(photo =>
+        !keys.has(editorPhotoKey(photo))
+      );
+
+      editor.selectedPhotoIds.clear();
+
+      editor.photos.forEach((photo, index) => {
+        photo.sortOrder = index + 1;
+      });
+
+      renderEditorPhotos();
+
+      showToast(
+        'นำรูปภาพที่เลือกออกจากรายการแล้ว กดยืนยันบันทึกอัลบั้มเพื่อบันทึกการเปลี่ยนแปลง',
+        'success'
+      );
+    }
+
+    function openImageViewer(url, caption) {
+      if (!url) {
+        showToast('ไม่พบ URL รูปภาพ', 'error');
+        return;
+      }
+
+      openModal({
+        title: caption || 'ดูรูปภาพ',
+        imageViewer: true,
+        body:
+          '<div class="modal-image-stage">' +
+            '<img src="' + esc(url) + '" alt="' + esc(caption || 'รูปภาพ') + '">' +
+          '</div>',
+        footer:
+          '<button type="button" class="btn btn-secondary" id="close-image-viewer">ปิด</button>'
+      });
+
+      $('#close-image-viewer').addEventListener('click', closeModal);
+    }
+
+    function closeAlbumEditor() {
+      const editor = state.editor;
+
+      if (editor) {
+        (editor.objectUrls || []).forEach(url => {
+          try {
+            URL.revokeObjectURL(url);
+          } catch (error) {
+            /* ข้าม URL ที่ไม่ถูกต้อง */
+          }
+        });
+      }
+
+      state.editor = null;
+      closeModal();
+    }
+
+    /* =========================================================
+       14. FILE UPLOAD
+       ========================================================= */
+
+    /*
+     * อ่านไฟล์ด้วย FileReader
+     * Progress ของ FileReader เป็นความคืบหน้าการอ่านไฟล์จริง
+     * ส่วนแถบอัปโหลดอัลบั้มด้านล่างจะแสดงจำนวนภาพที่ส่งสำเร็จจริง
+     */
+    function readFileAsDataUrl(file, onProgress) {
+      return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+
+        reader.onprogress = function (event) {
+          if (event.lengthComputable && typeof onProgress === 'function') {
+            onProgress(event.loaded, event.total);
+          }
+        };
+
+        reader.onload = function () {
+          resolve(String(reader.result || ''));
+        };
+
+        reader.onerror = function () {
+          reject(new Error('อ่านไฟล์ไม่สำเร็จ: ' + file.name));
+        };
+
+        reader.onabort = function () {
+          reject(new Error('การอ่านไฟล์ถูกยกเลิก: ' + file.name));
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadImageFileDetailed(file, progressCallback) {
+      if (!(file instanceof File)) {
+        throw new Error('ไม่พบไฟล์รูปภาพ');
+      }
+
+      if (!file.type || !file.type.startsWith('image/')) {
+        throw new Error('ไฟล์ที่เลือกไม่ใช่รูปภาพ');
+      }
+
+      if (file.size > CONFIG.MAX_IMAGE_BYTES) {
+        throw new Error('ไฟล์ ' + file.name + ' มีขนาดใหญ่เกินไป');
+      }
+
+      const dataUrl = await readFileAsDataUrl(file, progressCallback);
+      const separator = dataUrl.indexOf(',');
+
+      if (separator < 0) {
+        throw new Error('รูปแบบไฟล์ที่อ่านไม่ถูกต้อง');
+      }
+
+      const result = await callPost('uploadImage', {
+        imageBase64: dataUrl.substring(separator + 1),
+        fileName: file.name,
+        mimeType: file.type
+      });
+
+      if (!result.image || !result.image.url) {
+        throw new Error('บริการอัปโหลดไม่ส่ง URL รูปภาพกลับมา');
+      }
+
+      return result.image;
+    }
+
+    async function uploadImageFile(file, progressCallback) {
+      const result = await uploadImageFileDetailed(
+        file,
+        progressCallback
+      );
+
+      return result.url;
+    }
+
+    function updateAlbumUploadProgress(
+      status,
+      percent,
+      detail,
+      complete
+    ) {
+      const wrap = $('#editor-upload-progress');
+      if (!wrap) return;
+
+      wrap.classList.remove('hidden');
+
+      $('#editor-upload-status').textContent = status || '';
+
+      $('#editor-upload-percent').textContent =
+        Math.round(percent || 0) + '%';
+
+      $('#editor-upload-bar').style.width =
+        Math.max(0, Math.min(100, percent || 0)) + '%';
+
+      $('#editor-upload-bar').classList.toggle(
+        'complete',
+        Boolean(complete)
+      );
+
+      $('#editor-upload-detail').textContent = detail || '';
+    }
+
+    async function saveAlbumEditor() {
+      const editor = state.editor;
+      if (!editor || editor.isSaving) return;
+
+      const title = $('#editor-album-title').value.trim();
+      const description = $('#editor-album-description').value.trim();
+      const categoryId = $('#editor-album-category').value;
+      const isPublished = $('#editor-album-published').checked;
+
+      if (!title) {
+        showToast('กรุณาระบุชื่ออัลบั้ม', 'error');
+        $('#editor-album-title').focus();
+        return;
+      }
+
+      const organizationId = isAdmin()
+        ? $('#editor-organization').value
+        : state.user.organizationId;
+
+      if (!organizationId) {
+        showToast('กรุณาเลือกหน่วยงานหรือองค์กร', 'error');
+        return;
+      }
+
+      const button = $('#save-album-editor');
+      editor.isSaving = true;
+
+      setBusy(button, true, 'กำลังเตรียมอัปโหลด');
+
+      const pendingPhotos = editor.photos.filter(photo =>
+        photo.pendingFile instanceof File
+      );
+
+      const totalPending = pendingPhotos.length;
+      let completed = 0;
+
+      if (totalPending > 0) {
+        updateAlbumUploadProgress(
+          'กำลังอัปโหลดรูปภาพ',
+          0,
+          'อัปโหลดสำเร็จ 0 จาก ' + totalPending + ' รูป',
+          false
+        );
+      }
+
+      try {
+        for (const photo of pendingPhotos) {
+          const file = photo.pendingFile;
+
+          updateAlbumUploadProgress(
+            'กำลังอัปโหลด ' + file.name,
+            totalPending ? (completed / totalPending) * 90 : 90,
+            'อัปโหลดสำเร็จ ' + completed + ' จาก ' + totalPending + ' รูป',
+            false
+          );
+
+          const uploaded = await uploadImageFileDetailed(
+            file,
+            function (loaded, total) {
+              updateAlbumUploadProgress(
+                'กำลังเตรียมไฟล์ ' + file.name,
+                totalPending ? (completed / totalPending) * 90 : 90,
+                'อ่านไฟล์แล้ว ' +
+                  formatNumber(loaded) + ' / ' +
+                  formatNumber(total) + ' ไบต์',
+                false
+              );
+            }
+          );
+
+          photo.imageUrl = uploaded.url;
+          photo.thumbnailUrl = uploaded.thumbnailUrl || uploaded.url;
+          photo.previewUrl = uploaded.url;
+          photo.deleteUrl = uploaded.deleteUrl || '';
+          photo.pendingFile = null;
+
+          completed++;
+
+          updateAlbumUploadProgress(
+            'อัปโหลดรูปภาพแล้ว',
+            totalPending ? (completed / totalPending) * 90 : 90,
+            'อัปโหลดสำเร็จ ' + completed + ' จาก ' + totalPending + ' รูป',
+            false
+          );
+
+          renderEditorPhotos();
+        }
+
+        const finalPhotos = editor.photos.map(function (photo, index) {
+          return {
+            photoId: photo.photoId || '',
+            imageUrl: photo.imageUrl,
+            thumbnailUrl: photo.thumbnailUrl || photo.imageUrl,
+            deleteUrl: photo.deleteUrl || '',
+            caption: photo.caption || '',
+            sortOrder: index + 1,
+            duplicateOfPhotoId: photo.duplicateOfPhotoId || ''
+          };
+        });
+
+        updateAlbumUploadProgress(
+          'กำลังบันทึกข้อมูลอัลบั้ม',
+          95,
+          'กำลังบันทึกรายละเอียดและลำดับรูปภาพ',
+          false
+        );
+
+        const action = editor.albumId
+          ? 'updateAlbum'
+          : 'createAlbum';
+
+        const result = await callPost(action, {
+          albumId: editor.albumId || '',
+          title: title,
+          description: description,
+          categoryId: categoryId,
+          organizationId: organizationId,
+          coverUrl: finalPhotos.length
+            ? finalPhotos[0].imageUrl
+            : '',
+          photos: finalPhotos,
+          isPublished: isPublished
+        });
+
+        updateAlbumUploadProgress(
+          'อัปโหลดอัลบั้มเสร็จสิ้น',
+          100,
+          'บันทึกข้อมูลเรียบร้อยแล้ว · ' +
+            formatNumber(result.photoCount || finalPhotos.length) +
+            ' รูปภาพ',
+          true
+        );
+
+        await sleep(450);
+
+        closeAlbumEditor();
+
+        await loadAlbums();
+        await renderAlbumsPage();
+
+        showToast(
+          editor.albumId
+            ? 'แก้ไขอัลบั้มเรียบร้อยแล้ว'
+            : 'อัปโหลดอัลบั้มเสร็จสิ้น',
+          'success'
+        );
+      } catch (error) {
+        editor.isSaving = false;
+
+        const currentButton = $('#save-album-editor');
+        if (currentButton) {
+          setBusy(currentButton, false);
+        }
+
+        showToast(
+          'ไม่สามารถบันทึกอัลบั้มได้: ' +
+            (error.message || 'เกิดข้อผิดพลาด'),
+          'error'
+        );
+
+        updateAlbumUploadProgress(
+          'อัปโหลดไม่สำเร็จ',
+          totalPending ? (completed / totalPending) * 90 : 0,
+          error.message || 'เกิดข้อผิดพลาด',
+          false
+        );
+
+        return;
+      }
+
+      editor.isSaving = false;
+    }
+
+    /* =========================================================
+       15. SECURITY / CHANGE PASSWORD
+       ========================================================= */
+
+    function renderSecurityPage() {
+      $('#main-content').innerHTML =
+        '<div class="page-heading">' +
+          '<div><h1>ความปลอดภัย</h1><p>เปลี่ยนรหัสผ่านและดูแลความปลอดภัยบัญชีของคุณ</p></div>' +
+        '</div>' +
+
+        '<div class="card" style="max-width:730px">' +
+          '<div class="card-header">' +
+            '<div><h2 class="section-heading">เปลี่ยนรหัสผ่าน</h2><p class="section-description">ตั้งรหัสผ่านใหม่ที่เดายากและไม่ซ้ำกับบริการอื่น</p></div>' +
+            '<div class="stat-icon"><i class="fa-solid fa-shield-halved"></i></div>' +
+          '</div>' +
+          '<div class="card-body">' +
+
+            (state.user.mustChangePassword
+              ? '<div class="inline-alert"><i class="fa-solid fa-triangle-exclamation"></i> แนะนำให้เปลี่ยนรหัสผ่านเริ่มต้นก่อนใช้งานต่อ</div>'
+              : '') +
+
+            '<form id="change-password-form">' +
+              '<div class="form-group">' +
+                '<label for="current-password">รหัสผ่านเดิม <span class="danger-text">*</span></label>' +
+                '<input class="form-control" id="current-password" type="password" autocomplete="current-password" required placeholder="กรอกรหัสผ่านเดิม">' +
+              '</div>' +
+
+              '<div class="form-group">' +
+                '<label for="new-password">รหัสผ่านใหม่ <span class="danger-text">*</span></label>' +
+                '<input class="form-control" id="new-password" type="password" autocomplete="new-password" required minlength="10" placeholder="ตั้งรหัสผ่านใหม่">' +
+                '<div class="security-meter" id="password-meter">' +
+                  '<span></span><span></span><span></span><span></span><span></span>' +
+                '</div>' +
+                '<strong id="password-strength-label" class="small">ระดับความปลอดภัย: ยังไม่ได้กรอกรหัสผ่าน</strong>' +
+                '<ul class="security-tips" id="password-tips">' +
+                  '<li>ควรมีความยาวอย่างน้อย 10 ตัวอักษร</li>' +
+                  '<li>ใช้ตัวพิมพ์เล็ก ตัวพิมพ์ใหญ่ ตัวเลข และสัญลักษณ์พิเศษ</li>' +
+                '</ul>' +
+              '</div>' +
+
+              '<div class="form-group">' +
+                '<label for="confirm-password">ยืนยันรหัสผ่านใหม่ <span class="danger-text">*</span></label>' +
+                '<input class="form-control" id="confirm-password" type="password" autocomplete="new-password" required placeholder="กรอกรหัสผ่านใหม่อีกครั้ง">' +
+                '<div id="password-match-message" class="form-hint"></div>' +
+              '</div>' +
+
+              '<div style="display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:20px">' +
+                '<button type="reset" class="btn btn-secondary" id="reset-password-form">ล้างข้อมูล</button>' +
+                '<button type="submit" class="btn btn-primary" id="submit-change-password">' +
+                  '<i class="fa-solid fa-key"></i> เปลี่ยนรหัสผ่าน' +
+                '</button>' +
+              '</div>' +
+            '</form>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="card" style="max-width:730px;margin-top:17px">' +
+          '<div class="card-header"><div><h2 class="section-heading">คำแนะนำด้านความปลอดภัย</h2></div></div>' +
+          '<div class="card-body">' +
+            '<div style="display:flex;flex-direction:column;gap:12px">' +
+              '<div class="profile-section"><div class="avatar"><i class="fa-solid fa-fingerprint"></i></div><div><strong>ใช้รหัสผ่านที่คาดเดายาก</strong><div class="muted small">หลีกเลี่ยงวันเกิด ชื่อเล่น หรือข้อมูลส่วนตัว</div></div></div>' +
+              '<div class="profile-section"><div class="avatar"><i class="fa-solid fa-user-lock"></i></div><div><strong>อย่าใช้รหัสผ่านซ้ำ</strong><div class="muted small">ใช้รหัสผ่านแยกสำหรับแต่ละบริการ</div></div></div>' +
+              '<div class="profile-section"><div class="avatar"><i class="fa-solid fa-right-from-bracket"></i></div><div><strong>ออกจากระบบเมื่อใช้เครื่องสาธารณะ</strong><div class="muted small">ไม่ควรจดจำการเข้าสู่ระบบบนอุปกรณ์ที่ใช้ร่วมกับผู้อื่น</div></div></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      $('#new-password').addEventListener(
+        'input',
+        updatePasswordStrength
+      );
+
+      $('#confirm-password').addEventListener(
+        'input',
+        updatePasswordMatch
+      );
+
+      $('#reset-password-form').addEventListener('click', function () {
+        setTimeout(function () {
+          updatePasswordStrength();
+          updatePasswordMatch();
+        }, 0);
+      });
+
+      $('#change-password-form').addEventListener(
+        'submit',
+        submitChangePassword
+      );
+    }
+
+    function clientPasswordStrength(password) {
+      password = String(password || '');
+
+      const checks = [
+        password.length >= 10,
+        /[a-z]/.test(password),
+        /[A-Z]/.test(password),
+        /[0-9]/.test(password),
+        /[^A-Za-z0-9]/.test(password)
+      ];
+
+      const score = checks.filter(Boolean).length;
+
+      let label = 'อ่อนมาก';
+
+      if (score >= 5 && password.length >= 12) {
+        label = 'แข็งแกร่งมาก';
+      } else if (score >= 4 && password.length >= 10) {
+        label = 'แข็งแกร่ง';
+      } else if (score >= 3 && password.length >= 10) {
+        label = 'ปานกลาง';
+      } else if (score >= 2) {
+        label = 'อ่อน';
+      }
+
+      const tips = [];
+
+      if (!checks[0]) tips.push('เพิ่มความยาวให้ครบอย่างน้อย 10 ตัวอักษร');
+      if (!checks[1]) tips.push('เพิ่มตัวอักษรภาษาอังกฤษตัวพิมพ์เล็ก');
+      if (!checks[2]) tips.push('เพิ่มตัวอักษรภาษาอังกฤษตัวพิมพ์ใหญ่');
+      if (!checks[3]) tips.push('เพิ่มตัวเลข');
+      if (!checks[4]) tips.push('เพิ่มสัญลักษณ์พิเศษ เช่น ! @ #');
+
+      return {
+        checks: checks,
+        score: score,
+        label: label,
+        valid: checks.every(Boolean),
+        tips: tips
+      };
+    }
+
+    function updatePasswordStrength() {
+      const input = $('#new-password');
+      if (!input) return;
+
+      const password = input.value;
+      const result = clientPasswordStrength(password);
+      const meter = $('#password-meter');
+
+      meter.className = 'security-meter ' +
+        (result.score >= 4
+          ? 'level-strong'
+          : result.score >= 3
+            ? 'level-medium'
+            : '');
+
+      $$('.security-meter span', meter).forEach(function (bar, index) {
+        bar.classList.toggle('filled', index < result.score);
+      });
+
+      $('#password-strength-label').textContent =
+        'ระดับความปลอดภัย: ' +
+        (password ? result.label : 'ยังไม่ได้กรอกรหัสผ่าน');
+
+      $('#password-tips').innerHTML = result.tips.length
+        ? result.tips.map(tip => '<li>' + esc(tip) + '</li>').join('')
+        : '<li class="success-text">ผ่านเงื่อนไขพื้นฐานด้านความปลอดภัยแล้ว</li>';
+    }
+
+    function updatePasswordMatch() {
+      const input = $('#new-password');
+      const confirm = $('#confirm-password');
+      const message = $('#password-match-message');
+
+      if (!input || !confirm || !message) return;
+
+      if (!confirm.value) {
+        message.textContent = '';
+        message.className = 'form-hint';
+        return;
+      }
+
+      const matched = input.value === confirm.value;
+
+      message.textContent = matched
+        ? 'รหัสผ่านตรงกัน'
+        : 'รหัสผ่านไม่ตรงกัน';
+
+      message.className = matched
+        ? 'small success-text'
+        : 'small danger-text';
+    }
+
+    async function submitChangePassword(event) {
+      event.preventDefault();
+
+      const button = $('#submit-change-password');
+      const currentPassword = $('#current-password').value;
+      const newPassword = $('#new-password').value;
+      const confirmPassword = $('#confirm-password').value;
+
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        showToast('กรุณากรอกข้อมูลให้ครบทุกช่อง', 'error');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showToast('รหัสผ่านใหม่และการยืนยันไม่ตรงกัน', 'error');
+        return;
+      }
+
+      const strength = clientPasswordStrength(newPassword);
+
+      if (!strength.valid) {
+        showToast('รหัสผ่านยังไม่ผ่านเงื่อนไขความปลอดภัย', 'error');
+        return;
+      }
+
+      setBusy(button, true, 'กำลังเปลี่ยนรหัสผ่าน');
+
+      try {
+        await callPost('changePassword', {
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword
+        });
+
+        showToast('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว', 'success');
+
+        state.user.mustChangePassword = false;
+
+        try {
+          localStorage.setItem(
+            CONFIG.USER_CACHE_KEY,
+            JSON.stringify(state.user)
+          );
+        } catch (error) {
+          /* ข้ามการบันทึกข้อมูลที่แคชไว้ */
+        }
+
+        renderSecurityPage();
+      } catch (error) {
+        showToast(error.message, 'error');
+      } finally {
+        const currentButton = $('#submit-change-password');
+        if (currentButton) setBusy(currentButton, false);
+      }
+    }
+
+    /* =========================================================
+       16. ACTIVITY LOGS
+       ========================================================= */
+
+    async function renderLogsPage() {
+      await loadLogs(0);
+
+      $('#main-content').innerHTML =
+        '<div class="page-heading">' +
+          '<div><h1>ประวัติการใช้งาน</h1><p>' +
+            (isAdmin()
+              ? 'ตรวจสอบประวัติการเข้าสู่ระบบและรายการที่เกิดขึ้นในระบบ'
+              : 'ตรวจสอบประวัติการใช้งานบัญชีของคุณ') +
+          '</p></div>' +
+          '<div class="page-actions"><button type="button" class="btn btn-secondary" id="refresh-logs-button"><i class="fa-solid fa-rotate-right"></i> รีเฟรช</button></div>' +
+        '</div>' +
+
+        '<div class="toolbar">' +
+          '<select class="form-control" id="logs-action-filter">' +
+            '<option value="">ทุกรายการ</option>' +
+            '<option value="LOGIN_SUCCESS">เข้าสู่ระบบสำเร็จ</option>' +
+            '<option value="LOGIN_FAILED">เข้าสู่ระบบไม่สำเร็จ</option>' +
+            '<option value="LOGOUT">ออกจากระบบ</option>' +
+            '<option value="CREATE_USER">เพิ่มผู้ใช้งาน</option>' +
+            '<option value="UPDATE_USER">แก้ไขผู้ใช้งาน</option>' +
+            '<option value="RESET_USER_PASSWORD">รีเซ็ตรหัสผ่าน</option>' +
+            '<option value="CREATE_ORGANIZATION">เพิ่มหน่วยงาน</option>' +
+            '<option value="UPDATE_ORGANIZATION">แก้ไขหน่วยงาน</option>' +
+            '<option value="DELETE_ORGANIZATION">ลบหน่วยงาน</option>' +
+            '<option value="CREATE_CATEGORY">เพิ่มหมวดหมู่</option>' +
+            '<option value="UPDATE_CATEGORY">แก้ไขหมวดหมู่</option>' +
+            '<option value="DELETE_CATEGORY">ลบหมวดหมู่</option>' +
+            '<option value="CREATE_ALBUM">สร้างอัลบั้ม</option>' +
+            '<option value="UPDATE_ALBUM">แก้ไขอัลบั้ม</option>' +
+            '<option value="DELETE_ALBUM">ลบอัลบั้ม</option>' +
+            '<option value="DELETE_PHOTO">ลบรูปภาพ</option>' +
+            '<option value="DUPLICATE_PHOTO">ทำซ้ำรูปภาพ</option>' +
+            '<option value="REORDER_PHOTOS">จัดเรียงรูปภาพ</option>' +
+            '<option value="IMAGE_UPLOAD_SUCCESS">อัปโหลดรูปภาพสำเร็จ</option>' +
+            '<option value="IMAGE_UPLOAD_FAILED">อัปโหลดรูปภาพไม่สำเร็จ</option>' +
+            '<option value="CHANGE_PASSWORD">เปลี่ยนรหัสผ่าน</option>' +
+          '</select>' +
+          '<button type="button" class="btn btn-primary" id="apply-logs-filter"><i class="fa-solid fa-filter"></i> กรองรายการ</button>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<div class="card-header">' +
+            '<div><h2 class="section-heading">บันทึกกิจกรรม</h2><p class="section-description">รายการเรียงตามเวลาล่าสุด</p></div>' +
+            '<span class="badge badge-blue" id="logs-total-badge">' +
+              formatNumber(state.logTotal) + ' รายการ' +
+            '</span>' +
+          '</div>' +
+          '<div id="logs-table-area"></div>' +
+          '<div class="pagination" id="logs-pagination"></div>' +
+        '</div>';
+
+      $('#logs-action-filter').value = state.logFilter;
+
+      $('#refresh-logs-button').addEventListener('click', async function () {
+        try {
+          await loadLogs(state.logOffset);
+          renderLogsTable();
+          showToast('รีเฟรชประวัติการใช้งานแล้ว', 'success');
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+
+      $('#apply-logs-filter').addEventListener('click', async function () {
+        state.logFilter = $('#logs-action-filter').value;
+
+        try {
+          await loadLogs(0);
+          renderLogsTable();
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+
+      renderLogsTable();
+    }
+
+    function readableLogAction(action) {
+      const labels = {
+        LOGIN_SUCCESS: 'เข้าสู่ระบบสำเร็จ',
+        LOGIN_FAILED: 'เข้าสู่ระบบไม่สำเร็จ',
+        LOGOUT: 'ออกจากระบบ',
+        CHANGE_PASSWORD: 'เปลี่ยนรหัสผ่าน',
+        CREATE_USER: 'เพิ่มผู้ใช้งาน',
+        UPDATE_USER: 'แก้ไขผู้ใช้งาน',
+        RESET_USER_PASSWORD: 'รีเซ็ตรหัสผ่าน',
+        CREATE_ORGANIZATION: 'เพิ่มหน่วยงาน',
+        UPDATE_ORGANIZATION: 'แก้ไขหน่วยงาน',
+        DELETE_ORGANIZATION: 'ลบหน่วยงาน',
+        CREATE_CATEGORY: 'เพิ่มหมวดหมู่',
+        UPDATE_CATEGORY: 'แก้ไขหมวดหมู่',
+        DELETE_CATEGORY: 'ลบหมวดหมู่',
+        CREATE_ALBUM: 'สร้างอัลบั้ม',
+        UPDATE_ALBUM: 'แก้ไขอัลบั้ม',
+        DELETE_ALBUM: 'ลบอัลบั้ม',
+        DELETE_PHOTO: 'ลบรูปภาพ',
+        DUPLICATE_PHOTO: 'ทำซ้ำรูปภาพ',
+        REORDER_PHOTOS: 'จัดเรียงรูปภาพ',
+        IMAGE_UPLOAD_SUCCESS: 'อัปโหลดรูปภาพสำเร็จ',
+        IMAGE_UPLOAD_FAILED: 'อัปโหลดรูปภาพไม่สำเร็จ',
+        LIST_USERS: 'เปิดดูรายการผู้ใช้งาน'
+      };
+
+      return labels[action] || action || 'รายการอื่น';
+    }
+
+    function renderLogsTable() {
+      const area = $('#logs-table-area');
+      if (!area) return;
+
+      $('#logs-total-badge').textContent =
+        formatNumber(state.logTotal) + ' รายการ';
+
+      if (!state.logs.length) {
+        area.innerHTML =
+          '<div class="empty-state">' +
+            '<i class="fa-solid fa-clock-rotate-left"></i>' +
+            '<strong>ไม่พบประวัติการใช้งาน</strong>' +
+            '<div>ยังไม่มีรายการ หรือไม่พบรายการตามตัวกรองที่เลือก</div>' +
+          '</div>';
+
+        $('#logs-pagination').innerHTML = '';
+        return;
+      }
+
+      area.innerHTML =
+        '<div class="table-wrap">' +
+          '<table class="data-table" style="min-width:700px">' +
+            '<thead><tr><th>วันและเวลา</th><th>ผู้ใช้งาน</th><th>รายการ</th><th>ประเภทข้อมูล</th><th>รายละเอียด</th></tr></thead>' +
+            '<tbody>' +
+              state.logs.map(function (log) {
+                let details = '';
+
+                if (log.details && typeof log.details === 'object') {
+                  details = Object.keys(log.details)
+                    .filter(function (key) {
+                      return [
+                        'name',
+                        'title',
+                        'username',
+                        'organizationId',
+                        'categoryId',
+                        'photoCount',
+                        'deletedPhotoCount',
+                        'rememberMe',
+                        'reason'
+                      ].includes(key);
+                    })
+                    .map(function (key) {
+                      return key + ': ' + String(log.details[key]);
+                    })
+                    .join(' · ');
+                }
+
+                return (
+                  '<tr>' +
+                    '<td class="nowrap">' + esc(formatDate(log.occurredAt, true)) + '</td>' +
+                    '<td><strong>' + esc(log.username || 'ไม่ระบุ') + '</strong>' +
+                      '<div class="small muted">' + esc(ROLE_LABELS[log.role] || log.role || '') + '</div>' +
+                    '</td>' +
+                    '<td><strong>' + esc(readableLogAction(log.action)) + '</strong>' +
+                      '<div class="small muted">' + esc(log.action) + '</div>' +
+                    '</td>' +
+                    '<td>' + esc(log.entityType || '—') +
+                      (log.entityId
+                        ? '<div class="small muted wrap-anywhere">' + esc(log.entityId) + '</div>'
+                        : '') +
+                    '</td>' +
+                    '<td style="min-width:220px">' + esc(details || '—') + '</td>' +
+                  '</tr>'
+                );
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      const start = state.logTotal ? state.logOffset + 1 : 0;
+      const end = Math.min(state.logOffset + state.logs.length, state.logTotal);
+
+      $('#logs-pagination').innerHTML =
+        '<span class="muted small">แสดง ' +
+          formatNumber(start) + '–' +
+          formatNumber(end) + ' จาก ' +
+          formatNumber(state.logTotal) + ' รายการ</span>' +
+        '<div style="display:flex;gap:7px">' +
+          '<button type="button" class="btn btn-secondary btn-sm" id="logs-prev" ' +
+            (state.logOffset <= 0 ? 'disabled' : '') + '>' +
+            '<i class="fa-solid fa-chevron-left"></i> ก่อนหน้า</button>' +
+          '<button type="button" class="btn btn-secondary btn-sm" id="logs-next" ' +
+            (state.logOffset + CONFIG.PAGE_SIZE >= state.logTotal ? 'disabled' : '') + '>' +
+            'ถัดไป <i class="fa-solid fa-chevron-right"></i></button>' +
+        '</div>';
+
+      $('#logs-prev').addEventListener('click', async function () {
+        try {
+          await loadLogs(Math.max(0, state.logOffset - CONFIG.PAGE_SIZE));
+          renderLogsTable();
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+
+      $('#logs-next').addEventListener('click', async function () {
+        try {
+          await loadLogs(state.logOffset + CONFIG.PAGE_SIZE);
+          renderLogsTable();
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
+      });
+    }
+
+    /* =========================================================
+       17. EVENT HANDLERS
+       ========================================================= */
+
+    $('#login-form').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const button = $('#login-submit');
+      const username = $('#login-username').value.trim();
+      const password = $('#login-password').value;
+      const rememberMe = $('#remember-me').checked;
+
+      if (!username || !password) {
+        showToast('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน', 'error');
+        return;
+      }
+
+      setBusy(button, true, 'กำลังเข้าสู่ระบบ');
+
+      try {
+        const result = await login(username, password, rememberMe);
+
+        showAppScreen();
+        await initializeAppData();
+        navigate('dashboard', true);
+
+        showToast('เข้าสู่ระบบสำเร็จ', 'success');
+
+        if (result.mustChangePassword) {
+          await sleep(250);
+
+          openModal({
+            title: 'แนะนำให้เปลี่ยนรหัสผ่าน',
+            body:
+              '<div style="display:flex;gap:13px;align-items:flex-start">' +
+                '<div class="stat-icon" style="color:#b7791f;background:#fff4df">' +
+                  '<i class="fa-solid fa-shield-halved"></i>' +
+                '</div>' +
+                '<div><strong style="font-size:21px">ตั้งรหัสผ่านที่ปลอดภัย</strong>' +
+                  '<p style="margin:5px 0 0;color:var(--muted)">' +
+                    'เพื่อความปลอดภัยของบัญชี แนะนำให้เปลี่ยนรหัสผ่านเริ่มต้นของคุณ' +
+                  '</p></div>' +
+              '</div>',
+            footer:
+              '<button type="button" class="btn btn-secondary" id="skip-password-change">ภายหลัง</button>' +
+              '<button type="button" class="btn btn-primary" id="go-security">เปลี่ยนรหัสผ่าน</button>'
+          });
+
+          $('#skip-password-change').addEventListener('click', closeModal);
+
+          $('#go-security').addEventListener('click', function () {
+            closeModal();
+            navigate('security', true);
+          });
+        }
+      } catch (error) {
+        showToast(error.message || 'เข้าสู่ระบบไม่สำเร็จ', 'error');
+      } finally {
+        setBusy(button, false);
+      }
+    });
+
+    $('#toggle-login-password').addEventListener('click', function () {
+      const input = $('#login-password');
+      const icon = $('i', this);
+      const showing = input.type === 'text';
+
+      input.type = showing ? 'password' : 'text';
+
+      icon.className = showing
+        ? 'fa-regular fa-eye'
+        : 'fa-regular fa-eye-slash';
+    });
+
+    $('#open-login-help').addEventListener('click', openHelpModal);
+    $('#sidebar-logout').addEventListener('click', performLogout);
+
+    $('#mobile-menu-button').addEventListener('click', function () {
+      document.body.classList.toggle('sidebar-open');
+    });
+
+    $('#sidebar-overlay').addEventListener('click', closeSidebarMobile);
+
+    $('#copy-current-page').addEventListener('click', function () {
+      copyText(currentPageUrl(state.route));
+    });
+
+    window.addEventListener('hashchange', function () {
+      if (!state.user) return;
+
+      const route = getRouteFromHash();
+
+      if (route !== state.route) {
+        navigate(route, false);
+      }
+    });
+
+    window.addEventListener('popstate', function () {
+      if (!state.user) return;
+      navigate(getRouteFromHash(), false);
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (
+        document.visibilityState === 'visible' &&
+        state.token &&
+        state.user
+      ) {
+        /*
+         * Session จะถูกตรวจสอบจาก API เมื่อมีการทำรายการ
+         * ไม่จำเป็นต้องเข้าสู่ระบบใหม่เพียงเพราะกลับมาเปิดแท็บ
+         */
+      }
+    });
+
+    /* =========================================================
+       18. STARTUP
+       ========================================================= */
+
+    async function bootActiGallery() {
+      showStartupLoading(
+        'กำลังโหลดข้อมูลการใช้งาน',
+        'กำลังตรวจสอบสถานะการเข้าสู่ระบบ'
+      );
+
+      const token = getSavedToken();
+
+      if (!token) {
+        showLoginScreen();
+        return;
+      }
+
+      await validateExistingSession();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      bootActiGallery().catch(function (error) {
+        console.error(error);
+        clearSavedToken();
+        showLoginScreen();
+
+        showToast(
+          error.message || 'ไม่สามารถเริ่มต้นระบบได้',
+          'error'
+        );
+      });
+    });
+  </script>
+</body>
+  </html>
