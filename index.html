@@ -9,26 +9,34 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <style>
     :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
       --text: #172033;
-      --muted: #718096;
-      --border: #e5eaf1;
+      --text-secondary: #64748b;
+      --border: #e2e8f0;
+      --background: #f8fafc;
       --surface: #ffffff;
-      --background: #f7f9fc;
-      --success: #168653;
-      --danger: #dc3545;
-      --radius: 12px;
-      --shadow: 0 4px 20px rgba(15, 23, 42, .05);
+      --success: #15803d;
+      --danger: #dc2626;
+      --radius: 14px;
+      --shadow: 0 8px 28px rgba(15, 23, 42, 0.07);
     }
 
     * {
       box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
     }
 
     html {
@@ -40,9 +48,10 @@
       margin: 0;
       background: var(--background);
       color: var(--text);
-      font-family: "Sarabun", "TH Sarabun New", sans-serif;
-      font-size: 17px;
-      line-height: 1.55;
+      font-family: "TH Sarabun New", "TH Sarabun PSK", "Sarabun", sans-serif;
+      font-size: 19px;
+      line-height: 1.5;
+      -webkit-tap-highlight-color: transparent;
     }
 
     button,
@@ -57,7 +66,15 @@
 
     button:disabled {
       cursor: not-allowed;
-      opacity: .55;
+      opacity: 0.55;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.35);
+      outline-offset: 2px;
     }
 
     a {
@@ -66,173 +83,230 @@
     }
 
     img {
+      display: block;
       max-width: 100%;
     }
 
-    .hidden {
-      display: none !important;
-    }
-
-    .container {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .site-header {
+    .app-header {
       position: sticky;
       top: 0;
-      z-index: 30;
-      background: rgba(255, 255, 255, .96);
+      z-index: 50;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(12px);
     }
 
     .header-inner {
-      min-height: 68px;
+      width: min(1280px, calc(100% - 36px));
+      min-height: 76px;
+      margin: auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
     }
 
     .brand {
+      min-width: 0;
       display: flex;
       align-items: center;
       gap: 11px;
-      min-width: 0;
+      border: 0;
+      background: transparent;
+      padding: 6px 0;
+      text-align: left;
+      color: var(--text);
     }
 
     .brand-icon {
-      width: 42px;
-      height: 42px;
-      flex: 0 0 42px;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
       display: grid;
       place-items: center;
-      color: #fff;
-      background: var(--primary);
-      border-radius: 12px;
-      font-size: 20px;
+      border-radius: 13px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 23px;
+    }
+
+    .brand-copy {
+      min-width: 0;
     }
 
     .brand-name {
-      font-size: 23px;
+      display: block;
       font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -.3px;
+      font-size: 25px;
+      line-height: 1.1;
+      letter-spacing: -0.3px;
     }
 
-    .brand-subtitle {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
+    .brand-tagline {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 3px;
+      line-height: 1.2;
     }
 
-    .header-action {
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
     }
 
     .icon-button {
-      width: 42px;
-      height: 42px;
+      width: 43px;
+      height: 43px;
       display: inline-grid;
       place-items: center;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       background: #fff;
       color: var(--text);
-      transition: background .15s, border-color .15s;
+      font-size: 17px;
     }
 
     .icon-button:hover {
-      background: #f2f6ff;
-      border-color: #bfd0f7;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: #bfdbfe;
+    }
+
+    .page-container {
+      width: min(1280px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 28px 0 110px;
     }
 
     .hero {
-      padding: 32px 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 25px 0 27px;
+    }
+
+    .hero-copy {
+      min-width: 0;
     }
 
     .hero h1 {
-      margin: 0 0 5px;
-      font-size: clamp(25px, 4vw, 34px);
-      line-height: 1.3;
+      margin: 0 0 6px;
+      font-size: clamp(27px, 4vw, 36px);
+      line-height: 1.22;
       font-weight: 700;
+      letter-spacing: -0.4px;
     }
 
     .hero p {
       margin: 0;
-      color: var(--muted);
-      font-size: 17px;
+      color: var(--text-secondary);
+      font-size: 19px;
+    }
+
+    .hero-icon {
+      width: 76px;
+      height: 76px;
+      flex: 0 0 76px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 32px;
     }
 
     .toolbar {
       display: grid;
-      grid-template-columns: minmax(200px, 1fr) minmax(160px, 230px);
+      grid-template-columns: minmax(220px, 1fr) minmax(150px, 240px) auto;
+      align-items: center;
       gap: 12px;
       margin-bottom: 24px;
     }
 
     .search-box {
       position: relative;
+      min-width: 0;
     }
 
     .search-box > i {
       position: absolute;
-      left: 15px;
       top: 50%;
+      left: 16px;
       transform: translateY(-50%);
-      color: #8a96a8;
+      color: #94a3b8;
       pointer-events: none;
     }
 
-    .search-box input,
-    .filter-select {
+    .search-input,
+    .select-input {
       width: 100%;
-      min-height: 47px;
-      padding: 10px 14px;
+      min-height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       background: #fff;
       color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      outline: none;
+      padding: 10px 14px;
+      font-size: 18px;
     }
 
-    .search-box input {
+    .search-input {
       padding-left: 43px;
     }
 
-    .search-box input:focus,
-    .filter-select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    .search-input::placeholder {
+      color: #94a3b8;
     }
 
-    .section-heading {
+    .toolbar-button {
+      min-height: 48px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      padding: 10px 16px;
+      white-space: nowrap;
+    }
+
+    .toolbar-button:hover {
+      background: var(--primary-light);
+      border-color: #bfdbfe;
+      color: var(--primary);
+    }
+
+    .album-summary {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 16px;
+      margin: 0 0 15px;
     }
 
-    .section-heading h2 {
+    .section-title {
       margin: 0;
-      font-size: 23px;
+      font-size: 24px;
       font-weight: 700;
     }
 
-    .result-count {
-      color: var(--muted);
-      font-size: 15px;
+    .muted-text {
+      color: var(--text-secondary);
+    }
+
+    .small-text {
+      font-size: 16px;
     }
 
     .album-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
-      padding-bottom: 44px;
+      gap: 22px;
     }
 
     .album-card {
@@ -241,419 +315,210 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      transition: transform .18s, box-shadow .18s;
+      box-shadow: 0 2px 7px rgba(15, 23, 42, 0.025);
+      transition: transform 160ms ease, box-shadow 160ms ease;
     }
 
     .album-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 9px 28px rgba(15, 23, 42, .09);
+      box-shadow: var(--shadow);
+    }
+
+    .album-cover-button {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      padding: 0;
+      border: 0;
+      background: #e2e8f0;
     }
 
     .album-cover {
-      position: relative;
-      aspect-ratio: 16 / 10;
-      overflow: hidden;
-      background: #edf1f7;
-    }
-
-    .album-cover img {
-      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform .25s;
+      transition: transform 220ms ease;
     }
 
-    .album-card:hover .album-cover img {
+    .album-card:hover .album-cover {
       transform: scale(1.025);
     }
 
-    .photo-count-badge {
+    .cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #eff6ff, #e2e8f0);
+      color: #94a3b8;
+      font-size: 36px;
+    }
+
+    .cover-count {
       position: absolute;
-      right: 10px;
-      bottom: 10px;
-      padding: 4px 9px;
+      right: 11px;
+      bottom: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.78);
       color: #fff;
-      background: rgba(17, 24, 39, .75);
-      border-radius: 7px;
-      font-size: 14px;
+      padding: 5px 9px;
+      font-size: 15px;
     }
 
-    .album-content {
-      padding: 15px;
+    .album-card-content {
+      padding: 15px 16px 16px;
     }
 
-    .album-title {
+    .album-card-title {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
       margin: 0 0 6px;
-      font-size: 20px;
+      font-size: 22px;
+      line-height: 1.32;
       font-weight: 700;
-      line-height: 1.35;
       overflow-wrap: anywhere;
     }
 
     .album-description {
       display: -webkit-box;
+      overflow: hidden;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
-      overflow: hidden;
-      min-height: 46px;
       margin: 0 0 12px;
-      color: var(--muted);
-      font-size: 16px;
+      color: var(--text-secondary);
+      font-size: 17px;
       overflow-wrap: anywhere;
     }
 
     .album-meta {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 14px;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      min-height: 25px;
+      color: var(--text-secondary);
+      font-size: 16px;
     }
 
-    .category-tag {
+    .album-meta span {
       display: inline-flex;
       align-items: center;
-      max-width: 100%;
-      padding: 3px 9px;
-      color: #1d4ed8;
-      background: #eff5ff;
-      border-radius: 6px;
-      overflow-wrap: anywhere;
+      gap: 6px;
     }
 
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid #edf0f5;
-    }
-
-    .organization-label {
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: #64748b;
+    .album-meta i {
       font-size: 14px;
     }
 
-    .organization-label span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .album-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
     }
 
-    .text-button {
-      flex: 0 0 auto;
-      padding: 5px 0;
-      border: 0;
-      background: transparent;
-      color: var(--primary);
+    .button {
+      min-height: 43px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid transparent;
+      border-radius: 10px;
       font-weight: 600;
+      font-size: 18px;
+      transition: background 130ms ease, border-color 130ms ease;
     }
 
-    .text-button:hover {
-      color: var(--primary-dark);
+    .button-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .button-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .button-secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .button-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .button-danger {
+      background: #fff1f2;
+      color: var(--danger);
+      border-color: #fecdd3;
+    }
+
+    .button-danger:hover {
+      background: #ffe4e6;
+    }
+
+    .album-card-actions .button-primary {
+      flex: 1;
     }
 
     .empty-state,
-    .error-state {
-      grid-column: 1 / -1;
-      padding: 54px 20px;
+    .error-state,
+    .loading-state {
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 20px;
       text-align: center;
-      border: 1px dashed #d7dfeb;
+      border: 1px dashed #cbd5e1;
       border-radius: var(--radius);
       background: #fff;
     }
 
     .state-icon {
-      width: 60px;
-      height: 60px;
+      width: 64px;
+      height: 64px;
       display: grid;
       place-items: center;
-      margin: 0 auto 14px;
-      border-radius: 50%;
-      background: #f0f4fa;
-      color: #7b8ba3;
-      font-size: 25px;
+      margin-bottom: 14px;
+      border-radius: 18px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 26px;
     }
 
-    .empty-state h3,
-    .error-state h3 {
+    .state-heading {
       margin: 0 0 5px;
-      font-size: 21px;
-    }
-
-    .empty-state p,
-    .error-state p {
-      margin: 0 0 17px;
-      color: var(--muted);
-    }
-
-    .primary-button,
-    .secondary-button,
-    .danger-button {
-      min-height: 42px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 9px 15px;
-      border: 1px solid transparent;
-      border-radius: 9px;
-      font-weight: 600;
-      transition: background .15s;
-    }
-
-    .primary-button {
-      color: #fff;
-      background: var(--primary);
-    }
-
-    .primary-button:hover {
-      background: var(--primary-dark);
-    }
-
-    .secondary-button {
-      color: var(--text);
-      border-color: var(--border);
-      background: #fff;
-    }
-
-    .secondary-button:hover {
-      background: #f5f7fb;
-    }
-
-    .danger-button {
-      color: #fff;
-      background: var(--danger);
-    }
-
-    .site-footer {
-      padding: 24px 0;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-      background: #fff;
-      text-align: center;
-      font-size: 15px;
-    }
-
-    /* Album detail page */
-
-    .detail-header {
-      padding: 22px 0 16px;
-    }
-
-    .back-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 0;
-      border: 0;
-      background: transparent;
-      color: #52637a;
-      font-weight: 600;
-    }
-
-    .detail-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-top: 13px;
-    }
-
-    .detail-title {
-      min-width: 0;
-    }
-
-    .detail-title h1 {
-      margin: 0 0 6px;
-      font-size: clamp(25px, 4vw, 34px);
-      line-height: 1.3;
-      overflow-wrap: anywhere;
-    }
-
-    .detail-description {
-      margin: 0;
-      color: var(--muted);
-      white-space: pre-line;
-      overflow-wrap: anywhere;
-    }
-
-    .detail-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-
-    .detail-info {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 20px;
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 15px;
-    }
-
-    .detail-info span {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .selection-toolbar {
-      position: sticky;
-      top: 68px;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin: 12px 0 18px;
-      padding: 12px 14px;
-      border: 1px solid #dce5f5;
-      border-radius: 11px;
-      background: rgba(255, 255, 255, .97);
-      box-shadow: 0 4px 18px rgba(15, 23, 42, .07);
-    }
-
-    .selection-left,
-    .selection-actions {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .selection-count {
+      font-size: 24px;
       font-weight: 700;
     }
 
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      padding-bottom: 48px;
-    }
-
-    .photo-item {
-      position: relative;
-      min-width: 0;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      border: 2px solid transparent;
-      border-radius: 9px;
-      background: #e9eef5;
-      cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    .photo-item img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-      -webkit-user-drag: none;
-      user-select: none;
-    }
-
-    .photo-item.selected {
-      border-color: var(--primary);
-    }
-
-    .photo-item.selected img {
-      opacity: .82;
-    }
-
-    .photo-check {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      z-index: 2;
-      width: 27px;
-      height: 27px;
-      display: grid;
-      place-items: center;
-      border: 2px solid #fff;
-      border-radius: 50%;
-      color: transparent;
-      background: rgba(20, 29, 45, .3);
-      box-shadow: 0 1px 5px rgba(0, 0, 0, .2);
-    }
-
-    .photo-item.selected .photo-check {
-      color: #fff;
-      background: var(--primary);
-    }
-
-    .photo-caption {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 24px 9px 8px;
-      color: #fff;
-      background: linear-gradient(transparent, rgba(0, 0, 0, .65));
-      font-size: 14px;
-      overflow-wrap: anywhere;
-      pointer-events: none;
-    }
-
-    .photo-loading {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      color: #8a96a8;
-    }
-
-    /* Loading */
-
-    .loading-state {
-      grid-column: 1 / -1;
-      min-height: 220px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: var(--muted);
-      text-align: center;
+    .state-message {
+      max-width: 430px;
+      margin: 0 0 17px;
+      color: var(--text-secondary);
+      font-size: 18px;
     }
 
     .spinner {
-      width: 33px;
-      height: 33px;
-      border: 3px solid #e2e9f4;
+      width: 34px;
+      height: 34px;
+      border: 3px solid #dbeafe;
       border-top-color: var(--primary);
       border-radius: 50%;
-      animation: spin .75s linear infinite;
-    }
-
-    .progress-track {
-      width: min(360px, 90%);
-      height: 7px;
-      overflow: hidden;
-      background: #e8edf5;
-      border-radius: 99px;
-    }
-
-    .progress-fill {
-      width: 0;
-      height: 100%;
-      background: var(--primary);
-      border-radius: inherit;
-      transition: width .15s;
+      animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin {
@@ -662,103 +527,214 @@
       }
     }
 
-    /* Image viewer */
+    .album-view {
+      min-width: 0;
+    }
 
-    .viewer {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
+    .album-view-top {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(7, 12, 22, .96);
-    }
-
-    .viewer-image-wrap {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .viewer-image {
-      display: block;
-      max-width: 100%;
-      max-height: calc(100vh - 120px);
-      object-fit: contain;
-      user-select: none;
-    }
-
-    .viewer-top {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 2;
-      display: flex;
       justify-content: space-between;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
-      color: #fff;
+      margin-bottom: 20px;
     }
 
-    .viewer-counter {
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, .12);
+    .back-button {
+      min-height: 43px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text);
     }
 
-    .viewer-controls {
+    .back-button:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .album-view-actions {
       display: flex;
+      align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
     }
 
-    .viewer-button {
-      width: 43px;
-      height: 43px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255, 255, 255, .25);
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .12);
-      color: #fff;
-      font-size: 18px;
-    }
-
-    .viewer-button:hover {
-      background: rgba(255, 255, 255, .24);
-    }
-
-    .viewer-prev,
-    .viewer-next {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .viewer-prev {
-      left: 0;
-    }
-
-    .viewer-next {
-      right: 0;
-    }
-
-    .viewer-caption {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 80%;
-      color: #fff;
-      text-align: center;
+    .album-heading {
+      margin: 5px 0 8px;
+      font-size: clamp(27px, 4vw, 36px);
+      line-height: 1.25;
       overflow-wrap: anywhere;
     }
 
-    /* Modal and toast */
+    .album-detail-description {
+      margin: 0 0 12px;
+      color: var(--text-secondary);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .album-detail-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      margin: 0 0 25px;
+      color: var(--text-secondary);
+      font-size: 17px;
+    }
+
+    .album-detail-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .photo-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 0 0 16px;
+    }
+
+    .photo-toolbar-left,
+    .photo-toolbar-right {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .photo-item {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .photo-button {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .photo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 160ms ease, opacity 160ms ease;
+    }
+
+    .photo-item:hover .photo-image {
+      transform: scale(1.025);
+    }
+
+    .photo-selection-circle {
+      position: absolute;
+      z-index: 3;
+      top: 9px;
+      right: 9px;
+      width: 27px;
+      height: 27px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.86);
+      color: transparent;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+    }
+
+    .selection-mode .photo-selection-circle {
+      display: flex;
+    }
+
+    .photo-item.is-selected .photo-selection-circle {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .photo-item.is-selected {
+      outline: 3px solid var(--primary);
+      outline-offset: -3px;
+    }
+
+    .photo-item.is-selected .photo-image {
+      opacity: 0.82;
+    }
+
+    .photo-index {
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      z-index: 2;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.68);
+      color: white;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .selection-bar {
+      position: fixed;
+      z-index: 80;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      width: min(650px, calc(100% - 24px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid #dbeafe;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 14px 45px rgba(15, 23, 42, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .selection-count {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .selection-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .selection-actions .button {
+      min-height: 39px;
+      padding: 7px 11px;
+      font-size: 17px;
+    }
 
     .modal-backdrop {
       position: fixed;
@@ -768,49 +744,67 @@
       align-items: center;
       justify-content: center;
       padding: 18px;
-      background: rgba(15, 23, 42, .52);
+      background: rgba(15, 23, 42, 0.58);
+      backdrop-filter: blur(4px);
     }
 
-    .modal {
+    .modal-card {
       width: min(460px, 100%);
-      max-height: min(85vh, 700px);
+      max-height: min(88vh, 760px);
       overflow: auto;
-      padding: 24px;
-      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 17px;
       background: #fff;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
-      animation: modalIn .16s ease-out;
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+      animation: modal-in 150ms ease-out;
     }
 
-    @keyframes modalIn {
+    @keyframes modal-in {
       from {
         opacity: 0;
-        transform: translateY(8px) scale(.985);
+        transform: translateY(8px) scale(0.99);
       }
-
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
       }
     }
 
-    .modal-heading {
+    .modal-header {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 10px;
+      padding: 17px 19px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .modal-heading h2 {
+    .modal-title {
       margin: 0;
       font-size: 23px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .modal-body {
+      padding: 19px;
     }
 
     .modal-message {
-      margin: 0 0 20px;
-      color: var(--muted);
-      white-space: pre-line;
+      margin: 0;
+      color: #475569;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     .modal-actions {
@@ -818,33 +812,141 @@
       justify-content: flex-end;
       flex-wrap: wrap;
       gap: 8px;
+      padding: 0 19px 19px;
     }
 
-    .toast-region {
+    .viewer-backdrop {
       position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 200;
+      inset: 0;
+      z-index: 150;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(2, 6, 23, 0.96);
+      color: white;
+    }
+
+    .viewer-layout {
+      width: 100%;
+      height: 100%;
+      max-width: 1400px;
       display: flex;
       flex-direction: column;
+      min-height: 0;
+    }
+
+    .viewer-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 52px;
+      flex: 0 0 auto;
+    }
+
+    .viewer-info {
+      color: #cbd5e1;
+      font-size: 18px;
+    }
+
+    .viewer-close,
+    .viewer-nav {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #475569;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.8);
+      color: white;
+    }
+
+    .viewer-stage {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      gap: 13px;
+      padding: 12px 0;
+    }
+
+    .viewer-image-wrap {
+      flex: 1;
+      width: 0;
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewer-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      user-select: none;
+    }
+
+    .viewer-caption {
+      flex: 0 0 auto;
+      min-height: 34px;
+      text-align: center;
+      color: #cbd5e1;
+      overflow-wrap: anywhere;
+    }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #e2e8f0;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 10px;
+      background: var(--primary);
+      transition: width 120ms ease;
+    }
+
+    .progress-text {
+      margin-top: 8px;
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+    .toast-container {
+      position: fixed;
+      z-index: 200;
+      top: 90px;
+      right: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
       gap: 8px;
       pointer-events: none;
     }
 
     .toast {
-      max-width: min(370px, calc(100vw - 36px));
+      max-width: min(420px, calc(100vw - 32px));
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 10px;
-      padding: 13px 16px;
+      padding: 12px 16px;
       border: 1px solid var(--border);
-      border-radius: 11px;
+      border-radius: 12px;
       background: #fff;
-      box-shadow: 0 8px 30px rgba(15, 23, 42, .14);
-      animation: modalIn .16s ease-out;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      font-size: 17px;
+      animation: toast-in 160ms ease-out;
     }
 
-    .toast.success i {
+    .toast i {
       color: var(--success);
     }
 
@@ -852,15 +954,38 @@
       color: var(--danger);
     }
 
-    .toast.info i {
-      color: var(--primary);
+    @keyframes toast-in {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .toast span {
-      overflow-wrap: anywhere;
+    .site-footer {
+      margin-top: 55px;
+      padding: 22px 0 5px;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      text-align: center;
+      font-size: 16px;
     }
 
-    @media (max-width: 900px) {
+    .site-footer strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    @media (min-width: 1500px) {
+      .album-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 950px) {
       .album-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -869,121 +994,200 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      .detail-title-row {
-        flex-direction: column;
+      .toolbar {
+        grid-template-columns: minmax(180px, 1fr) minmax(140px, 200px);
       }
 
-      .detail-actions {
-        justify-content: flex-start;
+      .toolbar .toolbar-button {
+        grid-column: 1 / -1;
+        justify-self: start;
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 600px) {
       body {
-        font-size: 16px;
+        font-size: 18px;
       }
 
-      .container {
+      .header-inner,
+      .page-container {
         width: calc(100% - 24px);
       }
 
       .header-inner {
-        min-height: 60px;
+        min-height: 66px;
       }
 
       .brand-icon {
-        width: 38px;
-        height: 38px;
-        flex-basis: 38px;
+        width: 39px;
+        height: 39px;
+        flex-basis: 39px;
+        border-radius: 11px;
+        font-size: 20px;
       }
 
       .brand-name {
-        font-size: 21px;
+        font-size: 23px;
       }
 
-      .brand-subtitle {
-        font-size: 12px;
+      .brand-tagline {
+        font-size: 13px;
+      }
+
+      .page-container {
+        padding-top: 12px;
       }
 
       .hero {
-        padding: 23px 0 18px;
+        padding: 19px 0 21px;
+        gap: 12px;
+      }
+
+      .hero h1 {
+        font-size: 29px;
+      }
+
+      .hero p {
+        font-size: 17px;
+      }
+
+      .hero-icon {
+        width: 54px;
+        height: 54px;
+        flex-basis: 54px;
+        border-radius: 16px;
+        font-size: 23px;
       }
 
       .toolbar {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 9px;
         margin-bottom: 20px;
       }
 
+      .toolbar .toolbar-button {
+        grid-column: auto;
+        width: 100%;
+      }
+
       .album-grid {
-        gap: 12px;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 15px;
       }
 
-      .album-content {
-        padding: 11px;
+      .album-cover-button {
+        aspect-ratio: 16 / 10;
       }
 
-      .album-title {
-        font-size: 18px;
+      .album-card-content {
+        padding: 13px;
       }
 
-      .album-description {
-        min-height: 42px;
-        font-size: 15px;
+      .album-card-title {
+        font-size: 22px;
       }
 
-      .album-meta {
-        font-size: 13px;
-      }
-
-      .card-footer {
+      .album-view-top {
         align-items: flex-start;
-        flex-direction: column;
-        gap: 5px;
+      }
+
+      .album-view-actions {
+        width: 100%;
+      }
+
+      .album-view-actions .button {
+        flex: 1;
       }
 
       .photo-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 7px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
       }
 
-      .selection-toolbar {
-        top: 60px;
+      .photo-item {
+        border-radius: 7px;
+      }
+
+      .photo-selection-circle {
+        top: 5px;
+        right: 5px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .photo-index {
+        left: 4px;
+        bottom: 4px;
+        font-size: 12px;
+      }
+
+      .photo-toolbar {
         align-items: flex-start;
-        flex-direction: column;
+      }
+
+      .photo-toolbar-left,
+      .photo-toolbar-right {
+        width: 100%;
+      }
+
+      .photo-toolbar .button {
+        flex: 1;
+      }
+
+      .selection-bar {
+        bottom: 10px;
+        padding: 10px;
+        gap: 9px;
+      }
+
+      .selection-count {
+        font-size: 17px;
       }
 
       .selection-actions {
         width: 100%;
       }
 
-      .selection-actions button {
+      .selection-actions .button {
         flex: 1;
       }
 
-      .primary-button,
-      .secondary-button {
-        padding: 8px 11px;
+      .viewer-backdrop {
+        padding: 7px;
       }
 
-      .viewer {
-        padding: 12px;
+      .viewer-nav {
+        width: 36px;
+        height: 42px;
+        flex: 0 0 36px;
       }
 
-      .viewer-prev {
-        left: -4px;
+      .viewer-stage {
+        gap: 5px;
       }
 
-      .viewer-next {
-        right: -4px;
+      .toast-container {
+        top: 75px;
+        right: 12px;
       }
 
-      .viewer-image {
-        max-height: calc(100vh - 145px);
+      .site-footer {
+        margin-top: 38px;
+      }
+    }
+
+    @media (max-width: 370px) {
+      .brand-tagline {
+        display: none;
       }
 
-      .modal {
-        padding: 19px;
+      .photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .selection-actions .button {
+        padding: 7px 8px;
+        font-size: 16px;
       }
     }
 
@@ -992,1815 +1196,2418 @@
       *::before,
       *::after {
         scroll-behavior: auto !important;
-        animation-duration: .01ms !important;
+        animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="/" class="brand" id="brandHome" aria-label="กลับหน้าหลัก ActiGallery">
+  <header class="app-header">
+    <div class="header-inner">
+      <button class="brand" id="brandHomeButton" type="button" aria-label="กลับหน้าหลัก">
         <span class="brand-icon">
           <i class="fa-solid fa-images" aria-hidden="true"></i>
         </span>
-        <span>
-          <span class="brand-name">ActiGallery</span>
-          <span class="brand-subtitle" style="display:block">ทุกกิจกรรม ทุกความทรงจำ รวมไว้ในที่เดียว</span>
-        </span>
-      </a>
 
-      <div class="header-action">
-        <button class="icon-button" id="refreshButton" type="button" aria-label="โหลดข้อมูลใหม่" title="โหลดข้อมูลใหม่">
+        <span class="brand-copy">
+          <span class="brand-name">ActiGallery</span>
+          <span class="brand-tagline">ทุกกิจกรรม ทุกความทรงจำ รวมไว้ในที่เดียว</span>
+        </span>
+      </button>
+
+      <div class="header-actions">
+        <button
+          class="icon-button"
+          id="headerRefreshButton"
+          type="button"
+          aria-label="โหลดข้อมูลใหม่"
+          title="โหลดข้อมูลใหม่"
+        >
           <i class="fa-solid fa-rotate" aria-hidden="true"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <main>
+  <main class="page-container">
     <section id="homePage">
-      <div class="container">
-        <div class="hero">
+      <div class="hero">
+        <div class="hero-copy">
           <h1>คลังภาพกิจกรรม</h1>
-          <p>เลือกชมภาพความทรงจำจากกิจกรรมต่าง ๆ ได้ที่นี่</p>
+          <p>ค้นหาและย้อนชมภาพความทรงจำจากกิจกรรมต่าง ๆ</p>
         </div>
 
-        <div class="toolbar">
-          <label class="search-box">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            <input
-              type="search"
-              id="searchInput"
-              placeholder="ค้นหาชื่ออัลบั้ม หน่วยงาน หรือหมวดหมู่"
-              autocomplete="off"
-              aria-label="ค้นหาอัลบั้ม">
-          </label>
-
-          <select id="categoryFilter" class="filter-select" aria-label="กรองตามหมวดหมู่">
-            <option value="">ทุกหมวดหมู่</option>
-          </select>
-        </div>
-
-        <div class="section-heading">
-          <h2>อัลบั้มกิจกรรม</h2>
-          <span class="result-count" id="resultCount">กำลังโหลด...</span>
-        </div>
-
-        <div class="album-grid" id="albumGrid" aria-live="polite">
-          <div class="loading-state">
-            <div class="spinner" aria-hidden="true"></div>
-            <div>กำลังโหลดข้อมูลการใช้งาน</div>
-          </div>
+        <div class="hero-icon" aria-hidden="true">
+          <i class="fa-regular fa-images"></i>
         </div>
       </div>
+
+      <div class="toolbar">
+        <label class="search-box">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input
+            class="search-input"
+            id="searchInput"
+            type="search"
+            placeholder="ค้นหาชื่ออัลบั้ม หน่วยงาน หรือรายละเอียด"
+            autocomplete="off"
+            aria-label="ค้นหาอัลบั้ม"
+          >
+        </label>
+
+        <select class="select-input" id="categoryFilter" aria-label="กรองตามหมวดหมู่">
+          <option value="">ทุกหมวดหมู่</option>
+        </select>
+
+        <button class="toolbar-button" id="refreshAlbumsButton" type="button">
+          <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+          โหลดข้อมูลใหม่
+        </button>
+      </div>
+
+      <div class="album-summary">
+        <h2 class="section-title">อัลบั้มกิจกรรม</h2>
+        <span class="muted-text small-text" id="albumCountLabel">กำลังโหลดข้อมูล</span>
+      </div>
+
+      <div id="homeLoading" class="loading-state">
+        <span class="spinner" aria-hidden="true"></span>
+        <h3 class="state-heading" style="margin-top: 16px;">กำลังโหลดอัลบั้ม</h3>
+        <p class="state-message">กรุณารอสักครู่</p>
+      </div>
+
+      <div id="homeError" class="error-state" hidden>
+        <span class="state-icon">
+          <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+        </span>
+        <h3 class="state-heading">ไม่สามารถโหลดข้อมูลได้</h3>
+        <p class="state-message">กรุณาลองโหลดข้อมูลใหม่อีกครั้ง</p>
+        <button class="button button-primary" id="retryAlbumsButton" type="button">
+          <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+          ลองอีกครั้ง
+        </button>
+      </div>
+
+      <div id="emptyAlbums" class="empty-state" hidden>
+        <span class="state-icon">
+          <i class="fa-regular fa-images" aria-hidden="true"></i>
+        </span>
+        <h3 class="state-heading">ยังไม่มีอัลบั้มกิจกรรม</h3>
+        <p class="state-message">ขณะนี้ยังไม่มีอัลบั้มที่เผยแพร่ให้เข้าชม</p>
+      </div>
+
+      <div id="noSearchResults" class="empty-state" hidden>
+        <span class="state-icon">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        </span>
+        <h3 class="state-heading">ไม่พบอัลบั้มที่ค้นหา</h3>
+        <p class="state-message">ลองค้นหาด้วยคำอื่นหรือเลือกทุกหมวดหมู่</p>
+        <button class="button button-secondary" id="clearSearchButton" type="button">
+          ล้างการค้นหา
+        </button>
+      </div>
+
+      <div class="album-grid" id="albumGrid" hidden></div>
     </section>
 
-    <section id="albumPage" class="hidden">
-      <div class="container">
-        <div class="detail-header">
-          <button class="back-button" id="backToAlbums" type="button">
-            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-            กลับไปยังอัลบั้มทั้งหมด
+    <section class="album-view" id="albumPage" hidden>
+      <div class="album-view-top">
+        <button class="back-button" id="backToAlbumsButton" type="button">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          กลับไปหน้าอัลบั้ม
+        </button>
+
+        <div class="album-view-actions">
+          <button class="button button-secondary" id="shareAlbumButton" type="button">
+            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+            แชร์อัลบั้ม
           </button>
 
-          <div class="detail-title-row">
-            <div class="detail-title">
-              <h1 id="detailTitle">อัลบั้มกิจกรรม</h1>
-              <p class="detail-description" id="detailDescription"></p>
-              <div class="detail-info" id="detailInfo"></div>
-            </div>
+          <button class="button button-primary" id="downloadAllButton" type="button">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            ดาวน์โหลดทั้งหมด
+          </button>
+        </div>
+      </div>
 
-            <div class="detail-actions">
-              <button class="secondary-button" id="shareAlbumButton" type="button">
-                <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
-                แชร์อัลบั้ม
-              </button>
+      <div id="albumDetailLoading" class="loading-state">
+        <span class="spinner" aria-hidden="true"></span>
+        <h3 class="state-heading" style="margin-top: 16px;">กำลังโหลดอัลบั้ม</h3>
+        <p class="state-message">กรุณารอสักครู่</p>
+      </div>
 
-              <button class="primary-button" id="downloadAllButton" type="button">
-                <i class="fa-solid fa-download" aria-hidden="true"></i>
-                ดาวน์โหลดทั้งหมด
-              </button>
-            </div>
-          </div>
+      <div id="albumDetailError" class="error-state" hidden>
+        <span class="state-icon">
+          <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+        </span>
+        <h3 class="state-heading">ไม่สามารถโหลดข้อมูลได้</h3>
+        <p class="state-message">อัลบั้มนี้อาจไม่มีอยู่หรือยังไม่เปิดให้เข้าชม</p>
+        <button class="button button-primary" id="albumErrorBackButton" type="button">
+          กลับไปหน้าอัลบั้ม
+        </button>
+      </div>
+
+      <div id="albumDetailContent" hidden>
+        <h1 class="album-heading" id="albumTitle"></h1>
+        <p class="album-detail-description" id="albumDescription"></p>
+
+        <div class="album-detail-meta">
+          <span id="albumOrganization">
+            <i class="fa-regular fa-building" aria-hidden="true"></i>
+            <span></span>
+          </span>
+          <span id="albumCategory">
+            <i class="fa-regular fa-folder" aria-hidden="true"></i>
+            <span></span>
+          </span>
+          <span id="albumPhotoCount">
+            <i class="fa-regular fa-image" aria-hidden="true"></i>
+            <span></span>
+          </span>
         </div>
 
-        <div class="selection-toolbar">
-          <div class="selection-left">
-            <button class="secondary-button" id="toggleSelectionButton" type="button">
-              <i class="fa-regular fa-circle-check" aria-hidden="true"></i>
+        <div class="photo-toolbar">
+          <div class="photo-toolbar-left">
+            <h2 class="section-title" style="font-size: 23px;">รูปภาพทั้งหมด</h2>
+            <span class="muted-text small-text" id="photoSelectionHint"></span>
+          </div>
+
+          <div class="photo-toolbar-right">
+            <button class="button button-secondary" id="toggleSelectionButton" type="button">
+              <i class="fa-regular fa-square-check" aria-hidden="true"></i>
               เลือกรูปภาพ
             </button>
-            <span class="selection-count" id="selectedCount">เลือกแล้ว 0 รูป</span>
-          </div>
-
-          <div class="selection-actions">
-            <button class="secondary-button" id="selectAllButton" type="button">
-              <i class="fa-solid fa-check-double" aria-hidden="true"></i>
-              เลือกทั้งหมด
-            </button>
-            <button class="secondary-button" id="clearSelectionButton" type="button">
-              ยกเลิกเลือก
-            </button>
-            <button class="primary-button" id="downloadSelectedButton" type="button" disabled>
-              <i class="fa-solid fa-download" aria-hidden="true"></i>
-              ดาวน์โหลดที่เลือก
-            </button>
           </div>
         </div>
 
-        <div id="downloadProgress" class="hidden" style="padding:0 0 20px">
-          <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:7px">
-            <span id="downloadProgressLabel">กำลังเตรียมไฟล์</span>
-            <span id="downloadProgressPercent">0%</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="downloadProgressFill"></div>
-          </div>
+        <div id="emptyPhotos" class="empty-state" hidden>
+          <span class="state-icon">
+            <i class="fa-regular fa-image" aria-hidden="true"></i>
+          </span>
+          <h3 class="state-heading">ไม่มีรูปภาพในอัลบั้มนี้</h3>
+          <p class="state-message">ยังไม่มีรูปภาพให้แสดง</p>
         </div>
 
-        <div class="photo-grid" id="photoGrid" aria-live="polite">
-          <div class="loading-state">
-            <div class="spinner" aria-hidden="true"></div>
-            <div>กำลังโหลดรูปภาพ</div>
-          </div>
-        </div>
+        <div class="photo-grid" id="photoGrid"></div>
       </div>
     </section>
+
+    <footer class="site-footer">
+      <strong>ActiGallery</strong>
+      <span> · ทุกกิจกรรม ทุกความทรงจำ รวมไว้ในที่เดียว</span>
+    </footer>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      ActiGallery · ทุกกิจกรรม ทุกความทรงจำ รวมไว้ในที่เดียว
-    </div>
-  </footer>
+  <div class="selection-bar" id="selectionBar" hidden>
+    <div class="selection-count" id="selectionCountLabel">เลือกแล้ว 0 รูป</div>
 
-  <!-- Image viewer -->
-  <div class="viewer hidden" id="imageViewer" role="dialog" aria-modal="true" aria-label="ดูรูปภาพเต็มหน้าจอ">
-    <div class="viewer-image-wrap">
-      <div class="viewer-top">
-        <div class="viewer-counter" id="viewerCounter">1 / 1</div>
-        <div class="viewer-controls">
-          <button class="viewer-button" id="viewerDownloadButton" type="button" aria-label="ดาวน์โหลดรูปภาพ">
-            <i class="fa-solid fa-download" aria-hidden="true"></i>
-          </button>
-          <button class="viewer-button" id="viewerCloseButton" type="button" aria-label="ปิดรูปภาพ">
-            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-          </button>
-        </div>
+    <div class="selection-actions">
+      <button class="button button-secondary" id="selectAllPhotosButton" type="button">
+        <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+        เลือกทั้งหมด
+      </button>
+
+      <button class="button button-primary" id="downloadSelectedButton" type="button">
+        <i class="fa-solid fa-download" aria-hidden="true"></i>
+        ดาวน์โหลด
+      </button>
+
+      <button class="button button-secondary" id="cancelSelectionButton" type="button">
+        ยกเลิก
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="messageModal" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modal-header">
+        <h2 class="modal-title" id="modalTitle">แจ้งเตือน</h2>
+        <button class="modal-close" id="modalCloseButton" type="button" aria-label="ปิด">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <p class="modal-message" id="modalMessage"></p>
+        <div id="modalExtraContent" style="margin-top: 17px;" hidden></div>
       </div>
 
-      <button class="viewer-button viewer-prev" id="viewerPrevButton" type="button" aria-label="รูปก่อนหน้า">
-        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-      </button>
+      <div class="modal-actions" id="modalActions">
+        <button class="button button-primary" id="modalOkayButton" type="button">
+          ตกลง
+        </button>
+      </div>
+    </section>
+  </div>
 
-      <img class="viewer-image" id="viewerImage" src="" alt="รูปภาพกิจกรรม">
+  <div class="modal-backdrop" id="downloadModal" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="downloadModalTitle">
+      <header class="modal-header">
+        <h2 class="modal-title" id="downloadModalTitle">กำลังเตรียมดาวน์โหลด</h2>
+      </header>
 
-      <button class="viewer-button viewer-next" id="viewerNextButton" type="button" aria-label="รูปถัดไป">
-        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-      </button>
+      <div class="modal-body">
+        <p class="modal-message" id="downloadModalMessage">กำลังเตรียมรูปภาพ</p>
+
+        <div class="progress-track" style="margin-top: 18px;">
+          <div class="progress-fill" id="downloadProgressFill"></div>
+        </div>
+
+        <div class="progress-text" id="downloadProgressText">0%</div>
+      </div>
+
+      <div class="modal-actions" id="downloadModalActions" hidden>
+        <button class="button button-primary" id="downloadModalOkayButton" type="button">
+          ตกลง
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div class="viewer-backdrop" id="photoViewer" hidden>
+    <div class="viewer-layout">
+      <div class="viewer-toolbar">
+        <button class="viewer-close" id="viewerCloseButton" type="button" aria-label="ปิดรูปภาพ">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+
+        <div class="viewer-info" id="viewerCounter">1 / 1</div>
+
+        <button class="viewer-close" id="viewerDownloadButton" type="button" aria-label="ดาวน์โหลดรูปภาพ">
+          <i class="fa-solid fa-download" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="viewer-stage">
+        <button class="viewer-nav" id="viewerPreviousButton" type="button" aria-label="รูปก่อนหน้า">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+
+        <div class="viewer-image-wrap">
+          <img class="viewer-image" id="viewerImage" src="" alt="">
+        </div>
+
+        <button class="viewer-nav" id="viewerNextButton" type="button" aria-label="รูปถัดไป">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
 
       <div class="viewer-caption" id="viewerCaption"></div>
     </div>
   </div>
 
-  <!-- Center modal -->
-  <div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal">
-      <div class="modal-heading">
-        <h2 id="modalTitle">แจ้งเตือน</h2>
-        <button class="icon-button" id="modalCloseButton" type="button" aria-label="ปิดหน้าต่าง">
-          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-        </button>
-      </div>
-      <p class="modal-message" id="modalMessage"></p>
-      <div class="modal-actions" id="modalActions">
-        <button class="primary-button" id="modalOkButton" type="button">ตกลง</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <script>
-    'use strict';
+    "use strict";
 
     /* =========================================================
-       ActiGallery Frontend
-       Public website — no login required
+       ACTIGALLERY — PUBLIC FRONTEND
        ========================================================= */
 
-    const FIREBASE_CONFIG = {
-      apiKey: "AIzaSyDkV8que2vhIndcsPvewlnbE1haIY4EW1U",
-      authDomain: "actigallery-web.firebaseapp.com",
-      projectId: "actigallery-web",
-      storageBucket: "actigallery-web.firebasestorage.app",
-      messagingSenderId: "576432443690",
-      appId: "1:576432443690:web:2c9a7701dd9e95864e8e53",
-      measurementId: "G-BYQBTYCZX6"
-    };
+    const ACTIGALLERY_CONFIG = Object.freeze({
+      API_URL:
+        "https://script.google.com/macros/s/AKfycbwbTJBCd8ROe0yrAGBVz7PXuIHCoUB4DI5F-Nhljzy38RG7Dzw6fDIFZNO430E7_HdPjw/exec",
 
-    /*
-      Firestore collections expected by this frontend:
+      SITE_NAME: "ActiGallery",
+      REQUEST_TIMEOUT_MS: 20000,
+      DOWNLOAD_TIMEOUT_MS: 45000
+    });
 
-      publicAlbums:
-        albumId, title, description, organizationId,
-        organizationName, organizationLogoUrl,
-        categoryId, categoryName, categoryDescription,
-        coverUrl, photoCount, isPublished, isDeleted,
-        createdAt, updatedAt, publishedAt
-
-      publicPhotos:
-        photoId, albumId, organizationId, imageUrl,
-        thumbnailUrl, caption, sortOrder, isDeleted
-
-      The Google Apps Script must sync published data
-      from Google Sheets into these collections.
-    */
-
-    const COLLECTION_ALBUMS = 'publicAlbums';
-    const COLLECTION_PHOTOS = 'publicPhotos';
-
-    const state = {
-      db: null,
-      allAlbums: [],
+    const appState = {
+      albums: [],
       filteredAlbums: [],
-      categories: [],
       currentAlbum: null,
       currentPhotos: [],
-      selectedPhotoIds: new Set(),
+      selectedPhotos: new Set(),
       selectionMode: false,
       viewerIndex: 0,
       loadingAlbums: false,
-      loadingPhotos: false,
-      downloading: false,
-      currentRoute: 'home',
-      activeModalCleanup: null
+      loadingAlbum: false,
+      downloadRunning: false,
+      routeRequestId: 0
     };
 
-    const elements = {
-      homePage: document.getElementById('homePage'),
-      albumPage: document.getElementById('albumPage'),
-      albumGrid: document.getElementById('albumGrid'),
-      photoGrid: document.getElementById('photoGrid'),
-      searchInput: document.getElementById('searchInput'),
-      categoryFilter: document.getElementById('categoryFilter'),
-      resultCount: document.getElementById('resultCount'),
-      detailTitle: document.getElementById('detailTitle'),
-      detailDescription: document.getElementById('detailDescription'),
-      detailInfo: document.getElementById('detailInfo'),
-      imageViewer: document.getElementById('imageViewer'),
-      viewerImage: document.getElementById('viewerImage'),
-      viewerCounter: document.getElementById('viewerCounter'),
-      viewerCaption: document.getElementById('viewerCaption'),
-      modalBackdrop: document.getElementById('modalBackdrop'),
-      modalTitle: document.getElementById('modalTitle'),
-      modalMessage: document.getElementById('modalMessage'),
-      modalActions: document.getElementById('modalActions'),
-      toastRegion: document.getElementById('toastRegion'),
-      downloadProgress: document.getElementById('downloadProgress'),
-      downloadProgressLabel: document.getElementById('downloadProgressLabel'),
-      downloadProgressPercent: document.getElementById('downloadProgressPercent'),
-      downloadProgressFill: document.getElementById('downloadProgressFill'),
-      selectedCount: document.getElementById('selectedCount'),
-      toggleSelectionButton: document.getElementById('toggleSelectionButton'),
-      selectAllButton: document.getElementById('selectAllButton'),
-      clearSelectionButton: document.getElementById('clearSelectionButton'),
-      downloadSelectedButton: document.getElementById('downloadSelectedButton'),
-      downloadAllButton: document.getElementById('downloadAllButton')
-    };
+    const DOM = {};
 
-    function escapeHtml(value) {
-      return String(value == null ? '' : value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    document.addEventListener("DOMContentLoaded", initializeApp);
+
+    function initializeApp() {
+      cacheElements();
+      bindEvents();
+      handleInitialRoute();
     }
 
-    function safeUrl(value) {
-      const url = String(value || '').trim();
+    function cacheElements() {
+      const ids = [
+        "brandHomeButton",
+        "headerRefreshButton",
+        "searchInput",
+        "categoryFilter",
+        "refreshAlbumsButton",
+        "albumCountLabel",
+        "homeLoading",
+        "homeError",
+        "emptyAlbums",
+        "noSearchResults",
+        "albumGrid",
+        "retryAlbumsButton",
+        "clearSearchButton",
+        "homePage",
+        "albumPage",
+        "backToAlbumsButton",
+        "shareAlbumButton",
+        "downloadAllButton",
+        "albumDetailLoading",
+        "albumDetailError",
+        "albumErrorBackButton",
+        "albumDetailContent",
+        "albumTitle",
+        "albumDescription",
+        "albumOrganization",
+        "albumCategory",
+        "albumPhotoCount",
+        "photoSelectionHint",
+        "toggleSelectionButton",
+        "emptyPhotos",
+        "photoGrid",
+        "selectionBar",
+        "selectionCountLabel",
+        "selectAllPhotosButton",
+        "downloadSelectedButton",
+        "cancelSelectionButton",
+        "messageModal",
+        "modalTitle",
+        "modalMessage",
+        "modalExtraContent",
+        "modalActions",
+        "modalCloseButton",
+        "modalOkayButton",
+        "downloadModal",
+        "downloadModalTitle",
+        "downloadModalMessage",
+        "downloadProgressFill",
+        "downloadProgressText",
+        "downloadModalActions",
+        "downloadModalOkayButton",
+        "photoViewer",
+        "viewerCloseButton",
+        "viewerDownloadButton",
+        "viewerCounter",
+        "viewerImage",
+        "viewerCaption",
+        "viewerPreviousButton",
+        "viewerNextButton",
+        "toastContainer"
+      ];
 
-      if (!url) return '';
+      ids.forEach(function (id) {
+        DOM[id] = document.getElementById(id);
+      });
+    }
 
-      try {
-        const parsed = new URL(url, window.location.origin);
+    function bindEvents() {
+      DOM.brandHomeButton.addEventListener("click", navigateHome);
+      DOM.headerRefreshButton.addEventListener("click", refreshCurrentPage);
+      DOM.refreshAlbumsButton.addEventListener("click", loadAlbums);
+      DOM.retryAlbumsButton.addEventListener("click", loadAlbums);
+      DOM.searchInput.addEventListener("input", applyAlbumFilters);
+      DOM.categoryFilter.addEventListener("change", applyAlbumFilters);
+      DOM.clearSearchButton.addEventListener("click", clearAlbumFilters);
 
-        if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
-          return '';
+      DOM.backToAlbumsButton.addEventListener("click", navigateHome);
+      DOM.albumErrorBackButton.addEventListener("click", navigateHome);
+
+      DOM.shareAlbumButton.addEventListener("click", shareCurrentAlbum);
+      DOM.downloadAllButton.addEventListener("click", downloadAllPhotos);
+      DOM.toggleSelectionButton.addEventListener("click", toggleSelectionMode);
+      DOM.selectAllPhotosButton.addEventListener("click", selectAllPhotos);
+      DOM.downloadSelectedButton.addEventListener("click", downloadSelectedPhotos);
+      DOM.cancelSelectionButton.addEventListener("click", exitSelectionMode);
+
+      DOM.modalCloseButton.addEventListener("click", closeMessageModal);
+      DOM.modalOkayButton.addEventListener("click", closeMessageModal);
+      DOM.downloadModalOkayButton.addEventListener("click", closeDownloadModal);
+
+      DOM.viewerCloseButton.addEventListener("click", closePhotoViewer);
+      DOM.viewerPreviousButton.addEventListener("click", showPreviousPhoto);
+      DOM.viewerNextButton.addEventListener("click", showNextPhoto);
+      DOM.viewerDownloadButton.addEventListener("click", downloadCurrentViewerPhoto);
+
+      DOM.messageModal.addEventListener("click", function (event) {
+        if (event.target === DOM.messageModal) {
+          closeMessageModal();
+        }
+      });
+
+      DOM.photoViewer.addEventListener("click", function (event) {
+        if (event.target === DOM.photoViewer) {
+          closePhotoViewer();
+        }
+      });
+
+      window.addEventListener("popstate", handleRouteChange);
+
+      document.addEventListener("keydown", handleKeyboardShortcuts);
+    }
+
+    /* =========================================================
+       API CONNECTION
+       ========================================================= */
+
+    function apiGet(action, parameters) {
+      return new Promise(function (resolve, reject) {
+        const callbackName =
+          "actiGalleryCallback_" +
+          Date.now().toString(36) +
+          "_" +
+          Math.random().toString(36).slice(2);
+
+        const script = document.createElement("script");
+        let finished = false;
+
+        const query = new URLSearchParams();
+        query.set("action", action);
+        query.set("callback", callbackName);
+
+        Object.entries(parameters || {}).forEach(function (entry) {
+          if (entry[1] !== undefined && entry[1] !== null) {
+            query.set(entry[0], String(entry[1]));
+          }
+        });
+
+        const timeoutId = window.setTimeout(function () {
+          finishWithError(new Error("Request timeout"));
+        }, ACTIGALLERY_CONFIG.REQUEST_TIMEOUT_MS);
+
+        function cleanup() {
+          window.clearTimeout(timeoutId);
+          script.remove();
+
+          try {
+            delete window[callbackName];
+          } catch (_) {
+            window[callbackName] = undefined;
+          }
         }
 
-        return parsed.href;
-      } catch (error) {
-        return '';
-      }
+        function finishWithError(error) {
+          if (finished) return;
+          finished = true;
+          cleanup();
+          reject(error);
+        }
+
+        function finishWithSuccess(data) {
+          if (finished) return;
+          finished = true;
+          cleanup();
+          resolve(data);
+        }
+
+        window[callbackName] = function (response) {
+          if (response && response.success === false) {
+            const message =
+              response.message ||
+              response.error ||
+              "ไม่สามารถโหลดข้อมูลได้";
+
+            finishWithError(new Error(String(message)));
+            return;
+          }
+
+          finishWithSuccess(response);
+        };
+
+        script.onerror = function () {
+          finishWithError(new Error("Network request failed"));
+        };
+
+        script.async = true;
+        script.src =
+          ACTIGALLERY_CONFIG.API_URL +
+          (ACTIGALLERY_CONFIG.API_URL.includes("?") ? "&" : "?") +
+          query.toString();
+
+        document.head.appendChild(script);
+      });
     }
 
-    function normalizeBoolean(value) {
-      return value === true ||
-        value === 1 ||
-        String(value).toLowerCase() === 'true' ||
-        String(value) === '1';
+    async function apiGetFirstAvailable(actions, parameters) {
+      let lastError = null;
+
+      for (const action of actions) {
+        try {
+          return await apiGet(action, parameters);
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error("ไม่สามารถโหลดข้อมูลได้");
     }
 
-    function normalizeDate(value) {
-      if (!value) return null;
+    function unwrapData(response) {
+      let value = response;
 
-      if (value instanceof Date) {
-        return isNaN(value.getTime()) ? null : value;
+      for (let depth = 0; depth < 4; depth += 1) {
+        if (!value || typeof value !== "object" || Array.isArray(value)) {
+          break;
+        }
+
+        if (
+          value.data !== undefined &&
+          value.data !== null &&
+          typeof value.data === "object"
+        ) {
+          value = value.data;
+          continue;
+        }
+
+        if (
+          value.result !== undefined &&
+          value.result !== null &&
+          typeof value.result === "object"
+        ) {
+          value = value.result;
+          continue;
+        }
+
+        break;
       }
 
-      if (typeof value.toDate === 'function') {
-        const date = value.toDate();
-        return isNaN(date.getTime()) ? null : date;
-      }
-
-      if (value.seconds) {
-        const date = new Date(value.seconds * 1000);
-        return isNaN(date.getTime()) ? null : date;
-      }
-
-      const date = new Date(value);
-
-      return isNaN(date.getTime()) ? null : date;
+      return value;
     }
 
-    function formatDate(value) {
-      const date = normalizeDate(value);
+    function extractArray(response, possibleKeys) {
+      if (Array.isArray(response)) {
+        return response;
+      }
 
-      if (!date) return '';
+      const candidates = [
+        response,
+        unwrapData(response),
+        response && response.data,
+        response && response.result
+      ];
+
+      for (const candidate of candidates) {
+        if (Array.isArray(candidate)) {
+          return candidate;
+        }
+
+        if (candidate && typeof candidate === "object") {
+          for (const key of possibleKeys) {
+            if (Array.isArray(candidate[key])) {
+              return candidate[key];
+            }
+          }
+        }
+      }
+
+      return [];
+    }
+
+    function extractAlbumObject(response) {
+      let value = unwrapData(response);
+
+      if (!value || typeof value !== "object") {
+        return null;
+      }
+
+      for (let depth = 0; depth < 4; depth += 1) {
+        if (Array.isArray(value)) {
+          value = value[0] || null;
+          continue;
+        }
+
+        if (!value || typeof value !== "object") {
+          return null;
+        }
+
+        const nestedKeys = [
+          "album",
+          "item",
+          "record",
+          "albumData"
+        ];
+
+        let found = false;
+
+        for (const key of nestedKeys) {
+          if (value[key] && typeof value[key] === "object") {
+            value = value[key];
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          break;
+        }
+      }
+
+      return value && typeof value === "object" ? value : null;
+    }
+
+    /* =========================================================
+       DATA NORMALIZATION
+       ========================================================= */
+
+    function firstAvailable(object, keys, fallback) {
+      if (!object || typeof object !== "object") {
+        return fallback;
+      }
+
+      for (const key of keys) {
+        const value = object[key];
+
+        if (value !== undefined && value !== null && value !== "") {
+          return value;
+        }
+      }
+
+      return fallback;
+    }
+
+    function safeText(value, fallback) {
+      if (value === undefined || value === null) {
+        return fallback || "";
+      }
+
+      return String(value);
+    }
+
+    function parseMaybeJson(value) {
+      if (typeof value !== "string") {
+        return value;
+      }
+
+      const trimmed = value.trim();
+
+      if (!trimmed) {
+        return [];
+      }
 
       try {
-        return new Intl.DateTimeFormat('th-TH', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }).format(date);
-      } catch (error) {
-        return '';
+        return JSON.parse(trimmed);
+      } catch (_) {
+        return value;
       }
     }
 
-    function formatNumber(value) {
-      return new Intl.NumberFormat('th-TH').format(
-        Number(value || 0)
+    function normalizePhoto(rawPhoto, index) {
+      let photo = rawPhoto;
+
+      if (typeof photo === "string") {
+        photo = {
+          url: photo,
+          name: "รูปภาพ " + (index + 1)
+        };
+      }
+
+      if (!photo || typeof photo !== "object") {
+        return null;
+      }
+
+      const url = firstAvailable(
+        photo,
+        [
+          "url",
+          "imageUrl",
+          "photoUrl",
+          "image",
+          "src",
+          "downloadUrl",
+          "directUrl",
+          "secure_url",
+          "displayUrl"
+        ],
+        ""
       );
-    }
 
-    function showToast(message, type) {
-      type = type || 'info';
-
-      const icons = {
-        success: 'fa-circle-check',
-        error: 'fa-circle-exclamation',
-        info: 'fa-circle-info'
-      };
-
-      const toast = document.createElement('div');
-      toast.className = 'toast ' + type;
-
-      const icon = document.createElement('i');
-      icon.className = 'fa-solid ' + (icons[type] || icons.info);
-      icon.setAttribute('aria-hidden', 'true');
-
-      const text = document.createElement('span');
-      text.textContent = String(message || '');
-
-      toast.appendChild(icon);
-      toast.appendChild(text);
-      elements.toastRegion.appendChild(toast);
-
-      window.setTimeout(function () {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(5px)';
-
-        window.setTimeout(function () {
-          toast.remove();
-        }, 180);
-      }, 3600);
-    }
-
-    function closeModal() {
-      if (typeof state.activeModalCleanup === 'function') {
-        state.activeModalCleanup();
+      if (typeof url !== "string" || !url.trim()) {
+        return null;
       }
 
-      state.activeModalCleanup = null;
-      elements.modalBackdrop.classList.add('hidden');
-      elements.modalActions.replaceChildren();
-    }
+      const normalizedUrl = url.trim();
 
-    function openModal(options) {
-      options = options || {};
-
-      closeModal();
-
-      elements.modalTitle.textContent = options.title || 'แจ้งเตือน';
-      elements.modalMessage.textContent = options.message || '';
-      elements.modalActions.replaceChildren();
-
-      if (typeof options.content === 'function') {
-        options.content(elements.modalActions);
-      } else {
-        const ok = document.createElement('button');
-        ok.className = 'primary-button';
-        ok.type = 'button';
-        ok.textContent = options.okText || 'ตกลง';
-        ok.addEventListener('click', function () {
-          closeModal();
-
-          if (typeof options.onOk === 'function') {
-            options.onOk();
-          }
-        });
-
-        elements.modalActions.appendChild(ok);
+      if (!/^https?:\/\//i.test(normalizedUrl)) {
+        return null;
       }
-
-      elements.modalBackdrop.classList.remove('hidden');
-
-      const firstButton = elements.modalActions.querySelector('button');
-
-      if (firstButton) {
-        window.setTimeout(function () {
-          firstButton.focus();
-        }, 0);
-      }
-    }
-
-    function showError(message) {
-      openModal({
-        title: 'ไม่สามารถดำเนินการได้',
-        message: message || 'ไม่สามารถโหลดข้อมูลได้',
-        okText: 'ตกลง'
-      });
-    }
-
-    function showLoading(container, message) {
-      container.replaceChildren();
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'loading-state';
-
-      const spinner = document.createElement('div');
-      spinner.className = 'spinner';
-      spinner.setAttribute('aria-hidden', 'true');
-
-      const text = document.createElement('div');
-      text.textContent = message || 'กำลังโหลดข้อมูล';
-
-      wrapper.appendChild(spinner);
-      wrapper.appendChild(text);
-      container.appendChild(wrapper);
-    }
-
-    function showEmpty(container, title, message, iconName) {
-      container.replaceChildren();
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'empty-state';
-
-      const iconWrap = document.createElement('div');
-      iconWrap.className = 'state-icon';
-
-      const icon = document.createElement('i');
-      icon.className = 'fa-solid ' + (iconName || 'fa-images');
-      icon.setAttribute('aria-hidden', 'true');
-
-      const heading = document.createElement('h3');
-      heading.textContent = title || 'ไม่พบข้อมูล';
-
-      const paragraph = document.createElement('p');
-      paragraph.textContent = message || '';
-
-      iconWrap.appendChild(icon);
-      wrapper.appendChild(iconWrap);
-      wrapper.appendChild(heading);
-      wrapper.appendChild(paragraph);
-      container.appendChild(wrapper);
-    }
-
-    function showErrorState(container, message, retryCallback) {
-      container.replaceChildren();
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'error-state';
-
-      const iconWrap = document.createElement('div');
-      iconWrap.className = 'state-icon';
-
-      const icon = document.createElement('i');
-      icon.className = 'fa-solid fa-triangle-exclamation';
-
-      const heading = document.createElement('h3');
-      heading.textContent = 'ไม่สามารถโหลดข้อมูลได้';
-
-      const paragraph = document.createElement('p');
-      paragraph.textContent = message || 'กรุณาลองใหม่อีกครั้ง';
-
-      const button = document.createElement('button');
-      button.className = 'primary-button';
-      button.type = 'button';
-      button.innerHTML = '<i class="fa-solid fa-rotate"></i> ลองอีกครั้ง';
-      button.addEventListener('click', retryCallback);
-
-      iconWrap.appendChild(icon);
-      wrapper.appendChild(iconWrap);
-      wrapper.appendChild(heading);
-      wrapper.appendChild(paragraph);
-      wrapper.appendChild(button);
-      container.appendChild(wrapper);
-    }
-
-    function initializeFirebase() {
-      if (typeof firebase === 'undefined') {
-        throw new Error('ไม่สามารถเริ่มต้นระบบได้');
-      }
-
-      if (!firebase.apps.length) {
-        firebase.initializeApp(FIREBASE_CONFIG);
-      }
-
-      state.db = firebase.firestore();
-      return state.db;
-    }
-
-    function getAlbumIdFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('album') || '';
-    }
-
-    function makeAlbumUrl(albumId) {
-      const url = new URL(window.location.href);
-      url.search = '';
-      url.hash = '';
-      url.searchParams.set('album', albumId);
-      return url.href;
-    }
-
-    function updateUrlForHome(replace) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete('album');
-
-      const nextUrl = url.pathname + url.search + url.hash;
-
-      if (replace) {
-        history.replaceState({ route: 'home' }, '', nextUrl);
-      } else {
-        history.pushState({ route: 'home' }, '', nextUrl);
-      }
-    }
-
-    function updateUrlForAlbum(albumId, replace) {
-      const url = new URL(window.location.href);
-      url.search = '';
-      url.hash = '';
-      url.searchParams.set('album', albumId);
-
-      const nextUrl = url.pathname + url.search;
-
-      if (replace) {
-        history.replaceState(
-          { route: 'album', albumId: albumId },
-          '',
-          nextUrl
-        );
-      } else {
-        history.pushState(
-          { route: 'album', albumId: albumId },
-          '',
-          nextUrl
-        );
-      }
-    }
-
-    function mapAlbumDocument(doc) {
-      const data = doc.data() || {};
 
       return {
-        ...data,
-        albumId: String(data.albumId || doc.id || ''),
-        title: String(data.title || 'ไม่มีชื่ออัลบั้ม'),
-        description: String(data.description || ''),
-        organizationName: String(data.organizationName || ''),
-        organizationLogoUrl: safeUrl(data.organizationLogoUrl || ''),
-        categoryId: String(data.categoryId || ''),
-        categoryName: String(data.categoryName || ''),
-        categoryDescription: String(data.categoryDescription || ''),
-        coverUrl: safeUrl(data.coverUrl || ''),
-        photoCount: Number(data.photoCount || 0),
-        isPublished: normalizeBoolean(data.isPublished),
-        isDeleted: normalizeBoolean(data.isDeleted),
-        createdAt: data.createdAt || null,
-        updatedAt: data.updatedAt || null,
-        publishedAt: data.publishedAt || null
+        url: normalizedUrl,
+        name: safeText(
+          firstAvailable(
+            photo,
+            ["name", "fileName", "filename", "title", "originalName"],
+            "รูปภาพ " + (index + 1)
+          ),
+          "รูปภาพ " + (index + 1)
+        ),
+        photoId: safeText(
+          firstAvailable(photo, ["photoId", "imageId", "id"], ""),
+          ""
+        )
       };
     }
 
-    function mapPhotoDocument(doc) {
-      const data = doc.data() || {};
+    function normalizePhotoArray(rawPhotos) {
+      let parsed = parseMaybeJson(rawPhotos);
 
-      return {
-        ...data,
-        photoId: String(data.photoId || doc.id || ''),
-        albumId: String(data.albumId || ''),
-        imageUrl: safeUrl(data.imageUrl || data.url || ''),
-        thumbnailUrl: safeUrl(data.thumbnailUrl || data.imageUrl || data.url || ''),
-        caption: String(data.caption || ''),
-        sortOrder: Number(data.sortOrder || 0),
-        isDeleted: normalizeBoolean(data.isDeleted)
-      };
-    }
-
-    async function fetchPublicAlbums() {
-      if (!state.db) {
-        initializeFirebase();
+      if (typeof parsed === "string") {
+        parsed = [parsed];
       }
 
-      /*
-       * Query เฉพาะอัลบั้มที่เผยแพร่แล้วและไม่ถูกลบ
-       * Rules ของ Firestore ต้องอนุญาตการอ่านตามเงื่อนไขนี้
-       */
-      const snapshot = await state.db
-        .collection(COLLECTION_ALBUMS)
-        .where('isPublished', '==', true)
-        .where('isDeleted', '==', false)
-        .get();
-
-      const albums = snapshot.docs
-        .map(mapAlbumDocument)
-        .filter(function (album) {
-          return album.albumId &&
-            album.isPublished &&
-            !album.isDeleted;
-        });
-
-      albums.sort(function (a, b) {
-        const dateA = normalizeDate(a.publishedAt || a.createdAt);
-        const dateB = normalizeDate(b.publishedAt || b.createdAt);
-
-        return (dateB ? dateB.getTime() : 0) -
-          (dateA ? dateA.getTime() : 0);
-      });
-
-      return albums;
-    }
-
-    async function loadAlbums(options) {
-      options = options || {};
-
-      if (state.loadingAlbums) return;
-
-      state.loadingAlbums = true;
-
-      showLoading(elements.albumGrid, 'กำลังโหลดอัลบั้มกิจกรรม');
-      elements.resultCount.textContent = 'กำลังโหลด...';
-
-      try {
-        state.allAlbums = await fetchPublicAlbums();
-        buildCategoryFilter();
-        applyAlbumFilters();
-
-        if (options.openAlbumId) {
-          await openAlbum(options.openAlbumId, {
-            updateHistory: false
-          });
-        }
-      } catch (error) {
-        console.error('ActiGallery: load albums failed', error);
-
-        showErrorState(
-          elements.albumGrid,
-          'ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง',
-          function () {
-            loadAlbums();
-          }
-        );
-
-        elements.resultCount.textContent = 'โหลดข้อมูลไม่สำเร็จ';
-      } finally {
-        state.loadingAlbums = false;
-      }
-    }
-
-    function buildCategoryFilter() {
-      const currentValue = elements.categoryFilter.value;
-
-      const categories = new Map();
-
-      state.allAlbums.forEach(function (album) {
-        if (album.categoryId || album.categoryName) {
-          const key = album.categoryId || album.categoryName;
-
-          if (!categories.has(key)) {
-            categories.set(key, {
-              id: key,
-              name: album.categoryName || 'ไม่มีชื่อหมวดหมู่'
-            });
-          }
-        }
-      });
-
-      state.categories = Array.from(categories.values())
-        .sort(function (a, b) {
-          return a.name.localeCompare(b.name, 'th');
-        });
-
-      elements.categoryFilter.replaceChildren();
-
-      const allOption = document.createElement('option');
-      allOption.value = '';
-      allOption.textContent = 'ทุกหมวดหมู่';
-      elements.categoryFilter.appendChild(allOption);
-
-      state.categories.forEach(function (category) {
-        const option = document.createElement('option');
-        option.value = category.id;
-        option.textContent = category.name;
-        elements.categoryFilter.appendChild(option);
-      });
-
-      if (Array.from(elements.categoryFilter.options)
-          .some(function (option) {
-            return option.value === currentValue;
-          })) {
-        elements.categoryFilter.value = currentValue;
-      }
-    }
-
-    function applyAlbumFilters() {
-      const query = elements.searchInput.value.trim().toLocaleLowerCase('th');
-      const categoryId = elements.categoryFilter.value;
-
-      state.filteredAlbums = state.allAlbums.filter(function (album) {
-        const searchable = [
-          album.title,
-          album.description,
-          album.organizationName,
-          album.categoryName
-        ].join(' ').toLocaleLowerCase('th');
-
-        const matchesQuery = !query || searchable.includes(query);
-        const matchesCategory = !categoryId ||
-          album.categoryId === categoryId ||
-          album.categoryName === categoryId;
-
-        return matchesQuery && matchesCategory;
-      });
-
-      renderAlbumCards();
-    }
-
-    function renderAlbumCards() {
-      elements.albumGrid.replaceChildren();
-
-      elements.resultCount.textContent =
-        formatNumber(state.filteredAlbums.length) + ' อัลบั้ม';
-
-      if (!state.filteredAlbums.length) {
-        showEmpty(
-          elements.albumGrid,
-          'ไม่พบอัลบั้มกิจกรรม',
-          'ลองเปลี่ยนคำค้นหาหรือเลือกหมวดหมู่อื่น',
-          'fa-images'
-        );
-        return;
-      }
-
-      const fragment = document.createDocumentFragment();
-
-      state.filteredAlbums.forEach(function (album) {
-        const card = document.createElement('article');
-        card.className = 'album-card';
-        card.tabIndex = 0;
-        card.setAttribute('role', 'link');
-        card.setAttribute('aria-label', 'เปิดอัลบั้ม ' + album.title);
-
-        const cover = document.createElement('div');
-        cover.className = 'album-cover';
-
-        if (album.coverUrl) {
-          const image = document.createElement('img');
-          image.src = album.coverUrl;
-          image.alt = album.title;
-          image.loading = 'lazy';
-          image.decoding = 'async';
-
-          image.addEventListener('error', function () {
-            image.remove();
-            cover.insertAdjacentHTML(
-              'afterbegin',
-              '<div class="photo-loading"><i class="fa-regular fa-image fa-2x"></i></div>'
-            );
-          });
-
-          cover.appendChild(image);
+      if (!Array.isArray(parsed)) {
+        if (parsed && typeof parsed === "object") {
+          parsed = firstAvailable(
+            parsed,
+            ["photos", "images", "items", "data"],
+            []
+          );
         } else {
-          cover.innerHTML =
-            '<div class="photo-loading"><i class="fa-regular fa-image fa-2x"></i></div>';
+          parsed = [];
         }
+      }
 
-        const count = document.createElement('span');
-        count.className = 'photo-count-badge';
-        count.innerHTML =
-          '<i class="fa-regular fa-images" aria-hidden="true"></i> ' +
-          escapeHtml(formatNumber(album.photoCount)) + ' รูป';
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
 
-        cover.appendChild(count);
-
-        const content = document.createElement('div');
-        content.className = 'album-content';
-
-        const title = document.createElement('h3');
-        title.className = 'album-title';
-        title.textContent = album.title;
-
-        const description = document.createElement('p');
-        description.className = 'album-description';
-        description.textContent =
-          album.description || 'ไม่มีข้อมูลรายละเอียด';
-
-        const meta = document.createElement('div');
-        meta.className = 'album-meta';
-
-        const category = document.createElement('span');
-        category.className = 'category-tag';
-        category.textContent =
-          album.categoryName || 'ไม่มีหมวดหมู่';
-
-        const date = document.createElement('span');
-        date.innerHTML = '<i class="fa-regular fa-calendar" aria-hidden="true"></i> ';
-        date.appendChild(document.createTextNode(
-          formatDate(album.publishedAt || album.createdAt) || 'ไม่ระบุวันที่'
-        ));
-
-        meta.appendChild(category);
-        meta.appendChild(date);
-
-        const footer = document.createElement('div');
-        footer.className = 'card-footer';
-
-        const organization = document.createElement('div');
-        organization.className = 'organization-label';
-
-        const organizationIcon = document.createElement('i');
-        organizationIcon.className = 'fa-regular fa-building';
-        organizationIcon.setAttribute('aria-hidden', 'true');
-
-        const organizationName = document.createElement('span');
-        organizationName.textContent =
-          album.organizationName || 'ไม่ระบุหน่วยงาน';
-
-        organization.appendChild(organizationIcon);
-        organization.appendChild(organizationName);
-
-        const openButton = document.createElement('button');
-        openButton.className = 'text-button';
-        openButton.type = 'button';
-        openButton.innerHTML =
-          'เปิดดู <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
-
-        openButton.addEventListener('click', function (event) {
-          event.stopPropagation();
-          openAlbum(album.albumId);
-        });
-
-        footer.appendChild(organization);
-        footer.appendChild(openButton);
-
-        content.appendChild(title);
-        content.appendChild(description);
-        content.appendChild(meta);
-        content.appendChild(footer);
-
-        card.appendChild(cover);
-        card.appendChild(content);
-
-        card.addEventListener('click', function () {
-          openAlbum(album.albumId);
-        });
-
-        card.addEventListener('keydown', function (event) {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openAlbum(album.albumId);
-          }
-        });
-
-        fragment.appendChild(card);
-      });
-
-      elements.albumGrid.appendChild(fragment);
+      return parsed
+        .map(function (photo, index) {
+          return normalizePhoto(photo, index);
+        })
+        .filter(Boolean);
     }
 
-    async function fetchAlbumPhotos(albumId) {
-      const snapshot = await state.db
-        .collection(COLLECTION_PHOTOS)
-        .where('albumId', '==', albumId)
-        .where('isDeleted', '==', false)
-        .get();
+    function getAlbumPhotos(album) {
+      const rawPhotos = firstAvailable(
+        album,
+        [
+          "photos",
+          "images",
+          "photoList",
+          "imageList",
+          "photoUrls",
+          "imageUrls",
+          "photosJson",
+          "imagesJson",
+          "photoData",
+          "imagesData"
+        ],
+        []
+      );
 
-      const photos = snapshot.docs
-        .map(mapPhotoDocument)
-        .filter(function (photo) {
-          return photo.imageUrl &&
-            !photo.isDeleted &&
-            photo.albumId === albumId;
-        });
+      let photos = normalizePhotoArray(rawPhotos);
 
-      photos.sort(function (a, b) {
-        return a.sortOrder - b.sortOrder;
-      });
+      if (photos.length === 0) {
+        const singleCover = firstAvailable(
+          album,
+          [
+            "coverUrl",
+            "coverImageUrl",
+            "thumbnailUrl",
+            "imageUrl",
+            "coverImage",
+            "thumbnail",
+            "image"
+          ],
+          ""
+        );
+
+        if (typeof singleCover === "string" && singleCover.trim()) {
+          photos = normalizePhotoArray([singleCover]);
+        }
+      }
 
       return photos;
     }
 
-    async function fetchSinglePublicAlbum(albumId) {
-      const localAlbum = state.allAlbums.find(function (album) {
-        return album.albumId === albumId;
-      });
-
-      if (localAlbum) {
-        return localAlbum;
-      }
-
-      const snapshot = await state.db
-        .collection(COLLECTION_ALBUMS)
-        .doc(albumId)
-        .get();
-
-      if (!snapshot.exists) {
+    function normalizeAlbum(rawAlbum) {
+      if (!rawAlbum || typeof rawAlbum !== "object") {
         return null;
       }
 
-      const album = mapAlbumDocument(snapshot);
+      const id = safeText(
+        firstAvailable(
+          rawAlbum,
+          [
+            "albumId",
+            "id",
+            "albumID",
+            "album_id",
+            "uuid",
+            "ID"
+          ],
+          ""
+        ),
+        ""
+      ).trim();
 
-      if (!album.isPublished || album.isDeleted) {
+      if (!id) {
         return null;
       }
 
-      return album;
+      const title = safeText(
+        firstAvailable(
+          rawAlbum,
+          [
+            "title",
+            "albumTitle",
+            "albumName",
+            "name",
+            "ชื่ออัลบั้ม"
+          ],
+          "ไม่มีชื่ออัลบั้ม"
+        ),
+        "ไม่มีชื่ออัลบั้ม"
+      );
+
+      const description = safeText(
+        firstAvailable(
+          rawAlbum,
+          [
+            "description",
+            "albumDescription",
+            "details",
+            "detail",
+            "รายละเอียด"
+          ],
+          ""
+        ),
+        ""
+      );
+
+      const organization = safeText(
+        firstAvailable(
+          rawAlbum,
+          [
+            "organizationName",
+            "organization",
+            "agencyName",
+            "ownerOrganizationName",
+            "orgName",
+            "departmentName",
+            "หน่วยงาน"
+          ],
+          typeof rawAlbum.organization === "object"
+            ? firstAvailable(rawAlbum.organization, ["name", "title"], "")
+            : ""
+        ),
+        ""
+      );
+
+      const category = safeText(
+        firstAvailable(
+          rawAlbum,
+          [
+            "categoryName",
+            "categoryTitle",
+            "category",
+            "หมวดหมู่"
+          ],
+          ""
+        ),
+        ""
+      );
+
+      const directCover = firstAvailable(
+        rawAlbum,
+        [
+          "coverUrl",
+          "coverImageUrl",
+          "thumbnailUrl",
+          "coverImage",
+          "thumbnail",
+          "imageUrl",
+          "cover"
+        ],
+        ""
+      );
+
+      const photos = getAlbumPhotos(rawAlbum);
+
+      const coverUrl =
+        typeof directCover === "string" &&
+        /^https?:\/\//i.test(directCover.trim())
+          ? directCover.trim()
+          : (photos[0] ? photos[0].url : "");
+
+      const countValue = firstAvailable(
+        rawAlbum,
+        [
+          "photoCount",
+          "imageCount",
+          "totalPhotos",
+          "totalImages",
+          "numberOfPhotos",
+          "จำนวนรูปภาพ"
+        ],
+        photos.length
+      );
+
+      const createdAt = firstAvailable(
+        rawAlbum,
+        [
+          "createdAt",
+          "createdDate",
+          "publishedAt",
+          "date",
+          "timestamp"
+        ],
+        ""
+      );
+
+      const publishedValue = firstAvailable(
+        rawAlbum,
+        [
+          "isPublished",
+          "published",
+          "isPublic",
+          "visibility",
+          "status"
+        ],
+        undefined
+      );
+
+      return {
+        id: id,
+        title: title,
+        description: description,
+        organization: organization,
+        category: category,
+        coverUrl: coverUrl,
+        photos: photos,
+        photoCount: Math.max(
+          0,
+          Number(countValue) || photos.length
+        ),
+        createdAt: createdAt,
+        publishedValue: publishedValue,
+        raw: rawAlbum
+      };
     }
 
-    async function openAlbum(albumId, options) {
-      options = options || {};
+    function isAlbumPublic(album) {
+      if (!album) return false;
 
-      if (!albumId) return;
+      const value = album.publishedValue;
 
-      closeViewer();
-      state.currentAlbum = null;
-      state.currentPhotos = [];
-      state.selectedPhotoIds.clear();
-      state.selectionMode = false;
-      updateSelectionUI();
-
-      elements.homePage.classList.add('hidden');
-      elements.albumPage.classList.remove('hidden');
-      state.currentRoute = 'album';
-
-      elements.detailTitle.textContent = 'กำลังโหลดอัลบั้ม';
-      elements.detailDescription.textContent = '';
-      elements.detailInfo.replaceChildren();
-
-      showLoading(elements.photoGrid, 'กำลังโหลดรูปภาพ');
-
-      if (options.updateHistory !== false) {
-        updateUrlForAlbum(albumId, false);
+      if (value === undefined || value === null || value === "") {
+        return true;
       }
 
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      if (typeof value === "boolean") {
+        return value;
+      }
+
+      if (typeof value === "number") {
+        return value !== 0;
+      }
+
+      const normalized = String(value).trim().toLowerCase();
+
+      if (
+        [
+          "false",
+          "0",
+          "no",
+          "draft",
+          "hidden",
+          "unpublished",
+          "private",
+          "inactive",
+          "ปิด",
+          "ไม่เผยแพร่",
+          "ฉบับร่าง"
+        ].includes(normalized)
+      ) {
+        return false;
+      }
+
+      return true;
+    }
+
+    /* =========================================================
+       ROUTING
+       ========================================================= */
+
+    function getAlbumIdFromUrl() {
+      const url = new URL(window.location.href);
+      const queryId = url.searchParams.get("album");
+
+      if (queryId) {
+        return queryId;
+      }
+
+      const hash = window.location.hash;
+
+      if (hash && hash.startsWith("#album=")) {
+        return decodeURIComponent(hash.slice("#album=".length));
+      }
+
+      return "";
+    }
+
+    function buildAlbumUrl(albumId) {
+      const url = new URL(window.location.href);
+      url.search = "";
+      url.hash = "";
+      url.searchParams.set("album", String(albumId));
+      return url.toString();
+    }
+
+    function navigateToAlbum(albumId) {
+      const targetUrl = buildAlbumUrl(albumId);
+      window.history.pushState(
+        { albumId: String(albumId) },
+        "",
+        targetUrl
+      );
+
+      showAlbumPage(albumId);
+    }
+
+    function navigateHome() {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("album");
+      url.hash = "";
+
+      window.history.pushState(
+        { page: "home" },
+        "",
+        url.toString()
+      );
+
+      showHomePage(true);
+    }
+
+    function handleInitialRoute() {
+      const albumId = getAlbumIdFromUrl();
+
+      if (albumId) {
+        showAlbumPage(albumId);
+      } else {
+        showHomePage(false);
+      }
+    }
+
+    function handleRouteChange() {
+      const albumId = getAlbumIdFromUrl();
+
+      if (albumId) {
+        showAlbumPage(albumId);
+      } else {
+        showHomePage(false);
+      }
+    }
+
+    function refreshCurrentPage() {
+      const albumId = getAlbumIdFromUrl();
+
+      if (albumId) {
+        showAlbumPage(albumId);
+      } else {
+        loadAlbums();
+      }
+    }
+
+    function setPageMode(mode) {
+      const isAlbum = mode === "album";
+
+      DOM.homePage.hidden = isAlbum;
+      DOM.albumPage.hidden = !isAlbum;
+
+      DOM.selectionBar.hidden = true;
+
+      if (!isAlbum) {
+        document.title = "ActiGallery | คลังภาพกิจกรรม";
+      }
+    }
+
+    /* =========================================================
+       ALBUM LIST
+       ========================================================= */
+
+    async function loadAlbums() {
+      if (appState.loadingAlbums) return;
+
+      appState.loadingAlbums = true;
+
+      DOM.homeLoading.hidden = false;
+      DOM.homeError.hidden = true;
+      DOM.emptyAlbums.hidden = true;
+      DOM.noSearchResults.hidden = true;
+      DOM.albumGrid.hidden = true;
+      DOM.albumCountLabel.textContent = "กำลังโหลดข้อมูล";
 
       try {
-        if (!state.db) {
-          initializeFirebase();
-        }
-
-        const album = await fetchSinglePublicAlbum(albumId);
-
-        if (!album) {
-          showErrorState(
-            elements.photoGrid,
-            'ไม่พบอัลบั้มนี้ หรืออัลบั้มยังไม่เผยแพร่',
-            function () {
-              showHome({ updateHistory: true });
-              loadAlbums();
-            }
-          );
-
-          elements.detailTitle.textContent = 'ไม่พบอัลบั้ม';
-          elements.detailDescription.textContent = '';
-          return;
-        }
-
-        state.currentAlbum = album;
-
-        elements.detailTitle.textContent = album.title;
-        elements.detailDescription.textContent =
-          album.description || 'ไม่มีข้อมูลรายละเอียด';
-
-        renderAlbumInfo(album);
-
-        state.currentPhotos = await fetchAlbumPhotos(albumId);
-
-        renderPhotoGrid();
-
-      } catch (error) {
-        console.error('ActiGallery: open album failed', error);
-
-        showErrorState(
-          elements.photoGrid,
-          'ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง',
-          function () {
-            openAlbum(albumId, { updateHistory: false });
+        const response = await apiGetFirstAvailable(
+          ["listAlbums", "listPublicAlbums", "getPublicAlbums"],
+          {
+            page: 1,
+            limit: 500
           }
         );
+
+        const rawAlbums = extractArray(
+          response,
+          [
+            "albums",
+            "items",
+            "records",
+            "results",
+            "data",
+            "publishedAlbums"
+          ]
+        );
+
+        const normalizedAlbums = rawAlbums
+          .map(normalizeAlbum)
+          .filter(Boolean)
+          .filter(isAlbumPublic);
+
+        appState.albums = normalizedAlbums;
+
+        populateCategoryFilter();
+        applyAlbumFilters();
+
+        DOM.homeLoading.hidden = true;
+        DOM.homeError.hidden = true;
+
+        if (appState.albums.length === 0) {
+          DOM.emptyAlbums.hidden = false;
+          DOM.albumGrid.hidden = true;
+          DOM.noSearchResults.hidden = true;
+          DOM.albumCountLabel.textContent = "0 อัลบั้ม";
+        }
+      } catch (error) {
+        console.error("ActiGallery: load albums failed", error);
+
+        DOM.homeLoading.hidden = true;
+        DOM.albumGrid.hidden = true;
+        DOM.emptyAlbums.hidden = true;
+        DOM.noSearchResults.hidden = true;
+        DOM.homeError.hidden = false;
+        DOM.albumCountLabel.textContent = "โหลดข้อมูลไม่สำเร็จ";
+      } finally {
+        appState.loadingAlbums = false;
       }
     }
 
-    function renderAlbumInfo(album) {
-      elements.detailInfo.replaceChildren();
+    function populateCategoryFilter() {
+      const previousValue = DOM.categoryFilter.value;
 
-      const infoItems = [
-        {
-          icon: 'fa-regular fa-building',
-          text: album.organizationName || 'ไม่ระบุหน่วยงาน'
-        },
-        {
-          icon: 'fa-regular fa-calendar',
-          text: formatDate(album.publishedAt || album.createdAt) || 'ไม่ระบุวันที่'
-        },
-        {
-          icon: 'fa-regular fa-images',
-          text: formatNumber(state.currentPhotos.length || album.photoCount) + ' รูป'
-        }
-      ];
+      DOM.categoryFilter.replaceChildren();
 
-      infoItems.forEach(function (item) {
-        const span = document.createElement('span');
-        const icon = document.createElement('i');
-        icon.className = item.icon;
-        icon.setAttribute('aria-hidden', 'true');
+      const allOption = document.createElement("option");
+      allOption.value = "";
+      allOption.textContent = "ทุกหมวดหมู่";
+      DOM.categoryFilter.appendChild(allOption);
 
-        span.appendChild(icon);
-        span.appendChild(document.createTextNode(item.text));
-
-        elements.detailInfo.appendChild(span);
+      const categoryNames = Array.from(
+        new Set(
+          appState.albums
+            .map(function (album) {
+              return album.category.trim();
+            })
+            .filter(Boolean)
+        )
+      ).sort(function (a, b) {
+        return a.localeCompare(b, "th");
       });
+
+      categoryNames.forEach(function (name) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        DOM.categoryFilter.appendChild(option);
+      });
+
+      if (categoryNames.includes(previousValue)) {
+        DOM.categoryFilter.value = previousValue;
+      }
     }
 
-    function renderPhotoGrid() {
-      elements.photoGrid.replaceChildren();
+    function applyAlbumFilters() {
+      const keyword = DOM.searchInput.value.trim().toLocaleLowerCase("th");
+      const category = DOM.categoryFilter.value;
 
-      if (!state.currentPhotos.length) {
-        showEmpty(
-          elements.photoGrid,
-          'ยังไม่มีรูปภาพในอัลบั้มนี้',
-          'รูปภาพอาจยังไม่ถูกเพิ่มหรือไม่สามารถแสดงได้',
-          'fa-images'
-        );
+      appState.filteredAlbums = appState.albums.filter(function (album) {
+        const haystack = [
+          album.title,
+          album.description,
+          album.organization,
+          album.category
+        ]
+          .join(" ")
+          .toLocaleLowerCase("th");
 
-        updateSelectionUI();
+        const keywordMatches = !keyword || haystack.includes(keyword);
+        const categoryMatches = !category || album.category === category;
+
+        return keywordMatches && categoryMatches;
+      });
+
+      renderAlbums();
+    }
+
+    function clearAlbumFilters() {
+      DOM.searchInput.value = "";
+      DOM.categoryFilter.value = "";
+      applyAlbumFilters();
+    }
+
+    function renderAlbums() {
+      DOM.albumGrid.replaceChildren();
+
+      const albums = appState.filteredAlbums;
+
+      DOM.albumCountLabel.textContent = albums.length + " อัลบั้ม";
+
+      if (appState.albums.length === 0) {
+        DOM.albumGrid.hidden = true;
+        DOM.noSearchResults.hidden = true;
+        DOM.emptyAlbums.hidden = false;
         return;
       }
 
-      const fragment = document.createDocumentFragment();
+      DOM.emptyAlbums.hidden = true;
 
-      state.currentPhotos.forEach(function (photo, index) {
-        const item = document.createElement('div');
-        item.className = 'photo-item';
-        item.dataset.photoId = photo.photoId;
-        item.dataset.index = String(index);
-        item.tabIndex = 0;
-        item.setAttribute('role', 'button');
-        item.setAttribute(
-          'aria-label',
-          state.selectionMode
-            ? 'เลือกภาพที่ ' + (index + 1)
-            : 'เปิดดูภาพที่ ' + (index + 1)
-        );
+      if (albums.length === 0) {
+        DOM.albumGrid.hidden = true;
+        DOM.noSearchResults.hidden = false;
+        return;
+      }
 
-        const image = document.createElement('img');
-        image.src = photo.thumbnailUrl || photo.imageUrl;
-        image.alt = photo.caption || 'ภาพกิจกรรม ' + (index + 1);
-        image.loading = 'lazy';
-        image.decoding = 'async';
-        image.draggable = false;
+      DOM.noSearchResults.hidden = true;
+      DOM.albumGrid.hidden = false;
 
-        image.addEventListener('error', function () {
-          image.alt = 'ไม่สามารถโหลดรูปภาพได้';
-          image.style.opacity = '.3';
-        });
+      albums.forEach(function (album) {
+        DOM.albumGrid.appendChild(createAlbumCard(album));
+      });
+    }
 
-        const check = document.createElement('span');
-        check.className = 'photo-check';
-        check.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
+    function createAlbumCard(album) {
+      const article = document.createElement("article");
+      article.className = "album-card";
 
-        item.appendChild(image);
-        item.appendChild(check);
+      const coverButton = document.createElement("button");
+      coverButton.className = "album-cover-button";
+      coverButton.type = "button";
+      coverButton.setAttribute(
+        "aria-label",
+        "เปิดอัลบั้ม " + album.title
+      );
 
-        if (photo.caption) {
-          const caption = document.createElement('span');
-          caption.className = 'photo-caption';
-          caption.textContent = photo.caption;
-          item.appendChild(caption);
-        }
+      if (album.coverUrl) {
+        const image = document.createElement("img");
+        image.className = "album-cover";
+        image.src = album.coverUrl;
+        image.alt = album.title;
+        image.loading = "lazy";
+        image.decoding = "async";
 
-        if (state.selectedPhotoIds.has(photo.photoId)) {
-          item.classList.add('selected');
-        }
+        image.addEventListener("error", function () {
+          const placeholder = createCoverPlaceholder();
+          coverButton.replaceChildren(placeholder);
+        }, { once: true });
 
-        item.addEventListener('click', function () {
-          if (state.selectionMode) {
-            togglePhotoSelection(photo.photoId);
-          } else {
-            openViewer(index);
-          }
-        });
+        coverButton.appendChild(image);
+      } else {
+        coverButton.appendChild(createCoverPlaceholder());
+      }
 
-        item.addEventListener('keydown', function (event) {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
+      const count = document.createElement("span");
+      count.className = "cover-count";
 
-            if (state.selectionMode) {
-              togglePhotoSelection(photo.photoId);
-            } else {
-              openViewer(index);
-            }
-          }
-        });
+      const countIcon = document.createElement("i");
+      countIcon.className = "fa-regular fa-images";
+      countIcon.setAttribute("aria-hidden", "true");
 
-        let longPressTimer = null;
-        let longPressTriggered = false;
+      const countText = document.createElement("span");
+      countText.textContent =
+        formatNumber(album.photoCount) + " รูป";
 
-        item.addEventListener('contextmenu', function (event) {
-          event.preventDefault();
-        });
+      count.append(countIcon, countText);
+      coverButton.appendChild(count);
 
-        item.addEventListener('pointerdown', function (event) {
-          if (event.pointerType === 'mouse' && event.button !== 0) {
-            return;
-          }
-
-          longPressTriggered = false;
-
-          longPressTimer = window.setTimeout(function () {
-            longPressTriggered = true;
-            state.selectionMode = true;
-            togglePhotoSelection(photo.photoId);
-            updateSelectionUI();
-          }, 550);
-        });
-
-        ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (name) {
-          item.addEventListener(name, function () {
-            if (longPressTimer) {
-              clearTimeout(longPressTimer);
-              longPressTimer = null;
-            }
-          });
-        });
-
-        item.addEventListener('click', function (event) {
-          if (longPressTriggered) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            longPressTriggered = false;
-          }
-        }, true);
-
-        fragment.appendChild(item);
+      coverButton.addEventListener("click", function () {
+        navigateToAlbum(album.id);
       });
 
-      elements.photoGrid.appendChild(fragment);
+      const content = document.createElement("div");
+      content.className = "album-card-content";
 
-      if (state.currentAlbum) {
-        renderAlbumInfo(state.currentAlbum);
+      const title = document.createElement("h3");
+      title.className = "album-card-title";
+      title.textContent = album.title;
+
+      const description = document.createElement("p");
+      description.className = "album-description";
+      description.textContent =
+        album.description || "ไม่มีรายละเอียดอัลบั้ม";
+
+      const meta = document.createElement("div");
+      meta.className = "album-meta";
+
+      if (album.organization) {
+        meta.appendChild(
+          createMetaItem("fa-regular fa-building", album.organization)
+        );
       }
+
+      if (album.category) {
+        meta.appendChild(
+          createMetaItem("fa-regular fa-folder", album.category)
+        );
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "album-card-actions";
+
+      const openButton = document.createElement("button");
+      openButton.type = "button";
+      openButton.className = "button button-primary";
+      openButton.innerHTML =
+        '<i class="fa-regular fa-images" aria-hidden="true"></i>' +
+        " เปิดอัลบั้ม";
+
+      openButton.addEventListener("click", function () {
+        navigateToAlbum(album.id);
+      });
+
+      const shareButton = document.createElement("button");
+      shareButton.type = "button";
+      shareButton.className = "button button-secondary";
+      shareButton.setAttribute("aria-label", "แชร์อัลบั้ม");
+      shareButton.title = "แชร์อัลบั้ม";
+      shareButton.innerHTML =
+        '<i class="fa-solid fa-share-nodes" aria-hidden="true"></i>';
+
+      shareButton.addEventListener("click", function () {
+        shareAlbum(album);
+      });
+
+      actions.append(openButton, shareButton);
+      content.append(title, description, meta, actions);
+      article.append(coverButton, content);
+
+      return article;
+    }
+
+    function createCoverPlaceholder() {
+      const placeholder = document.createElement("div");
+      placeholder.className = "cover-placeholder";
+
+      const icon = document.createElement("i");
+      icon.className = "fa-regular fa-image";
+      icon.setAttribute("aria-hidden", "true");
+
+      placeholder.appendChild(icon);
+      return placeholder;
+    }
+
+    function createMetaItem(iconClass, text) {
+      const span = document.createElement("span");
+      span.title = text;
+
+      const icon = document.createElement("i");
+      icon.className = iconClass;
+      icon.setAttribute("aria-hidden", "true");
+
+      const label = document.createElement("span");
+      label.textContent = text;
+
+      span.append(icon, label);
+      return span;
+    }
+
+    /* =========================================================
+       ALBUM DETAILS
+       ========================================================= */
+
+    async function showAlbumPage(albumId) {
+      const requestId = ++appState.routeRequestId;
+
+      setPageMode("album");
+
+      DOM.albumDetailLoading.hidden = false;
+      DOM.albumDetailError.hidden = true;
+      DOM.albumDetailContent.hidden = true;
+      DOM.photoGrid.replaceChildren();
+
+      DOM.emptyPhotos.hidden = true;
+      exitSelectionMode();
+
+      appState.currentAlbum = null;
+      appState.currentPhotos = [];
+
+      try {
+        let album = appState.albums.find(function (item) {
+          return String(item.id) === String(albumId);
+        }) || null;
+
+        let detailsError = null;
+
+        try {
+          const response = await apiGetFirstAvailable(
+            ["getAlbum", "getPublicAlbum", "getAlbumDetails"],
+            {
+              id: albumId,
+              albumId: albumId
+            }
+          );
+
+          const rawAlbum = extractAlbumObject(response);
+
+          if (rawAlbum) {
+            const detailedAlbum = normalizeAlbum(rawAlbum);
+
+            if (detailedAlbum && String(detailedAlbum.id) === String(albumId)) {
+              album = detailedAlbum;
+            } else if (detailedAlbum) {
+              album = detailedAlbum;
+            }
+          }
+        } catch (error) {
+          detailsError = error;
+        }
+
+        if (requestId !== appState.routeRequestId) {
+          return;
+        }
+
+        if (!album) {
+          throw detailsError || new Error("Album not found");
+        }
+
+        if (!isAlbumPublic(album)) {
+          throw new Error("Album is not public");
+        }
+
+        appState.currentAlbum = album;
+        appState.currentPhotos = getAlbumPhotos(album);
+
+        renderAlbumDetails();
+        DOM.albumDetailLoading.hidden = true;
+        DOM.albumDetailContent.hidden = false;
+
+        document.title = album.title + " | ActiGallery";
+        window.scrollTo({ top: 0, behavior: "auto" });
+      } catch (error) {
+        console.error("ActiGallery: load album failed", error);
+
+        if (requestId !== appState.routeRequestId) {
+          return;
+        }
+
+        DOM.albumDetailLoading.hidden = true;
+        DOM.albumDetailContent.hidden = true;
+        DOM.albumDetailError.hidden = false;
+      }
+    }
+
+    function renderAlbumDetails() {
+      const album = appState.currentAlbum;
+
+      if (!album) return;
+
+      DOM.albumTitle.textContent = album.title;
+      DOM.albumDescription.textContent =
+        album.description || "ไม่มีรายละเอียดอัลบั้ม";
+
+      setMetaValue(DOM.albumOrganization, album.organization || "ไม่ระบุหน่วยงาน");
+      setMetaValue(DOM.albumCategory, album.category || "ไม่มีข้อมูลหมวดหมู่");
+      setMetaValue(
+        DOM.albumPhotoCount,
+        formatNumber(appState.currentPhotos.length) + " รูป"
+      );
+
+      DOM.photoSelectionHint.textContent =
+        appState.currentPhotos.length + " รูป";
+
+      renderPhotos();
+      updateSelectionUI();
+    }
+
+    function setMetaValue(container, value) {
+      const span = container.querySelector("span");
+
+      if (span) {
+        span.textContent = value;
+      }
+    }
+
+    /* =========================================================
+       PHOTO GRID AND SELECTION
+       ========================================================= */
+
+    function renderPhotos() {
+      DOM.photoGrid.replaceChildren();
+
+      const photos = appState.currentPhotos;
+
+      DOM.emptyPhotos.hidden = photos.length !== 0;
+      DOM.photoGrid.hidden = photos.length === 0;
+
+      setMetaValue(
+        DOM.albumPhotoCount,
+        formatNumber(photos.length) + " รูป"
+      );
+
+      photos.forEach(function (photo, index) {
+        DOM.photoGrid.appendChild(createPhotoItem(photo, index));
+      });
 
       updateSelectionUI();
     }
 
-    function showHome(options) {
-      options = options || {};
+    function createPhotoItem(photo, index) {
+      const item = document.createElement("div");
+      item.className = "photo-item";
 
-      closeViewer();
-
-      elements.albumPage.classList.add('hidden');
-      elements.homePage.classList.remove('hidden');
-
-      state.currentRoute = 'home';
-      state.currentAlbum = null;
-      state.currentPhotos = [];
-      state.selectedPhotoIds.clear();
-      state.selectionMode = false;
-
-      updateSelectionUI();
-
-      if (options.updateHistory !== false) {
-        updateUrlForHome(false);
+      if (appState.selectedPhotos.has(index)) {
+        item.classList.add("is-selected");
       }
 
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      const openButton = document.createElement("button");
+      openButton.type = "button";
+      openButton.className = "photo-button";
+      openButton.setAttribute(
+        "aria-label",
+        "เปิดรูปภาพที่ " + (index + 1)
+      );
+
+      const image = document.createElement("img");
+      image.className = "photo-image";
+      image.src = photo.url;
+      image.alt = photo.name || ("รูปภาพ " + (index + 1));
+      image.loading = "lazy";
+      image.decoding = "async";
+
+      image.addEventListener("error", function () {
+        image.style.opacity = "0.25";
+        image.alt = "ไม่สามารถแสดงรูปภาพนี้ได้";
+        item.style.background = "#cbd5e1";
+      }, { once: true });
+
+      openButton.appendChild(image);
+
+      openButton.addEventListener("click", function () {
+        if (appState.selectionMode) {
+          togglePhotoSelection(index);
+          return;
+        }
+
+        openPhotoViewer(index);
+      });
+
+      const circle = document.createElement("span");
+      circle.className = "photo-selection-circle";
+      circle.setAttribute("aria-hidden", "true");
+
+      const check = document.createElement("i");
+      check.className = "fa-solid fa-check";
+      circle.appendChild(check);
+
+      const number = document.createElement("span");
+      number.className = "photo-index";
+      number.textContent = String(index + 1);
+
+      item.append(openButton, circle, number);
+      item.dataset.photoIndex = String(index);
+
+      return item;
     }
 
-    function togglePhotoSelection(photoId) {
-      if (state.selectedPhotoIds.has(photoId)) {
-        state.selectedPhotoIds.delete(photoId);
+    function toggleSelectionMode() {
+      if (!appState.currentPhotos.length) {
+        showToast("ไม่มีรูปภาพให้เลือก", "error");
+        return;
+      }
+
+      appState.selectionMode = !appState.selectionMode;
+
+      if (!appState.selectionMode) {
+        appState.selectedPhotos.clear();
+      }
+
+      DOM.photoGrid.classList.toggle(
+        "selection-mode",
+        appState.selectionMode
+      );
+
+      updateSelectionUI();
+    }
+
+    function togglePhotoSelection(index) {
+      if (index < 0 || index >= appState.currentPhotos.length) {
+        return;
+      }
+
+      if (appState.selectedPhotos.has(index)) {
+        appState.selectedPhotos.delete(index);
       } else {
-        state.selectedPhotoIds.add(photoId);
+        appState.selectedPhotos.add(index);
       }
 
-      state.selectionMode = true;
-
-      const item = elements.photoGrid.querySelector(
-        '[data-photo-id="' + CSS.escape(photoId) + '"]'
+      const item = DOM.photoGrid.querySelector(
+        '[data-photo-index="' + index + '"]'
       );
 
       if (item) {
         item.classList.toggle(
-          'selected',
-          state.selectedPhotoIds.has(photoId)
+          "is-selected",
+          appState.selectedPhotos.has(index)
         );
+      }
+
+      updateSelectionUI();
+    }
+
+    function selectAllPhotos() {
+      if (!appState.currentPhotos.length) return;
+
+      const everyPhotoSelected =
+        appState.selectedPhotos.size === appState.currentPhotos.length;
+
+      appState.selectedPhotos.clear();
+
+      if (!everyPhotoSelected) {
+        appState.currentPhotos.forEach(function (_, index) {
+          appState.selectedPhotos.add(index);
+        });
+      }
+
+      renderPhotos();
+    }
+
+    function exitSelectionMode() {
+      appState.selectionMode = false;
+      appState.selectedPhotos.clear();
+
+      if (DOM.photoGrid) {
+        DOM.photoGrid.classList.remove("selection-mode");
       }
 
       updateSelectionUI();
     }
 
     function updateSelectionUI() {
-      const selectedCount = state.selectedPhotoIds.size;
+      const selectedCount = appState.selectedPhotos.size;
 
-      elements.selectedCount.textContent =
-        'เลือกแล้ว ' + formatNumber(selectedCount) + ' รูป';
+      DOM.selectionBar.hidden =
+        !appState.selectionMode ||
+        !DOM.albumPage ||
+        DOM.albumPage.hidden;
 
-      elements.downloadSelectedButton.disabled =
-        selectedCount === 0 || state.downloading;
+      DOM.selectionCountLabel.textContent =
+        "เลือกแล้ว " + formatNumber(selectedCount) + " รูป";
 
-      elements.downloadAllButton.disabled =
-        !state.currentPhotos.length || state.downloading;
+      DOM.downloadSelectedButton.disabled =
+        selectedCount === 0 || appState.downloadRunning;
 
-      elements.toggleSelectionButton.innerHTML =
-        state.selectionMode
-          ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i> ยกเลิกโหมดเลือก'
-          : '<i class="fa-regular fa-circle-check" aria-hidden="true"></i> เลือกรูปภาพ';
+      DOM.selectAllPhotosButton.disabled =
+        appState.currentPhotos.length === 0;
 
-      if (!state.selectionMode) {
-        state.selectedPhotoIds.clear();
+      DOM.toggleSelectionButton.innerHTML = appState.selectionMode
+        ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i> ยกเลิกการเลือก'
+        : '<i class="fa-regular fa-square-check" aria-hidden="true"></i> เลือกรูปภาพ';
 
-        elements.photoGrid
-          .querySelectorAll('.photo-item.selected')
-          .forEach(function (item) {
-            item.classList.remove('selected');
-          });
-      }
-
-      elements.downloadSelectedButton.disabled =
-        state.selectedPhotoIds.size === 0 || state.downloading;
-    }
-
-    function toggleSelectionMode() {
-      state.selectionMode = !state.selectionMode;
-
-      if (!state.selectionMode) {
-        state.selectedPhotoIds.clear();
-      }
-
-      renderPhotoGrid();
-      updateSelectionUI();
-    }
-
-    function selectAllPhotos() {
-      state.selectionMode = true;
-
-      state.currentPhotos.forEach(function (photo) {
-        state.selectedPhotoIds.add(photo.photoId);
-      });
-
-      renderPhotoGrid();
-    }
-
-    function clearPhotoSelection() {
-      state.selectedPhotoIds.clear();
-      state.selectionMode = false;
-      renderPhotoGrid();
-    }
-
-    async function shareCurrentAlbum() {
-      if (!state.currentAlbum) return;
-
-      const shareUrl = makeAlbumUrl(state.currentAlbum.albumId);
-      const shareData = {
-        title: state.currentAlbum.title,
-        text: state.currentAlbum.description || 'ชมอัลบั้มภาพกิจกรรมบน ActiGallery',
-        url: shareUrl
-      };
-
-      try {
-        if (navigator.share) {
-          await navigator.share(shareData);
-          return;
-        }
-
-        await copyText(shareUrl);
-        showToast('คัดลอกลิงก์อัลบั้มแล้ว', 'success');
-
-      } catch (error) {
-        if (error && error.name === 'AbortError') {
-          return;
-        }
-
-        try {
-          await copyText(shareUrl);
-          showToast('คัดลอกลิงก์อัลบั้มแล้ว', 'success');
-        } catch (copyError) {
-          openModal({
-            title: 'ลิงก์อัลบั้ม',
-            message: shareUrl,
-            okText: 'ปิด'
-          });
-        }
-      }
-    }
-
-    async function copyText(text) {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return;
-      }
-
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.setAttribute('readonly', '');
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      textarea.style.pointerEvents = 'none';
-
-      document.body.appendChild(textarea);
-      textarea.select();
-
-      const copied = document.execCommand('copy');
-      textarea.remove();
-
-      if (!copied) {
-        throw new Error('คัดลอกไม่สำเร็จ');
-      }
-    }
-
-    function openViewer(index) {
-      if (!state.currentPhotos.length) return;
-
-      state.viewerIndex = Math.max(
-        0,
-        Math.min(index, state.currentPhotos.length - 1)
+      DOM.photoGrid.classList.toggle(
+        "selection-mode",
+        appState.selectionMode
       );
 
-      renderViewerImage();
-
-      elements.imageViewer.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+      if (DOM.photoGrid.children.length > 0) {
+        Array.from(DOM.photoGrid.children).forEach(function (item) {
+          const index = Number(item.dataset.photoIndex);
+          item.classList.toggle(
+            "is-selected",
+            appState.selectedPhotos.has(index)
+          );
+        });
+      }
     }
 
-    function renderViewerImage() {
-      const photo = state.currentPhotos[state.viewerIndex];
+    /* =========================================================
+       SHARE ALBUM
+       ========================================================= */
 
-      if (!photo) return;
+    async function shareCurrentAlbum() {
+      if (!appState.currentAlbum) return;
 
-      elements.viewerImage.src = photo.imageUrl;
-      elements.viewerImage.alt =
-        photo.caption || 'ภาพกิจกรรม ' + (state.viewerIndex + 1);
-
-      elements.viewerCounter.textContent =
-        formatNumber(state.viewerIndex + 1) + ' / ' +
-        formatNumber(state.currentPhotos.length);
-
-      elements.viewerCaption.textContent = photo.caption || '';
-
-      document.getElementById('viewerPrevButton').disabled =
-        state.viewerIndex <= 0;
-
-      document.getElementById('viewerNextButton').disabled =
-        state.viewerIndex >= state.currentPhotos.length - 1;
+      await shareAlbum(appState.currentAlbum);
     }
 
-    function closeViewer() {
-      elements.imageViewer.classList.add('hidden');
-      elements.viewerImage.removeAttribute('src');
-      document.body.style.overflow = '';
-    }
+    async function shareAlbum(album) {
+      const url = buildAlbumUrl(album.id);
 
-    function viewerPrevious() {
-      if (state.viewerIndex <= 0) return;
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: album.title,
+            text: "ชมอัลบั้มกิจกรรม " + album.title,
+            url: url
+          });
 
-      state.viewerIndex--;
-      renderViewerImage();
-    }
-
-    function viewerNext() {
-      if (state.viewerIndex >= state.currentPhotos.length - 1) return;
-
-      state.viewerIndex++;
-      renderViewerImage();
-    }
-
-    function getFilenameFromUrl(url, fallback) {
-      try {
-        const parsed = new URL(url);
-        const last = parsed.pathname.split('/').filter(Boolean).pop();
-
-        if (last && last.includes('.')) {
-          return last.replace(/[^\w.\-ก-๙]/g, '_');
+          return;
+        } catch (error) {
+          if (error && error.name === "AbortError") {
+            return;
+          }
         }
-      } catch (error) {
-        // ใช้ชื่อสำรอง
       }
 
-      return fallback || 'actigallery-image.jpg';
+      const copied = await copyTextToClipboard(url);
+
+      if (copied) {
+        showToast("คัดลอกลิงก์อัลบั้มแล้ว");
+      } else {
+        showMessageModal(
+          "แชร์อัลบั้ม",
+          "คัดลอกลิงก์ด้านล่างเพื่อแชร์อัลบั้มนี้"
+        );
+
+        const linkBox = document.createElement("input");
+        linkBox.type = "text";
+        linkBox.readOnly = true;
+        linkBox.value = url;
+        linkBox.className = "search-input";
+        linkBox.style.paddingLeft = "12px";
+        linkBox.style.marginTop = "15px";
+
+        DOM.modalExtraContent.replaceChildren(linkBox);
+        DOM.modalExtraContent.hidden = false;
+
+        linkBox.addEventListener("focus", function () {
+          linkBox.select();
+        });
+
+        linkBox.select();
+      }
     }
 
-    async function downloadOnePhoto(photo, index) {
-      const url = photo.imageUrl;
-
-      if (!url) {
-        throw new Error('ไม่พบลิงก์รูปภาพ');
+    async function copyTextToClipboard(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) {
+        // ใช้วิธีสำรองด้านล่าง
       }
 
-      const response = await fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'default'
-      });
+      let temporaryInput = null;
 
-      if (!response.ok) {
-        throw new Error('ไม่สามารถดาวน์โหลดรูปภาพได้');
+      try {
+        temporaryInput = document.createElement("textarea");
+        temporaryInput.value = text;
+        temporaryInput.readOnly = true;
+        temporaryInput.style.position = "fixed";
+        temporaryInput.style.left = "-9999px";
+        temporaryInput.style.top = "0";
+
+        document.body.appendChild(temporaryInput);
+        temporaryInput.focus();
+        temporaryInput.select();
+
+        const succeeded = document.execCommand("copy");
+        temporaryInput.remove();
+
+        return succeeded;
+      } catch (_) {
+        if (temporaryInput) {
+          temporaryInput.remove();
+        }
+
+        return false;
       }
-
-      const blob = await response.blob();
-
-      if (!blob || !blob.size) {
-        throw new Error('ไฟล์รูปภาพว่างเปล่า');
-      }
-
-      return {
-        blob: blob,
-        name: getFilenameFromUrl(
-          url,
-          'ActiGallery-' + String(index + 1).padStart(3, '0') + '.jpg'
-        )
-      };
     }
 
-    function updateDownloadProgress(done, total, label) {
-      const percent = total > 0
-        ? Math.round((done / total) * 100)
-        : 0;
+    /* =========================================================
+       DOWNLOAD PHOTOS
+       ========================================================= */
 
-      elements.downloadProgress.classList.remove('hidden');
-      elements.downloadProgressLabel.textContent =
-        label || 'กำลังเตรียมไฟล์';
-
-      elements.downloadProgressPercent.textContent = percent + '%';
-      elements.downloadProgressFill.style.width = percent + '%';
-    }
-
-    function hideDownloadProgress() {
-      elements.downloadProgress.classList.add('hidden');
-      elements.downloadProgressFill.style.width = '0%';
-    }
-
-    async function downloadPhotos(photos, zipName) {
-      if (!photos || !photos.length || state.downloading) {
+    async function downloadAllPhotos() {
+      if (!appState.currentAlbum || appState.currentPhotos.length === 0) {
+        showToast("ไม่มีรูปภาพให้ดาวน์โหลด", "error");
         return;
       }
 
-      state.downloading = true;
+      const indices = appState.currentPhotos.map(function (_, index) {
+        return index;
+      });
+
+      await downloadPhotosAsZip(indices);
+    }
+
+    async function downloadSelectedPhotos() {
+      if (appState.selectedPhotos.size === 0) {
+        showToast("กรุณาเลือกรูปภาพก่อน", "error");
+        return;
+      }
+
+      const indices = Array.from(appState.selectedPhotos).sort(function (a, b) {
+        return a - b;
+      });
+
+      await downloadPhotosAsZip(indices);
+    }
+
+    async function downloadPhotosAsZip(indices) {
+      if (appState.downloadRunning) return;
+
+      if (!window.JSZip) {
+        showMessageModal(
+          "ไม่สามารถดาวน์โหลดได้",
+          "ไม่สามารถเตรียมไฟล์ดาวน์โหลดได้ในขณะนี้ กรุณาโหลดหน้าเว็บใหม่แล้วลองอีกครั้ง"
+        );
+        return;
+      }
+
+      const photos = indices
+        .map(function (index) {
+          return {
+            index: index,
+            photo: appState.currentPhotos[index]
+          };
+        })
+        .filter(function (item) {
+          return item.photo && item.photo.url;
+        });
+
+      if (photos.length === 0) {
+        showToast("ไม่มีรูปภาพให้ดาวน์โหลด", "error");
+        return;
+      }
+
+      appState.downloadRunning = true;
       updateSelectionUI();
 
+      const zip = new JSZip();
+      const albumName = sanitizeFilename(
+        appState.currentAlbum
+          ? appState.currentAlbum.title
+          : "ActiGallery"
+      );
+
+      const folder = zip.folder(albumName || "ActiGallery");
+      const failedPhotos = [];
+      const usedNames = new Set();
+
+      let completed = 0;
+
+      showDownloadModal(
+        "กำลังเตรียมไฟล์ดาวน์โหลด",
+        "กำลังดาวน์โหลดรูปภาพ 0 / " + photos.length
+      );
+
+      setDownloadProgress(0);
+
       try {
-        if (typeof JSZip === 'undefined') {
-          throw new Error('ไม่สามารถเริ่มระบบดาวน์โหลดได้');
-        }
-
-        const zip = new JSZip();
-        const folder = zip.folder('ActiGallery');
-
-        let completed = 0;
-        let failed = 0;
-
-        updateDownloadProgress(
-          0,
-          photos.length,
-          'กำลังดาวน์โหลดรูปภาพ 0/' + photos.length
-        );
-
-        for (let index = 0; index < photos.length; index++) {
-          const photo = photos[index];
+        for (const item of photos) {
+          const photo = item.photo;
+          const photoNumber = item.index + 1;
 
           try {
-            const result = await downloadOnePhoto(photo, index);
+            const response = await fetchWithTimeout(
+              photo.url,
+              ACTIGALLERY_CONFIG.DOWNLOAD_TIMEOUT_MS
+            );
 
-            const uniqueName =
-              String(index + 1).padStart(4, '0') + '_' + result.name;
+            if (!response.ok) {
+              throw new Error("Image download failed");
+            }
 
-            folder.file(uniqueName, result.blob);
+            const blob = await response.blob();
+
+            if (!blob || blob.size === 0) {
+              throw new Error("Empty image");
+            }
+
+            let filename = makePhotoFilename(
+              photo,
+              photoNumber,
+              blob.type
+            );
+
+            filename = makeUniqueFilename(filename, usedNames);
+            folder.file(filename, blob);
           } catch (error) {
-            failed++;
+            failedPhotos.push(photoNumber);
+            console.warn(
+              "ActiGallery: photo download failed",
+              photoNumber,
+              error
+            );
           }
 
-          completed++;
+          completed += 1;
 
-          updateDownloadProgress(
-            completed,
-            photos.length,
-            'กำลังดาวน์โหลดรูปภาพ ' + completed + '/' + photos.length
+          const percentage = Math.round(
+            (completed / photos.length) * 100
           );
+
+          setDownloadProgress(percentage);
+
+          DOM.downloadModalMessage.textContent =
+            "กำลังดาวน์โหลดรูปภาพ " +
+            completed +
+            " / " +
+            photos.length;
+
+          DOM.downloadProgressText.textContent =
+            "เตรียมรูปภาพแล้ว " +
+            completed +
+            " จาก " +
+            photos.length +
+            " รูป";
         }
 
-        if (folder.files && Object.keys(folder.files).length === 0) {
-          throw new Error(
-            'ไม่สามารถดาวน์โหลดรูปภาพได้ กรุณาลองเปิดรูปแล้วดาวน์โหลดอีกครั้ง'
+        const zipFiles = Object.keys(folder.files);
+
+        if (zipFiles.length === 0) {
+          closeDownloadModal();
+
+          showMessageModal(
+            "ดาวน์โหลดไม่สำเร็จ",
+            "ไม่สามารถดาวน์โหลดรูปภาพได้ กรุณาลองใหม่อีกครั้ง"
           );
+
+          return;
         }
 
-        updateDownloadProgress(
-          completed,
-          photos.length,
-          'กำลังสร้างไฟล์ ZIP'
-        );
+        DOM.downloadModalTitle.textContent = "กำลังสร้างไฟล์ ZIP";
+        DOM.downloadModalMessage.textContent =
+          "กำลังบีบอัดรูปภาพ " + zipFiles.length + " รูป";
 
-        const blob = await zip.generateAsync(
-          { type: 'blob' },
+        const zipBlob = await zip.generateAsync(
+          {
+            type: "blob",
+            compression: "DEFLATE",
+            compressionOptions: {
+              level: 4
+            }
+          },
           function (metadata) {
-            const percent = Math.round(metadata.percent || 0);
-
-            elements.downloadProgressPercent.textContent =
-              percent + '%';
-
-            elements.downloadProgressFill.style.width =
-              percent + '%';
-
-            elements.downloadProgressLabel.textContent =
-              'กำลังสร้างไฟล์ ZIP';
+            setDownloadProgress(metadata.percent || 0);
+            DOM.downloadProgressText.textContent =
+              "สร้างไฟล์ ZIP " +
+              Math.round(metadata.percent || 0) +
+              "%";
           }
         );
 
-        const blobUrl = URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const objectUrl = URL.createObjectURL(zipBlob);
+        const downloadLink = document.createElement("a");
 
-        link.href = blobUrl;
-        link.download = (zipName || 'ActiGallery') + '.zip';
+        downloadLink.href = objectUrl;
+        downloadLink.download = albumName + ".zip";
+        downloadLink.style.display = "none";
 
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
 
         window.setTimeout(function () {
-          URL.revokeObjectURL(blobUrl);
-        }, 30000);
+          URL.revokeObjectURL(objectUrl);
+        }, 60000);
 
-        if (failed > 0) {
-          showToast(
-            'ดาวน์โหลดสำเร็จบางส่วน มี ' + failed +
-            ' รูปที่ดาวน์โหลดไม่ได้',
-            'info'
-          );
-        } else {
-          showToast('เตรียมไฟล์ดาวน์โหลดเรียบร้อยแล้ว', 'success');
-        }
+        DOM.downloadModalTitle.textContent =
+          failedPhotos.length > 0
+            ? "ดาวน์โหลดเสร็จสิ้นบางส่วน"
+            : "เตรียมดาวน์โหลดเสร็จสิ้น";
 
+        DOM.downloadModalMessage.textContent =
+          failedPhotos.length > 0
+            ? "ดาวน์โหลดรูปภาพสำเร็จ " +
+              zipFiles.length +
+              " จาก " +
+              photos.length +
+              " รูป รูปภาพบางรูปไม่สามารถดาวน์โหลดได้"
+            : "เตรียมไฟล์ ZIP สำหรับดาวน์โหลดสำเร็จแล้ว";
+
+        setDownloadProgress(100);
+
+        DOM.downloadProgressText.textContent =
+          zipFiles.length + " / " + photos.length + " รูป";
+
+        DOM.downloadModalActions.hidden = false;
       } catch (error) {
-        console.error('ActiGallery: download failed', error);
+        console.error("ActiGallery: zip generation failed", error);
 
-        showError(
-          error.message ||
-          'ไม่สามารถดาวน์โหลดรูปภาพได้ กรุณาลองใหม่อีกครั้ง'
+        closeDownloadModal();
+
+        showMessageModal(
+          "ไม่สามารถดาวน์โหลดได้",
+          "ไม่สามารถเตรียมไฟล์ดาวน์โหลดได้ กรุณาลองใหม่อีกครั้ง"
         );
-
       } finally {
-        state.downloading = false;
-        hideDownloadProgress();
+        appState.downloadRunning = false;
         updateSelectionUI();
       }
     }
 
-    async function downloadAllPhotos() {
-      if (!state.currentAlbum || !state.currentPhotos.length) {
-        showToast('อัลบั้มนี้ยังไม่มีรูปภาพ', 'info');
-        return;
-      }
+    async function fetchWithTimeout(url, timeoutMs) {
+      const controller = new AbortController();
 
-      await downloadPhotos(
-        state.currentPhotos.slice(),
-        sanitizeFilename(state.currentAlbum.title || 'ActiGallery')
-      );
+      const timeoutId = window.setTimeout(function () {
+        controller.abort();
+      }, timeoutMs);
+
+      try {
+        return await fetch(url, {
+          method: "GET",
+          mode: "cors",
+          credentials: "omit",
+          cache: "no-store",
+          signal: controller.signal
+        });
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
     }
 
-    async function downloadSelectedPhotos() {
-      const selected = state.currentPhotos.filter(function (photo) {
-        return state.selectedPhotoIds.has(photo.photoId);
-      });
+    function showDownloadModal(title, message) {
+      DOM.downloadModalTitle.textContent = title;
+      DOM.downloadModalMessage.textContent = message;
+      DOM.downloadModalActions.hidden = true;
+      DOM.downloadModal.hidden = false;
+      setDownloadProgress(0);
+    }
 
-      if (!selected.length) {
-        showToast('กรุณาเลือกรูปภาพก่อน', 'info');
-        return;
+    function setDownloadProgress(percentage) {
+      const safePercentage = Math.max(
+        0,
+        Math.min(100, Number(percentage) || 0)
+      );
+
+      DOM.downloadProgressFill.style.width =
+        safePercentage + "%";
+
+      if (
+        !DOM.downloadProgressText.textContent ||
+        DOM.downloadProgressText.textContent.includes("%")
+      ) {
+        DOM.downloadProgressText.textContent =
+          Math.round(safePercentage) + "%";
+      }
+    }
+
+    function closeDownloadModal() {
+      DOM.downloadModal.hidden = true;
+    }
+
+    function makePhotoFilename(photo, number, mimeType) {
+      let originalName = safeText(photo.name, "");
+
+      originalName = originalName
+        .split("/")
+        .pop()
+        .split("\\")
+        .pop();
+
+      let extension = "";
+
+      const matchedExtension = originalName.match(/\.([a-zA-Z0-9]{2,5})$/);
+
+      if (matchedExtension) {
+        extension = "." + matchedExtension[1].toLowerCase();
+      } else {
+        const subtype = safeText(mimeType, "")
+          .split("/")
+          .pop()
+          .toLowerCase();
+
+        const extensionMap = {
+          jpeg: ".jpg",
+          jpg: ".jpg",
+          png: ".png",
+          webp: ".webp",
+          gif: ".gif",
+          avif: ".avif",
+          heic: ".heic",
+          bmp: ".bmp",
+          svg: ".svg"
+        };
+
+        extension = extensionMap[subtype] || ".jpg";
       }
 
-      const albumName = state.currentAlbum
-        ? state.currentAlbum.title
-        : 'ActiGallery';
+      let baseName = originalName
+        ? originalName.replace(/\.[^.]+$/, "")
+        : "รูปภาพ";
 
-      await downloadPhotos(
-        selected,
-        sanitizeFilename(albumName + '-selected-' + selected.length + '-photos')
+      baseName = sanitizeFilename(baseName);
+
+      return (
+        String(number).padStart(4, "0") +
+        "_" +
+        (baseName || "รูปภาพ") +
+        extension
       );
     }
 
     function sanitizeFilename(value) {
-      return String(value || 'ActiGallery')
-        .replace(/[\\/:*?"<>|]/g, '-')
-        .replace(/\s+/g, '_')
-        .substring(0, 100);
+      return safeText(value, "")
+        .replace(/[<>:"/\\|?*\u0000-\u001F]/g, "_")
+        .replace(/\s+/g, "_")
+        .replace(/[. ]+$/g, "")
+        .slice(0, 100);
     }
 
-    async function downloadViewerImage() {
-      const photo = state.currentPhotos[state.viewerIndex];
+    function makeUniqueFilename(filename, usedNames) {
+      if (!usedNames.has(filename)) {
+        usedNames.add(filename);
+        return filename;
+      }
+
+      const dot = filename.lastIndexOf(".");
+      const base = dot >= 0 ? filename.slice(0, dot) : filename;
+      const extension = dot >= 0 ? filename.slice(dot) : "";
+
+      let counter = 2;
+      let candidate = base + "_" + counter + extension;
+
+      while (usedNames.has(candidate)) {
+        counter += 1;
+        candidate = base + "_" + counter + extension;
+      }
+
+      usedNames.add(candidate);
+      return candidate;
+    }
+
+    async function downloadCurrentViewerPhoto() {
+      const photo = appState.currentPhotos[appState.viewerIndex];
 
       if (!photo) return;
 
       try {
-        const result = await downloadOnePhoto(photo, state.viewerIndex);
-        const blobUrl = URL.createObjectURL(result.blob);
-        const link = document.createElement('a');
+        const response = await fetchWithTimeout(
+          photo.url,
+          ACTIGALLERY_CONFIG.DOWNLOAD_TIMEOUT_MS
+        );
 
-        link.href = blobUrl;
-        link.download = result.name;
+        if (!response.ok) {
+          throw new Error("Download failed");
+        }
+
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = objectUrl;
+        link.download = makePhotoFilename(
+          photo,
+          appState.viewerIndex + 1,
+          blob.type
+        );
 
         document.body.appendChild(link);
         link.click();
         link.remove();
 
         window.setTimeout(function () {
-          URL.revokeObjectURL(blobUrl);
+          URL.revokeObjectURL(objectUrl);
         }, 30000);
-
       } catch (error) {
-        const url = safeUrl(photo.imageUrl);
+        console.warn("Direct photo download failed", error);
 
-        if (url) {
-          window.open(url, '_blank', 'noopener,noreferrer');
-        } else {
-          showToast('ไม่สามารถดาวน์โหลดรูปภาพได้', 'error');
-        }
-      }
-    }
+        const link = document.createElement("a");
+        link.href = photo.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.click();
 
-    function bindEvents() {
-      elements.searchInput.addEventListener('input', function () {
-        applyAlbumFilters();
-      });
-
-      elements.categoryFilter.addEventListener('change', function () {
-        applyAlbumFilters();
-      });
-
-      document.getElementById('refreshButton').addEventListener('click', function () {
-        if (state.currentRoute === 'album' && state.currentAlbum) {
-          openAlbum(state.currentAlbum.albumId, {
-            updateHistory: false
-          });
-        } else {
-          loadAlbums();
-        }
-      });
-
-      document.getElementById('brandHome').addEventListener('click', function (event) {
-        event.preventDefault();
-        showHome();
-      });
-
-      document.getElementById('backToAlbums').addEventListener('click', function () {
-        showHome();
-      });
-
-      document.getElementById('shareAlbumButton').addEventListener('click', shareCurrentAlbum);
-      elements.downloadAllButton.addEventListener('click', downloadAllPhotos);
-      elements.downloadSelectedButton.addEventListener('click', downloadSelectedPhotos);
-
-      elements.toggleSelectionButton.addEventListener('click', toggleSelectionMode);
-      elements.selectAllButton.addEventListener('click', selectAllPhotos);
-      elements.clearSelectionButton.addEventListener('click', clearPhotoSelection);
-
-      document.getElementById('viewerCloseButton').addEventListener('click', closeViewer);
-      document.getElementById('viewerPrevButton').addEventListener('click', viewerPrevious);
-      document.getElementById('viewerNextButton').addEventListener('click', viewerNext);
-      document.getElementById('viewerDownloadButton').addEventListener('click', downloadViewerImage);
-
-      elements.imageViewer.addEventListener('click', function (event) {
-        if (event.target === elements.imageViewer ||
-            event.target.classList.contains('viewer-image-wrap')) {
-          closeViewer();
-        }
-      });
-
-      elements.modalBackdrop.addEventListener('click', function (event) {
-        if (event.target === elements.modalBackdrop) {
-          closeModal();
-        }
-      });
-
-      document.getElementById('modalCloseButton').addEventListener('click', closeModal);
-      document.getElementById('modalOkButton').addEventListener('click', closeModal);
-
-      document.addEventListener('keydown', function (event) {
-        if (!elements.imageViewer.classList.contains('hidden')) {
-          if (event.key === 'Escape') {
-            closeViewer();
-          } else if (event.key === 'ArrowLeft') {
-            viewerPrevious();
-          } else if (event.key === 'ArrowRight') {
-            viewerNext();
-          }
-
-          return;
-        }
-
-        if (event.key === 'Escape' &&
-            !elements.modalBackdrop.classList.contains('hidden')) {
-          closeModal();
-        }
-      });
-
-      let touchStartX = 0;
-      let touchStartY = 0;
-
-      elements.imageViewer.addEventListener('touchstart', function (event) {
-        if (!event.touches || !event.touches.length) return;
-
-        touchStartX = event.touches[0].clientX;
-        touchStartY = event.touches[0].clientY;
-      }, { passive: true });
-
-      elements.imageViewer.addEventListener('touchend', function (event) {
-        if (!event.changedTouches || !event.changedTouches.length) return;
-
-        const deltaX = event.changedTouches[0].clientX - touchStartX;
-        const deltaY = event.changedTouches[0].clientY - touchStartY;
-
-        if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY)) {
-          if (deltaX > 0) {
-            viewerPrevious();
-          } else {
-            viewerNext();
-          }
-        }
-      }, { passive: true });
-
-      window.addEventListener('popstate', function () {
-        const albumId = getAlbumIdFromUrl();
-
-        if (albumId) {
-          openAlbum(albumId, { updateHistory: false });
-        } else {
-          showHome({ updateHistory: false });
-        }
-      });
-    }
-
-    async function bootActiGallery() {
-      bindEvents();
-
-      try {
-        initializeFirebase();
-
-        const albumId = getAlbumIdFromUrl();
-
-        if (albumId) {
-          elements.homePage.classList.add('hidden');
-          elements.albumPage.classList.remove('hidden');
-          await loadAlbums({ openAlbumId: albumId });
-        } else {
-          await loadAlbums();
-        }
-
-      } catch (error) {
-        console.error('ActiGallery: startup failed', error);
-
-        showErrorState(
-          elements.albumGrid,
-          'ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง',
-          bootActiGallery
+        showToast(
+          "เปิดรูปภาพแล้ว หากดาวน์โหลดไม่ได้ให้บันทึกรูปจากหน้ารูปภาพ",
+          "error"
         );
       }
     }
 
-    bootActiGallery();
+    /* =========================================================
+       FULL-SIZE PHOTO VIEWER
+       ========================================================= */
+
+    function openPhotoViewer(index) {
+      if (
+        index < 0 ||
+        index >= appState.currentPhotos.length
+      ) {
+        return;
+      }
+
+      appState.viewerIndex = index;
+      renderPhotoViewer();
+
+      DOM.photoViewer.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+
+    function renderPhotoViewer() {
+      const photos = appState.currentPhotos;
+      const index = appState.viewerIndex;
+      const photo = photos[index];
+
+      if (!photo) return;
+
+      DOM.viewerImage.src = photo.url;
+      DOM.viewerImage.alt = photo.name || ("รูปภาพ " + (index + 1));
+
+      DOM.viewerCounter.textContent =
+        (index + 1) + " / " + photos.length;
+
+      DOM.viewerCaption.textContent =
+        photo.name || ("รูปภาพ " + (index + 1));
+
+      DOM.viewerPreviousButton.disabled = photos.length <= 1;
+      DOM.viewerNextButton.disabled = photos.length <= 1;
+    }
+
+    function showPreviousPhoto() {
+      if (appState.currentPhotos.length <= 1) return;
+
+      appState.viewerIndex =
+        (appState.viewerIndex - 1 + appState.currentPhotos.length) %
+        appState.currentPhotos.length;
+
+      renderPhotoViewer();
+    }
+
+    function showNextPhoto() {
+      if (appState.currentPhotos.length <= 1) return;
+
+      appState.viewerIndex =
+        (appState.viewerIndex + 1) %
+        appState.currentPhotos.length;
+
+      renderPhotoViewer();
+    }
+
+    function closePhotoViewer() {
+      DOM.photoViewer.hidden = true;
+      DOM.viewerImage.src = "";
+      document.body.style.overflow = "";
+    }
+
+    function handleKeyboardShortcuts(event) {
+      if (
+        DOM.photoViewer &&
+        !DOM.photoViewer.hidden
+      ) {
+        if (event.key === "Escape") {
+          closePhotoViewer();
+          return;
+        }
+
+        if (event.key === "ArrowLeft") {
+          showPreviousPhoto();
+          return;
+        }
+
+        if (event.key === "ArrowRight") {
+          showNextPhoto();
+          return;
+        }
+      }
+
+      if (
+        event.key === "Escape" &&
+        DOM.messageModal &&
+        !DOM.messageModal.hidden
+      ) {
+        closeMessageModal();
+      }
+
+      if (
+        event.key === "Escape" &&
+        DOM.downloadModal &&
+        !DOM.downloadModal.hidden &&
+        DOM.downloadModalActions.hidden === false
+      ) {
+        closeDownloadModal();
+      }
+    }
+
+    /* =========================================================
+       MESSAGE MODAL AND TOAST
+       ========================================================= */
+
+    function showMessageModal(title, message) {
+      DOM.modalTitle.textContent = title || "แจ้งเตือน";
+      DOM.modalMessage.textContent = message || "";
+      DOM.modalExtraContent.replaceChildren();
+      DOM.modalExtraContent.hidden = true;
+      DOM.modalActions.replaceChildren();
+
+      const okay = document.createElement("button");
+      okay.type = "button";
+      okay.className = "button button-primary";
+      okay.textContent = "ตกลง";
+      okay.addEventListener("click", closeMessageModal);
+
+      DOM.modalActions.appendChild(okay);
+      DOM.messageModal.hidden = false;
+
+      window.setTimeout(function () {
+        okay.focus();
+      }, 0);
+    }
+
+    function closeMessageModal() {
+      DOM.messageModal.hidden = true;
+    }
+
+    function showToast(message, type) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+
+      if (type === "error") {
+        toast.classList.add("error");
+      }
+
+      const icon = document.createElement("i");
+      icon.className =
+        type === "error"
+          ? "fa-solid fa-circle-exclamation"
+          : "fa-solid fa-circle-check";
+
+      icon.setAttribute("aria-hidden", "true");
+
+      const text = document.createElement("span");
+      text.textContent = message;
+
+      toast.append(icon, text);
+      DOM.toastContainer.appendChild(toast);
+
+      window.setTimeout(function () {
+        toast.remove();
+      }, 3600);
+    }
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+
+    function formatNumber(value) {
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) {
+        return "0";
+      }
+
+      return new Intl.NumberFormat("th-TH").format(number);
+    }
   </script>
 </body>
   </html>
