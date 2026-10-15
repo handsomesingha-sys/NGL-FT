@@ -2838,6 +2838,7 @@
       appState.loadingAlbums = true;
 
       if (shouldReset) {
+        appState.loadingMoreAlbums = false;
         appState.albumOffset = 0;
         appState.albumTotal = 0;
         appState.albumHasMore = false;
