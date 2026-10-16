@@ -3705,6 +3705,13 @@
         });
       }
 
+      
+      const favoriteIds = getFavoriteAlbumIds();
+
+      const favoriteOrder = new Map(
+        favoriteIds.map((id, index) => [id, index])
+      );
+
       switch (state.activeFilter.sort) {
         case "oldest":
           albums = albums.slice().sort((a, b) => {
@@ -3715,11 +3722,15 @@
           break;
 
         case "name":
-          albums = albums.slice().sort((a, b) => getAlbumTitle(a).localeCompare(getAlbumTitle(b), "th"));
+          albums = albums.slice().sort((a, b) =>
+            getAlbumTitle(a).localeCompare(getAlbumTitle(b), "th")
+          );
           break;
 
         case "photos":
-          albums = albums.slice().sort((a, b) => getPhotoCount(b) - getPhotoCount(a));
+          albums = albums.slice().sort((a, b) =>
+            getPhotoCount(b) - getPhotoCount(a)
+          );
           break;
 
         default:
@@ -3729,6 +3740,21 @@
             return dateB - dateA;
           });
       }
+
+      albums.sort((a, b) => {
+        const idA = getAlbumId(a);
+        const idB = getAlbumId(b);
+
+        const orderA = favoriteOrder.has(idA)
+          ? favoriteOrder.get(idA)
+          : Infinity;
+
+        const orderB = favoriteOrder.has(idB)
+          ? favoriteOrder.get(idB)
+          : Infinity;
+
+        return orderA - orderB;
+      });
 
       return albums;
     }
