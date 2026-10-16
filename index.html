@@ -2128,6 +2128,254 @@
         transition-duration: .01ms !important;
       }
     }
+    /* =========================================
+   ActiGallery Theme: Dark / Light
+   ========================================= */
+
+/* สีพื้นฐานของโหมดมืด */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --primary-light: #26385c;
+  --text: #edf3ff;
+  --muted: #b2bfd3;
+  --border: #2d3b53;
+  --surface: #172338;
+  --background: #0c1423;
+  --shadow: 0 12px 38px rgba(0, 0, 0, .28);
+}
+
+:root[data-theme="dark"] body {
+  color: var(--text);
+  background: var(--background);
+}
+
+/* แถบเมนู */
+:root[data-theme="dark"] .site-header {
+  background: rgba(12, 20, 35, .94);
+  border-bottom-color: var(--border);
+}
+
+:root[data-theme="dark"] .brand-subtitle {
+  color: #b2bfd3;
+}
+
+:root[data-theme="dark"] .header-link {
+  color: #d4def0;
+}
+
+:root[data-theme="dark"] .header-link:hover {
+  color: #a9c0ff;
+  background: #24324a;
+}
+
+:root[data-theme="dark"] .header-organization {
+  color: var(--text);
+}
+
+/* พื้นหลังของการ์ดและแผงต่าง ๆ */
+:root[data-theme="dark"] .filter-panel,
+:root[data-theme="dark"] .category-chip,
+:root[data-theme="dark"] .album-card,
+:root[data-theme="dark"] .empty-state,
+:root[data-theme="dark"] .site-stat,
+:root[data-theme="dark"] .gallery-toolbar,
+:root[data-theme="dark"] .photo-floating-bar,
+:root[data-theme="dark"] .skeleton-card,
+:root[data-theme="dark"] .loading-card,
+:root[data-theme="dark"] .error-panel,
+:root[data-theme="dark"] .toast,
+:root[data-theme="dark"] .zip-progress,
+:root[data-theme="dark"] .album-share-button,
+:root[data-theme="dark"] .header-organization,
+:root[data-theme="dark"] .ag-contact-card,
+:root[data-theme="dark"] .site-footer {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+/* ช่องค้นหา ตัวกรอง และช่องเลือก */
+:root[data-theme="dark"] .control {
+  color: var(--text);
+  background: #111d30;
+  border-color: #35445e;
+}
+
+:root[data-theme="dark"] .control::placeholder {
+  color: #9aa9c1;
+}
+
+:root[data-theme="dark"] .control:focus {
+  border-color: #7899f7;
+  box-shadow: 0 0 0 3px rgba(120, 153, 247, .15);
+}
+
+/* ปุ่มหมวดหมู่ */
+:root[data-theme="dark"] .category-chip {
+  color: #d0daed;
+}
+
+:root[data-theme="dark"] .category-chip:hover {
+  color: #ffffff;
+  background: #263653;
+  border-color: #465a81;
+}
+
+:root[data-theme="dark"] .category-chip.active {
+  color: #c4d4ff;
+  background: #243657;
+  border-color: #405987;
+}
+
+:root[data-theme="dark"] .category-chip .chip-count {
+  color: #c1cde2;
+  background: #28364d;
+}
+
+:root[data-theme="dark"] .category-chip.active .chip-count {
+  color: #d6e1ff;
+  background: #354b74;
+}
+
+/* ตัวอักษรบนการ์ดอัลบั้ม */
+:root[data-theme="dark"] .album-card-title,
+:root[data-theme="dark"] .section-heading h2,
+:root[data-theme="dark"] .album-detail-title,
+:root[data-theme="dark"] .site-stat strong,
+:root[data-theme="dark"] .empty-state h3,
+:root[data-theme="dark"] .toast-copy strong,
+:root[data-theme="dark"] .ag-contact-info strong {
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .album-card-description,
+:root[data-theme="dark"] .album-card-meta,
+:root[data-theme="dark"] .album-date,
+:root[data-theme="dark"] .result-count,
+:root[data-theme="dark"] .section-heading p,
+:root[data-theme="dark"] .album-detail-description,
+:root[data-theme="dark"] .album-detail-meta,
+:root[data-theme="dark"] .back-link,
+:root[data-theme="dark"] .gallery-toolbar-label,
+:root[data-theme="dark"] .floating-selected-count,
+:root[data-theme="dark"] .footer-brand p,
+:root[data-theme="dark"] .footer-links,
+:root[data-theme="dark"] .footer-bottom,
+:root[data-theme="dark"] .ag-contact-info span,
+:root[data-theme="dark"] .ag-contact-arrow,
+:root[data-theme="dark"] .toast-copy p {
+  color: var(--muted);
+}
+
+/* เส้นแบ่งและปุ่มภายในการ์ด */
+:root[data-theme="dark"] .album-card-footer {
+  border-top-color: var(--border);
+}
+
+:root[data-theme="dark"] .org-mini-logo {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .album-share-button {
+  color: #c7d5ec;
+}
+
+:root[data-theme="dark"] .album-share-button:hover {
+  color: #c4d4ff;
+  background: #26385c;
+  border-color: #405987;
+}
+
+/* ปุ่มทั่วไป */
+:root[data-theme="dark"] .btn-outline {
+  color: #e0e9fa;
+  background: #1b2940;
+  border-color: #394963;
+}
+
+:root[data-theme="dark"] .btn-outline:hover:not(:disabled) {
+  background: #283956;
+  border-color: #536887;
+}
+
+:root[data-theme="dark"] .btn-soft {
+  color: #c8d7ff;
+  background: #243657;
+  border-color: #394e76;
+}
+
+:root[data-theme="dark"] .btn-soft:hover:not(:disabled) {
+  background: #304568;
+}
+
+/* ส่วนที่เกี่ยวกับภาพและสถานะว่าง */
+:root[data-theme="dark"] .album-cover {
+  background: #1b2942;
+}
+
+:root[data-theme="dark"] .cover-placeholder {
+  color: #aabcf0;
+  background: linear-gradient(145deg, #23314d, #172338);
+}
+
+:root[data-theme="dark"] .empty-icon {
+  color: #b4c6ff;
+  background: #26385c;
+}
+
+/* แถบโหลดและหน้าจอกำลังโหลด */
+:root[data-theme="dark"] .loading-screen {
+  background: rgba(12, 20, 35, .97);
+}
+
+:root[data-theme="dark"] #loadingMessage {
+  color: var(--muted) !important;
+}
+
+/* การแจ้งเตือน */
+:root[data-theme="dark"] .toast-close {
+  color: #c1cde2;
+}
+
+:root[data-theme="dark"] .toast-close:hover {
+  background: #28364d;
+}
+
+/* ส่วนท้ายและช่องทางติดต่อ */
+:root[data-theme="dark"] .ag-contact {
+  background: var(--background);
+  border-top-color: var(--border);
+}
+
+/* แถบความคืบหน้าการดาวน์โหลด */
+:root[data-theme="dark"] .progress-track {
+  background: #2b3850;
+}
+
+/* ปุ่มเปลี่ยนธีม */
+.theme-toggle {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.theme-toggle .icon {
+  width: 19px;
+  height: 19px;
+}
+
+/* มือถือ: แสดงไอคอนอย่างเดียวเพื่อประหยัดพื้นที่ */
+@media (max-width: 600px) {
+  .theme-toggle {
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .theme-toggle-label {
+    display: none;
+  }
+    }
   </style>
 </head>
 
@@ -2180,6 +2428,7 @@
             <rect x="3" y="13" width="8" height="8" rx="2"></rect>
           </svg>
           คลังภาพ
+        </a>
           <button
   type="button"
   class="header-link theme-toggle"
@@ -4681,6 +4930,71 @@
       }
     });
 
+        // ตั้งค่าปุ่มเปลี่ยนธีม ActiGallery
+    function setupThemeToggle() {
+      const root = document.documentElement;
+      const toggle = document.getElementById("themeToggle");
+      const label = document.getElementById("themeToggleLabel");
+      const icon = document.getElementById("themeToggleIcon");
+      const metaThemeColor = document.querySelector(
+        'meta[name="theme-color"]'
+      );
+
+      if (!toggle || !label || !icon) return;
+
+      const moonIcon = `
+        <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.463.402.807a6.5 6.5 0 0 0 8.268 8.268c.344-.215.829-.003.803.397Z"></path>
+      `;
+
+      const sunIcon = `
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="m4.93 4.93 1.42 1.42"></path>
+        <path d="m17.65 17.65 1.42 1.42"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="m6.35 17.65-1.42 1.42"></path>
+        <path d="m19.07 4.93-1.42 1.42"></path>
+      `;
+
+      function updateThemeButton() {
+        const isDark = root.dataset.theme === "dark";
+        const nextLabel = isDark ? "โหมดสว่าง" : "โหมดมืด";
+
+        label.textContent = nextLabel;
+        toggle.setAttribute("aria-label", "เปลี่ยนเป็น" + nextLabel);
+        toggle.setAttribute("title", "เปลี่ยนเป็น" + nextLabel);
+        icon.innerHTML = isDark ? sunIcon : moonIcon;
+
+        if (metaThemeColor) {
+          metaThemeColor.content = isDark ? "#0c1423" : "#f7f8fc";
+        }
+      }
+
+      toggle.addEventListener("click", function () {
+        const nextTheme =
+          root.dataset.theme === "dark" ? "light" : "dark";
+
+        if (nextTheme === "dark") {
+          root.setAttribute("data-theme", "dark");
+        } else {
+          root.removeAttribute("data-theme");
+        }
+
+        try {
+          localStorage.setItem("actigallery-theme", nextTheme);
+        } catch (error) {
+          // เปลี่ยนธีมได้แม้บันทึกค่าไม่ได้
+        }
+
+        updateThemeButton();
+      });
+
+      updateThemeButton();
+    }
+
+    setupThemeToggle();
     bindGlobalEvents();
     initialize();
   </script>
