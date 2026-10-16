@@ -3157,7 +3157,7 @@
         try {
           response = JSON.parse(response);
         } catch (_) {
-          throw new Error("รูปแบบข้อมูลจาก API ไม่ถูกต้อง");
+          throw new Error("รูปแบบข้อมูลไม่ถูกต้อง");
         }
       }
       if (response.success === false || response.ok === false || response.status === "error") {
@@ -3227,7 +3227,7 @@
         script.async = true;
         script.onerror = () => {
           cleanup();
-          reject(new Error("ไม่สามารถเชื่อมต่อ API ได้ กรุณาตรวจสอบ URL และการเผยแพร่สิทธิ์ Web App"));
+          reject(new Error("ไม่สามารถเชื่อมต่อได้"));
         };
         script.src = url.toString();
         document.body.appendChild(script);
@@ -6057,7 +6057,7 @@
     typeof devtoolsDetector.addListener !== "function"
   ) {
     console.warn(
-      "[ActiGallery Security] ไม่สามารถโหลด devtools-detector ได้"
+      "[ActiGallery Security] ไม่สามารถโหลดข้อมูลได้"
     );
     return;
   }
