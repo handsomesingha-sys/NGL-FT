@@ -2948,7 +2948,7 @@
         try {
           response = JSON.parse(response);
         } catch (_) {
-          throw new Error("API ส่งข้อมูลกลับมาในรูปแบบที่ไม่ถูกต้อง");
+          throw new Error("ข้อมูลอยู่ในรูปแบบที่ไม่ถูกต้อง");
         }
       }
 
@@ -3045,7 +3045,7 @@
 
         const timer = window.setTimeout(() => {
           cleanup();
-          reject(new Error("API ไม่ตอบกลับภายในเวลาที่กำหนด"));
+          reject(new Error("ไม่ตอบกลับภายในเวลาที่กำหนด"));
         }, APP_CONFIG.JSONP_TIMEOUT_MS);
 
         window[callbackName] = payload => {
@@ -3068,7 +3068,7 @@
         script.async = true;
         script.onerror = () => {
           cleanup();
-          reject(new Error("ไม่สามารถเชื่อมต่อ Apps Script ได้ กรุณาตรวจสอบ URL และการเผยแพร่ Web App"));
+          reject(new Error("ไม่สามารถเชื่อมต่อข้อมูลได้ กรุณาลองใหม่อีกครั้ง"));
         };
         script.src = url.toString();
         document.body.appendChild(script);
@@ -3522,7 +3522,7 @@
       }
 
       if (!album || typeof album !== "object") {
-        throw new Error("API ไม่พบรายละเอียดอัลบั้ม");
+        throw new Error("ไม่พบรายละเอียดอัลบั้ม");
       }
 
       if (!getAlbumId(album) && fallbackId) {
@@ -3876,7 +3876,7 @@
         return;
       }
 
-      showToast("ไม่สามารถคัดลอกลิงก์อัตโนมัติได้", "warning");
+      showToast("ไม่สามารถคัดลอกลิงก์ได้", "warning");
       openLinkFallback(url);
     }
 
@@ -4071,7 +4071,7 @@
         if (!fileCount) {
           closeDownloadProgressModal();
           throw new Error(
-            "ไม่สามารถเข้าถึงไฟล์ภาพเพื่อสร้าง ZIP ได้ รูปภาพจาก ImgBB อาจไม่อนุญาตการร้องขอข้ามโดเมน"
+            "ไม่สามารถเข้าถึงไฟล์ภาพเพื่อสร้าง ZIP ได้"
           );
         }
 
@@ -4350,7 +4350,7 @@
           renderAlbumCards();
           updateSiteStats();
         } catch (error) {
-          console.warn("การกรองผ่าน API ไม่สำเร็จ:", error.message);
+          console.warn("การกรองไม่สำเร็จ:", error.message);
         }
       }
 
@@ -4657,7 +4657,7 @@
   "use strict";
 
   if (typeof devtoolsDetector === "undefined") {
-    console.warn("[ActiGallery Security] ไม่สามารถโหลด devtools-detector ได้");
+    console.warn("[ActiGallery Security] ไม่สามารถโหลดข้อมูลได้");
     return;
   }
 
