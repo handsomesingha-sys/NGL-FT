@@ -2379,6 +2379,56 @@
     display: none;
   }
     }
+    /* ปุ่มบันทึกอัลบั้มโปรด */
+.album-favorite-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: 1px solid #e8ebf3;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #68758b;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.album-favorite-button svg {
+  width: 19px;
+  height: 19px;
+}
+
+.album-favorite-button:hover {
+  color: #e54865;
+  background: #fff0f3;
+  border-color: #ffc5d0;
+}
+
+.album-favorite-button.is-favorite {
+  color: #e54865;
+  background: #fff0f3;
+  border-color: #ffc5d0;
+}
+
+:root[data-theme="dark"] .album-favorite-button {
+  color: #d0daed;
+  background: #172338;
+  border-color: #35445e;
+}
+
+:root[data-theme="dark"] .album-favorite-button.is-favorite {
+  color: #ff91a6;
+  background: #452635;
+  border-color: #874354;
+}
+
+.album-favorite-button:focus-visible {
+  outline: 3px solid #7899f7;
+  outline-offset: 2px;
+}
   </style>
 </head>
 
@@ -3742,6 +3792,29 @@
                 <button class="album-share-button" type="button" data-action="share-album" data-id="${escapeHtml(id)}" data-title="${escapeHtml(title)}" aria-label="แชร์อัลบั้ม ${escapeHtml(title)}" title="แชร์อัลบั้ม">
                   ${icon("share")}
                 </button>
+                        <button
+                class="album-favorite-button"
+                type="button"
+                data-action="toggle-favorite"
+                data-id="${escapeHtml(id)}"
+                aria-label="บันทึกอัลบั้มโปรด"
+                aria-pressed="false"
+                title="บันทึกอัลบั้มโปรด"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"></path>
+                </svg>
+              </button>
               </div>
             </div>
           </article>
@@ -4724,7 +4797,70 @@
         showHome();
       }
     }
+/* ระบบบันทึกอัลบั้มโปรด ActiGallery */
+function getFavoriteAlbumIds() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem("actigallery-favorite-albums") || "[]"
+    );
 
+    return Array.isArray(saved)
+      ? saved.filter(id => typeof id === "string")
+      : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function updateFavoriteButtons() {
+  const favorites = getFavoriteAlbumIds();
+
+  document.querySelectorAll(".album-favorite-button").forEach(button => {
+    const isFavorite = favorites.includes(button.dataset.id);
+
+    button.classList.toggle("is-favorite", isFavorite);
+    button.setAttribute("aria-pressed", String(isFavorite));
+
+    const label = isFavorite
+      ? "นำออกจากอัลบั้มโปรด"
+      : "บันทึกอัลบั้มโปรด";
+
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+  });
+}
+
+function toggleFavoriteAlbum(albumId) {
+  if (!albumId) return;
+
+  try {
+    const favorites = getFavoriteAlbumIds();
+    const exists = favorites.includes(albumId);
+
+    const updated = exists
+      ? favorites.filter(id => id !== albumId)
+      : [...favorites, albumId];
+
+    localStorage.setItem(
+      "actigallery-favorite-albums",
+      JSON.stringify(updated)
+    );
+
+    updateFavoriteButtons();
+
+    if (typeof showToast === "function") {
+      showToast(
+        exists
+          ? "นำอัลบั้มออกจากรายการโปรดแล้ว"
+          : "บันทึกอัลบั้มโปรดแล้ว"
+      );
+    }
+  } catch (error) {
+    if (typeof showToast === "function") {
+      showToast("ไม่สามารถบันทึกรายการโปรดได้");
+    }
+  }
+}
     /*
      * Event delegation
      * รองรับรายการการ์ดที่ถูก render ใหม่ระหว่างการค้นหา
@@ -4742,7 +4878,10 @@
               if (event.target.closest("button")) return;
               await openAlbum(button.dataset.id);
               break;
-
+            case "toggle-favorite":
+              event.stopPropagation();
+              toggleFavoriteAlbum(button.dataset.id);
+              break;
             case "share-album":
               event.stopPropagation();
               await shareUrl(
