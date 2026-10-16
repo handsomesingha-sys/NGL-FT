@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f8fc">
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem("actigallery-theme") === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    } catch (error) {
+      // หากเบราว์เซอร์ไม่อนุญาตให้ใช้ localStorage ให้เปิดโหมดสว่างตามปกติ
+    }
+  })();
+</script>
 <link rel="manifest" href="/manifest.json">
   <meta name="description" content="ActiGallery — ทุกกิจกรรม ทุกความทรงจำ รวมไว้ในที่เดียว ระบบคลังภาพกิจกรรมออนไลน์">
   <title>ActiGallery — ทุกกิจกรรม ทุกความทรงจำ</title>
@@ -2169,7 +2180,28 @@
             <rect x="3" y="13" width="8" height="8" rx="2"></rect>
           </svg>
           คลังภาพ
-        </a>
+          <button
+  type="button"
+  class="header-link theme-toggle"
+  id="themeToggle"
+  aria-label="เปลี่ยนเป็นโหมดมืด"
+  title="เปลี่ยนธีม"
+>
+  <svg
+    class="icon"
+    id="themeToggleIcon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.463.402.807a6.5 6.5 0 0 0 8.268 8.268c.344-.215.829-.003.803.397Z"></path>
+  </svg>
+  <span class="theme-toggle-label" id="themeToggleLabel">โหมดมืด</span>
+          </button>
         <a class="header-link" href="/dashboard.html" title="เข้าสู่ระบบจัดการสำหรับผู้มีสิทธิ์">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
             <rect x="4" y="10" width="16" height="11" rx="2"></rect>
