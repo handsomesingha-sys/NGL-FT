@@ -3262,23 +3262,22 @@
         try {
           parsed = JSON.parse(text);
         } catch (_) {
-          throw new Error("API ส่งผลลัพธ์ที่ไม่ใช่ JSON กรุณาตรวจสอบ doPost ใน Code.gs");
+          throw new Error("เชื่อมต่อไม่สำเร็จ");
         }
 
         if (!response.ok) {
-          throw new Error(parsed.message || "คำขอ API ไม่สำเร็จ (HTTP " + response.status + ")");
+          throw new Error(parsed.message || "คำขอไม่สำเร็จ (HTTP " + response.status + ")");
         }
 
         return responseData(parsed);
       } catch (error) {
         if (error.name === "AbortError") {
-          throw new Error("การเชื่อมต่อ API ใช้เวลานานเกินไป");
+          throw new Error("การเชื่อมต่อใช้เวลานานเกินไป");
         }
 
         if (error instanceof TypeError) {
           throw new Error(
-            "เชื่อมต่อคำสั่ง POST ไม่สำเร็จ เบราว์เซอร์อาจบล็อก CORS ของ Apps Script " +
-            "หรือ API ยังไม่มี doPost ที่รองรับคำสั่งนี้ กรุณาตรวจสอบ Code.gs"
+            "เชื่อมต่อไม่สำเร็จ"
           );
         }
 
@@ -3369,11 +3368,11 @@
       const user = result.user || result.profile || result.account || result.session?.user;
 
       if (!token) {
-        throw new Error("เข้าสู่ระบบไม่สำเร็จ: API ไม่ได้ส่ง session token กลับมา");
+        throw new Error("เข้าสู่ระบบไม่สำเร็จ");
       }
 
       if (!user) {
-        throw new Error("เข้าสู่ระบบไม่สำเร็จ: API ไม่ได้ส่งข้อมูลผู้ใช้งานกลับมา");
+        throw new Error("เข้าสู่ระบบไม่สำเร็จ");
       }
 
       saveToken(String(token), remember);
@@ -3646,8 +3645,8 @@
           <div class="route-message">
             <div class="empty-icon" style="margin:0 auto">${icon("warning")}</div>
             <h2>โหลดข้อมูลไม่สำเร็จ</h2>
-            <p>${escapeHtml(error.message || "ไม่สามารถโหลดข้อมูลจาก API ได้")}</p>
-            <p>โปรดตรวจสอบว่า Code.gs รองรับคำสั่ง API ของหน้านี้ และ Web App เผยแพร่ให้ผู้ใช้งานเข้าถึงได้</p>
+            <p>${escapeHtml(error.message || "ไม่สามารถโหลดข้อมูลได้")}</p>
+            <p>กรุณารีเฟรชหน้านี้หรือติดต่อผู้ดูแลระบบ</p>
             <button class="btn btn-primary" type="button" data-action="reload-page">${icon("refresh")} ลองโหลดอีกครั้ง</button>
           </div>
         </section>
@@ -3749,7 +3748,7 @@
           <div class="welcome-row">
             <div>
               <h1>ยินดีต้อนรับ, ${escapeHtml(getUserName())}</h1>
-              <p>${escapeHtml(admin ? "ภาพรวมระบบคลังภาพกิจกรรมทุกหน่วยงาน" : "จัดการภาพกิจกรรมของ " + getUserOrganization())}</p>
+              <p>${escapeHtml(admin ? "ภาพรวมระบบคลังภาพกิจกรรม" : "จัดการภาพกิจกรรมของ " + getUserOrganization())}</p>
             </div>
             <div class="welcome-actions">
               <button class="btn btn-secondary" type="button" data-action="refresh-current">${icon("refresh")} รีเฟรชข้อมูล</button>
@@ -3786,7 +3785,7 @@
             </section>
           </div>
 
-          <div class="app-footer">ข้อมูลสรุปอ้างอิงจาก API ของระบบ ณ เวลาที่โหลดหน้านี้</div>
+          <div class="app-footer">ข้อมูลสรุปอ้างอิงจากข้อมูลของระบบ ณ เวลาที่โหลดหน้านี้</div>
         </section>
       `;
     }
