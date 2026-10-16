@@ -2533,6 +2533,30 @@
     height: 44px;
   }
 }
+  
+#backToTopButton {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 24px !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 99999 !important;
+  width: 48px !important;
+  height: 48px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+#backToTopButton svg {
+  width: 24px;
+  height: 24px;
+}
   </style>
 </head>
 
