@@ -1548,6 +1548,174 @@
       font-size: 10px;
       text-align: center;
     }
+    
+/* ===== ActiGallery Contact Section ===== */
+.ag-contact {
+  padding: 48px 0;
+  background: #f7f8fc;
+  border-top: 1px solid var(--border);
+}
+
+.ag-contact-heading {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.ag-contact-heading .eyebrow {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.ag-contact-heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+}
+
+.ag-contact-heading p {
+  max-width: 550px;
+  margin: 8px auto 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.ag-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.ag-contact-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+
+.ag-contact-card:hover {
+  border-color: #cbd7ff;
+  box-shadow: 0 7px 22px rgba(33, 49, 91, .07);
+  transform: translateY(-2px);
+}
+
+.ag-contact-card:focus-visible {
+  outline: 3px solid #9db3ff;
+  outline-offset: 3px;
+}
+
+.ag-contact-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+}
+
+.ag-contact-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.ag-contact-icon.facebook {
+  color: #1877f2;
+  background: #eaf2ff;
+}
+
+.ag-contact-icon.line {
+  color: #06a85f;
+  background: #e8f9ef;
+}
+
+.ag-contact-icon.instagram {
+  color: #c13584;
+  background: #fcecf5;
+}
+
+.ag-contact-icon.phone {
+  color: #3867e8;
+  background: #eef2ff;
+}
+
+.ag-contact-icon.email {
+  color: #b4771f;
+  background: #fff5e5;
+}
+
+.ag-contact-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ag-contact-info strong {
+  display: block;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ag-contact-info span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.ag-contact-arrow {
+  flex: 0 0 auto;
+  color: #9aa4b7;
+  font-size: 17px;
+}
+
+@media (max-width: 900px) {
+  .ag-contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .ag-contact {
+    padding: 35px 0;
+  }
+
+  .ag-contact-heading h2 {
+    font-size: 21px;
+  }
+
+  .ag-contact-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ag-contact-card {
+    padding: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ag-contact-card {
+    transition: none;
+  }
+
+  .ag-contact-card:hover {
+    transform: none;
+  }
+}
 
     /* Responsive */
 
