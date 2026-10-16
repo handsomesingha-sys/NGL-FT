@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devtools-detector/2.0.25/devtools-detector.min.js"></script>
   <style>
     :root {
       --primary: #3867e8;
@@ -6047,6 +6047,57 @@
     }
 
     initializeApp();
+  </script>
+  <script>
+(function () {
+  "use strict";
+
+  if (
+    typeof devtoolsDetector === "undefined" ||
+    typeof devtoolsDetector.addListener !== "function"
+  ) {
+    console.warn(
+      "[ActiGallery Security] ไม่สามารถโหลด devtools-detector ได้"
+    );
+    return;
+  }
+
+  let warningShown = false;
+
+  devtoolsDetector.addListener(function (isOpen, detail) {
+    if (isOpen && !warningShown) {
+      warningShown = true;
+
+      console.warn(
+        "%cตรวจพบการเข้าถึงเครื่องมือสำหรับนักพัฒนา",
+        "color:#ff334d;font-size:18px;font-weight:900;"
+      );
+
+      console.warn(
+        "%cเว็บไซต์นี้มีระบบป้องกันการเข้าถึงและแก้ไขส่วนประกอบภายในโดยไม่ได้รับอนุญาต กรุณาปิดเครื่องมือสำหรับนักพัฒนาและกลับไปใช้งานเว็บไซต์ตามปกติ",
+        "color:#d73e50;font-size:13px;font-weight:600;"
+      );
+
+      console.warn(
+        "%cหากคุณเป็นผู้ดูแลระบบและพบข้อความนี้โดยไม่ได้ตั้งใจ กรุณาตรวจสอบการทำงานของเว็บไซต์อีกครั้ง",
+        "color:#b4771f;font-size:12px;"
+      );
+
+      if (detail && detail.checkerName) {
+        console.info(
+          "[ActiGallery Security] Detection method:",
+          detail.checkerName
+        );
+      }
+    }
+
+    if (!isOpen) {
+      warningShown = false;
+    }
+  });
+
+  devtoolsDetector.launch();
+})();
   </script>
 </body>
   </html>
