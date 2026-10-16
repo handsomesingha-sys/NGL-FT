@@ -2613,7 +2613,18 @@
         </div>
         <div class="result-count" id="resultCount" aria-live="polite">กำลังโหลดข้อมูล</div>
       </div>
-
+      
+      <div class="album-view-toolbar">
+        <span>รูปแบบการแสดงผล</span>
+        <button
+          id="albumViewToggle"
+          class="album-view-toggle"
+          type="button"
+          aria-pressed="false"
+          data-action="toggle-album-view">
+          มุมมองแบบกระชับ
+        </button>
+      </div>
       <div id="filterPanel" class="filter-panel">
         <div class="search-field">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
@@ -5035,6 +5046,21 @@ function toggleFavoriteAlbum(albumId) {
               document.querySelector("#albumsSection").scrollIntoView({ behavior: "smooth" });
               break;
 
+            case "toggle-album-view": {
+              const grid = $("#albumGrid");
+              const toggle = $("#albumViewToggle");
+
+              if (!grid || !toggle) break;
+
+              const isCompact = grid.classList.toggle("compact-view");
+
+              toggle.setAttribute("aria-pressed", String(isCompact));
+              toggle.textContent = isCompact
+                ? "มุมมองแบบปกติ"
+                : "มุมมองแบบกระชับ";
+
+              break;
+            }
             default:
               break;
           }
