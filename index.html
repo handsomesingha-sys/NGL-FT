@@ -2429,6 +2429,47 @@
   outline: 3px solid #7899f7;
   outline-offset: 2px;
 }
+    /* ปุ่มเปลี่ยนรูปแบบอัลบั้ม */
+.album-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.album-view-toggle:hover {
+  background: var(--primary-light);
+}
+
+/* รูปแบบอัลบั้มแบบกะทัดรัด */
+#albumGrid.compact-view {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+#albumGrid.compact-view .album-card-description,
+#albumGrid.compact-view .album-org {
+  display: none;
+}
+
+#albumGrid.compact-view .album-card-body {
+  padding: 10px;
+}
+
+@media (max-width: 600px) {
+  #albumGrid.compact-view {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
   </style>
 </head>
 
