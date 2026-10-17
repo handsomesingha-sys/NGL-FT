@@ -3208,7 +3208,7 @@
 
         const timer = setTimeout(() => {
           cleanup();
-          reject(new Error("API ไม่ตอบกลับภายในเวลาที่กำหนด กรุณาตรวจสอบการเผยแพร่ Apps Script"));
+          reject(new Error("ระบบตอบกลับช้าเกินไป กรุณาลองใหม่อีกครั้ง"));
         }, APP_CONFIG.JSONP_TIMEOUT_MS);
 
         window[callbackName] = payload => {
@@ -3879,7 +3879,7 @@
           </div>
           <div class="pagination">
             <span>แสดง ${formatNumber(users.length)} รายการ</span>
-            <span>ข้อมูลจากฐานข้อมูลระบบ</span>
+            <span>ข้อมูลระบบ</span>
           </div>
         </section>
       `;
@@ -4964,7 +4964,7 @@
     function uploadImageToImgBB(file, onProgress = null) {
       return new Promise((resolve, reject) => {
         if (!APP_CONFIG.IMGBB_API_KEY) {
-          reject(new Error("ยังไม่ได้กำหนด ImgBB API Key"));
+          reject(new Error("ระบบอัปโหลดรูปภาพยังไม่พร้อมใช้งาน กรุณาติดต่อผู้ดูแลระบบ"));
           return;
         }
 
@@ -4991,7 +4991,7 @@
           try {
             result = JSON.parse(xhr.responseText);
           } catch (_) {
-            reject(new Error("ImgBB ส่งผลลัพธ์ไม่ถูกต้อง"));
+            reject(new Error("ไม่สามารถประมวลผลการอัปโหลดได้ กรุณาลองอีกครั้ง"));
             return;
           }
 
@@ -5012,8 +5012,8 @@
           });
         };
 
-        xhr.onerror = () => reject(new Error("เครือข่ายไม่สามารถอัปโหลดภาพไปยัง ImgBB ได้"));
-        xhr.ontimeout = () => reject(new Error("อัปโหลดภาพใช้เวลานานเกินกำหนด"));
+        xhr.onerror = () => reject(new Error("ไม่สามารถเชื่อมต่อเพื่ออัปโหลดรูปภาพได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง"));
+        xhr.ontimeout = () => reject(new Error("การอัปโหลดภาพใช้เวลานานเกินกำหนด"));
         xhr.onabort = () => reject(new Error("การอัปโหลดภาพถูกยกเลิก"));
         xhr.send(formData);
       });
@@ -5297,8 +5297,10 @@
         const time = log.createdAt || log.timestamp || log.date || log.time;
         const status = String(log.status || log.result || "success").toLowerCase();
         const success = ["success", "successful", "ok", "สำเร็จ"].includes(status);
-        const ip = log.ipAddress || log.ip || "—";
-
+        const rawIp = log.ipAddress || log.ip || "—";
+const ip = /Apps Script|ไม่เปิดเผย/i.test(String(rawIp))
+  ? "ไม่ระบุ"
+  : rawIp;
         return `
           <tr>
             <td>${escapeHtml(formatDate(time))}</td>
