@@ -2538,37 +2538,6 @@ html[data-theme="dark"] .theme-toggle-button {
     height: 34px;
   }
 }
-    /* Fix dark theme contrast across dashboard */
-html[data-theme="dark"] .modal {
-  background: var(--surface) !important;
-  color: var(--ink) !important;
-  border-color: var(--border) !important;
-}
-
-html[data-theme="dark"] .modal-header,
-html[data-theme="dark"] .modal-body,
-html[data-theme="dark"] .modal-footer {
-  background: var(--surface) !important;
-  color: var(--ink) !important;
-  border-color: var(--border) !important;
-}
-
-html[data-theme="dark"] .modal-close {
-  background: #202c41 !important;
-  color: var(--ink) !important;
-  border-color: var(--border) !important;
-}
-
-html[data-theme="dark"] .panel,
-html[data-theme="dark"] .stat-card,
-html[data-theme="dark"] .panel-body,
-html[data-theme="dark"] .table-wrap,
-html[data-theme="dark"] .security-info-card,
-html[data-theme="dark"] .album-card {
-  background: var(--surface) !important;
-  color: var(--ink) !important;
-  border-color: var(--border) !important;
-}
   </style>
 </head>
 <body>
@@ -2974,55 +2943,6 @@ html[data-theme="dark"] .album-card {
 
   const sunIcon =
     '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M6.35 17.65l-1.42 1.42M19.07 4.93l-1.42 1.42"></path>';
-
-  function updateButtons() {
-    const dark = root.dataset.theme === "dark";
-
-    buttons.forEach((button, index) => {
-      button.setAttribute(
-        "aria-label",
-        dark ? "เปลี่ยนเป็นโหมดสว่าง" : "เปลี่ยนเป็นโหมดมืด"
-      );
-
-      button.setAttribute(
-        "title",
-        dark ? "โหมดมืด: เปิดอยู่" : "โหมดสว่าง: เปิดอยู่"
-      );
-
-      if (icons[index]) {
-        icons[index].innerHTML = dark ? sunIcon : moonIcon;
-      }
-    });
-
-    if (metaThemeColor) {
-      metaThemeColor.content = dark ? "#101827" : "#f5f7fb";
-    }
-  }
-
-  buttons.forEach(button => {
-    button.addEventListener("click", function () {
-      const dark = root.dataset.theme !== "dark";
-
-      if (dark) {
-        root.setAttribute("data-theme", "dark");
-      } else {
-        root.removeAttribute("data-theme");
-      }
-
-      try {
-        localStorage.setItem(
-          storageKey,
-          dark ? "dark" : "light"
-        );
-      } catch (error) {}
-
-      updateButtons();
-    });
-  });
-
-  updateButtons();
-})();
-
     /* ============================================================
        ACTIGALLERY DASHBOARD
        Single-file frontend for GitHub Pages.
