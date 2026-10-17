@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "ใส่_PACKAGE_NAME_ของแอป",
+      "sha256_cert_fingerprints": [
+        "ใส่_SHA256_FINGERPRINT_ของใบรับรอง"
+      ]
+    }
+  }
+]
