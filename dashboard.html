@@ -2538,6 +2538,80 @@ html[data-theme="dark"] .theme-toggle-button {
     height: 34px;
   }
 }
+    /* Fix dark theme contrast across dashboard */
+html[data-theme="dark"] .modal {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] .modal-header,
+html[data-theme="dark"] .modal-body,
+html[data-theme="dark"] .modal-footer {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] .modal-close {
+  background: #202c41 !important;
+  color: var(--ink) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .stat-card,
+html[data-theme="dark"] .panel-body,
+html[data-theme="dark"] .table-wrap,
+html[data-theme="dark"] .security-info-card,
+html[data-theme="dark"] .album-card {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html[data-theme="dark"] .input-control,
+html[data-theme="dark"] .filter-control {
+  background: #202c41 !important;
+  color: var(--ink) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #9aa8c1 !important;
+  opacity: 1;
+}
+
+html[data-theme="dark"] th {
+  background: #202c41 !important;
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] td,
+html[data-theme="dark"] tr,
+html[data-theme="dark"] tbody {
+  color: var(--ink) !important;
+  background: var(--surface);
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] .login-panel {
+  background: var(--background) !important;
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .login-heading h2,
+html[data-theme="dark"] .login-heading p,
+html[data-theme="dark"] .field label,
+html[data-theme="dark"] .login-help,
+html[data-theme="dark"] .login-footer,
+html[data-theme="dark"] .remember-row {
+  color: var(--ink) !important;
+}
   </style>
 </head>
 <body>
@@ -2625,6 +2699,27 @@ html[data-theme="dark"] .theme-toggle-button {
 
     <section class="login-panel">
       <div class="login-card">
+        <button
+  id="loginThemeToggle"
+  class="theme-toggle-button login-theme-toggle"
+  type="button"
+  aria-label="เปลี่ยนธีม"
+  title="เปลี่ยนธีม"
+>
+  <svg
+    id="loginThemeIcon"
+    class="icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.463.402.807a6.5 6.5 0 0 0 8.268 8.268c.344-.215.829-.003.803.397Z"></path>
+  </svg>
+        </button>
         <div class="login-mobile-brand brand-lockup">
           <div class="brand-mark">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
@@ -2911,17 +3006,24 @@ html[data-theme="dark"] .theme-toggle-button {
 
   <script>
     "use strict";
-    
-/* Dashboard light/dark theme */
+    /* Shared dashboard theme toggles */
 (function setupDashboardTheme() {
   const root = document.documentElement;
-  const button = document.getElementById("dashboardThemeToggle");
-  const icon = document.getElementById("dashboardThemeIcon");
+
+  const buttons = [
+    document.getElementById("dashboardThemeToggle"),
+    document.getElementById("loginThemeToggle")
+  ].filter(Boolean);
+
+  const icons = [
+    document.getElementById("dashboardThemeIcon"),
+    document.getElementById("loginThemeIcon")
+  ];
+
+  const storageKey = "actigallery-dashboard-theme";
   const metaThemeColor = document.querySelector(
     'meta[name="theme-color"]'
   );
-
-  const storageKey = "actigallery-dashboard-theme";
 
   try {
     if (localStorage.getItem(storageKey) === "dark") {
@@ -2929,7 +3031,7 @@ html[data-theme="dark"] .theme-toggle-button {
     }
   } catch (error) {}
 
-  if (!button || !icon) return;
+  if (buttons.length === 0) return;
 
   const moonIcon =
     '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.463.402.807a6.5 6.5 0 0 0 8.268 8.268c.344-.215.829-.003.803.397Z"></path>';
@@ -2937,37 +3039,52 @@ html[data-theme="dark"] .theme-toggle-button {
   const sunIcon =
     '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M6.35 17.65l-1.42 1.42M19.07 4.93l-1.42 1.42"></path>';
 
-  function updateButton() {
+  function updateButtons() {
     const dark = root.dataset.theme === "dark";
 
-    icon.innerHTML = dark ? sunIcon : moonIcon;
-    button.setAttribute(
-      "aria-label",
-      dark ? "เปลี่ยนเป็นโหมดสว่าง" : "เปลี่ยนเป็นโหมดมืด"
-    );
+    buttons.forEach((button, index) => {
+      button.setAttribute(
+        "aria-label",
+        dark ? "เปลี่ยนเป็นโหมดสว่าง" : "เปลี่ยนเป็นโหมดมืด"
+      );
+
+      button.setAttribute(
+        "title",
+        dark ? "โหมดมืด: เปิดอยู่" : "โหมดสว่าง: เปิดอยู่"
+      );
+
+      if (icons[index]) {
+        icons[index].innerHTML = dark ? sunIcon : moonIcon;
+      }
+    });
 
     if (metaThemeColor) {
       metaThemeColor.content = dark ? "#101827" : "#f5f7fb";
     }
   }
 
-  button.addEventListener("click", function () {
-    const dark = root.dataset.theme !== "dark";
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      const dark = root.dataset.theme !== "dark";
 
-    if (dark) {
-      root.setAttribute("data-theme", "dark");
-    } else {
-      root.removeAttribute("data-theme");
-    }
+      if (dark) {
+        root.setAttribute("data-theme", "dark");
+      } else {
+        root.removeAttribute("data-theme");
+      }
 
-    try {
-      localStorage.setItem(storageKey, dark ? "dark" : "light");
-    } catch (error) {}
+      try {
+        localStorage.setItem(
+          storageKey,
+          dark ? "dark" : "light"
+        );
+      } catch (error) {}
 
-    updateButton();
+      updateButtons();
+    });
   });
 
-  updateButton();
+  updateButtons();
 })();
 
     /* ============================================================
