@@ -2475,69 +2475,6 @@
         transition-duration: .01ms !important;
         scroll-behavior: auto !important;
       }
-    }
-    /* Dashboard theme toggle */
-html[data-theme="dark"] {
-  color-scheme: dark;
-  --ink: #e8edf8;
-  --muted: #a1adc3;
-  --border: #303b50;
-  --background: #101827;
-  --surface: #182235;
-  --primary-soft: #243454;
-}
-
-html[data-theme="dark"] body,
-html[data-theme="dark"] .app-shell,
-html[data-theme="dark"] .main-area {
-  color: var(--ink);
-  background: var(--background);
-}
-
-html[data-theme="dark"] .sidebar,
-html[data-theme="dark"] .topbar {
-  color: var(--ink);
-  background: var(--surface);
-  border-color: var(--border);
-}
-
-html[data-theme="dark"] .sidebar-user,
-html[data-theme="dark"] .icon-button,
-html[data-theme="dark"] .mobile-menu-button {
-  color: var(--ink);
-  background: #202c41;
-  border-color: var(--border);
-}
-
-.theme-toggle-button {
-  width: 38px;
-  height: 38px;
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  color: #66718a;
-  background: var(--surface);
-  cursor: pointer;
-}
-
-.theme-toggle-button .icon {
-  width: 18px;
-  height: 18px;
-}
-
-html[data-theme="dark"] .theme-toggle-button {
-  color: #f2c16d;
-  background: #202c41;
-}
-
-@media (max-width: 640px) {
-  .theme-toggle-button {
-    width: 34px;
-    height: 34px;
-  }
-}
   </style>
 </head>
 <body>
