@@ -5,9 +5,9 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "ใส่_PACKAGE_NAME_ของแอป",
+      "package_name": "online.actigallery.twa",
       "sha256_cert_fingerprints": [
-        "ใส่_SHA256_FINGERPRINT_ของใบรับรอง"
+        "5F:FF:FA:72:CF:24:EA:5A:46:5F:C4:5C:B0:93:4F:B7:6B:87:1A:5B:A8:55:F0:1B:6B:61:EA:C0:D5:F2:87:72"
       ]
     }
   }
